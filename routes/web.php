@@ -33,6 +33,8 @@ Route::post('ecm_add', [MainController::class, 'estimatematerialcost_add']);
 Route::get('show_allecm/{id}', [MainController::class, 'show_estimatedmaterialcost']);
 Route::get('show_emcdata/{id}', [MainController::class, 'show_emcdata']);
 
+Route::get('get_allEquipments', [MainController::class, 'get_allEquipments']);
+
 Route::get('get_allusers', [UserController::class, 'get_all']);
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');

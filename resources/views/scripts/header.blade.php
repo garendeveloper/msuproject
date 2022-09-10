@@ -26,6 +26,6 @@
         color: #1f2d3d;
     }
     .nav-sidebar .nav-item>.nav-link {
-    margin-bottom: -0.5rem;
+    /* margin-bottom: -0.5rem; */
 }
 </style>

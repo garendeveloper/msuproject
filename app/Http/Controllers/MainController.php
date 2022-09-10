@@ -226,6 +226,11 @@ class MainController extends Controller
     {
         //
     }
+    public function get_allEquipments()
+    {
+        $data = DB::select('select * from estimated_equipment_rental_costs order by id desc');
+        echo json_encode($data);
+    }
     public function show_emcdata($id)
     {
         $data = EstimatedMaterialCost::findOrFail($id);

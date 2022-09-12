@@ -69,19 +69,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/materials') }}" class="nav-link">
-              <i class="nav-icon fa fa-square"></i>
-              <p>Materials</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url('/equipments') }}" class="nav-link">
-              <i class="nav-icon fa fa-square"></i>
-              <p>Equipments</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url('/schedules') }}" class="nav-link">
+            <a href="{{ url('/scheduling') }}" class="nav-link">
               <i class="nav-icon fa fa-square"></i>
               <p>Schedules</p>
             </a>

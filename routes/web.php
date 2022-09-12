@@ -33,8 +33,15 @@ Route::post('ecm_add', [MainController::class, 'estimatematerialcost_add']);
 Route::get('show_allecm/{id}', [MainController::class, 'show_estimatedmaterialcost']);
 Route::get('show_emcdata/{id}', [MainController::class, 'show_emcdata']);
 
-Route::get('get_allEquipments', [MainController::class, 'get_allEquipments']);
-
+Route::get('get_laborData/{id}', [MainController::class, 'get_laborData']);
+Route::get('get_allLaborCosts/{id}', [MainController::class, 'get_allLaborCosts']);
+Route::post('elc_actions', [MainController::class, 'labor_actions']);
+Route::get('get_allEquipments/{id}', [MainController::class, 'get_allEquipments']);
+Route::post('eec_actions', [MainController::class, 'equipment_actions']);
+Route::get('/constructions/{id}', [MainController::class, 'constructions']);
+Route::get('count_allLaborers/{id}', [MainController::class, 'count_allLaborers']);
+Route::get('get_allDepartments', [MainController::class, 'get_allDepartments']);
+Route::get('get_equipmentData/{id}', [MainController::class, 'get_equipmentData']);
 Route::get('get_allusers', [UserController::class, 'get_all']);
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');
@@ -43,5 +50,6 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/constructiontypes', [MainController::class, 'constructiontypes']);
     Route::get('/materials', [MainController::class, 'materials']);
     Route::get('/users', [UserController::class, 'index']);
+    Route::get('/scheduling', [MainController::class, 'scheduling']);
 });
 

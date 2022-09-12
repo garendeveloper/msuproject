@@ -134,7 +134,7 @@
       <div class="modal fade emc_modal" id="modal-xl">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
-            <div class="modal-header" style = "background-color: #1C518A; color: white;">
+            <div class="modal-header bg-success" >
               <div class="row">
                 <div class="col-md-12">
                 <h5 class = "modal-title" id = "constructiontype_title"></h5>
@@ -182,7 +182,7 @@
                   <div class="row"></div>
                   <div class="col-md-12">
                     <table id = "tbl_ecm" class="table table-bordered table-striped" style = "table-layout: fixed; ">
-                      <thead style = "background-color: #1C518A; color: white;">
+                      <thead class = "bg-success">
                       <tr>
                         <th>Qty</th>
                         <th>Unit</th>
@@ -227,7 +227,7 @@
           
               <div class="modal-body">
                 @csrf
-                <input type="text" style = "display:none" id = "selection_construction_id">
+                <input type="hidden"  id = "selection_construction_id">
                 <div class="row">
                     <div class="col-md-4">
                       <a class = "btn btn-app bg-success" id = "btn_materialcost" style = "width: 200px; font-size: 16px; height: 80px"><i class = "fa fa-building"></i> Material Cost</a>
@@ -254,7 +254,7 @@
       <div class="modal fade eec_modal" id="modal-xl">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
-            <div class="modal-header" style = "background-color: #1C518A; color: white;">
+            <div class="modal-header bg-warning">
               <div class="row">
                 <div class="col-md-12">
                 <h5 class = "modal-title" id = "eec_title"></h5>
@@ -269,44 +269,44 @@
               </button>
             </div>
             <ul id = "eec_ajaxresponse"></ul>
-            <form action="" method="post" id = "ecc_form">
+            <form action="" method="post" id = "eec_form">
               @csrf
-              <input type="hidden" id = "ecc_construction_id" class = "form-control ecm_construction_id" name = "construction_id">
-              <input type="hidden" name = "alphabethical" value = "A">
-              <input type="hidden" name = "ecc_id" id = "ecc_id">
+              <input type="text" style = "display: none" id = "eec_construction_id" class = "form-control" name = "construction_id">
+              <input type="text" style = "display: none" name = "eec_id" id = "eec_id">
               <div class="modal-body">
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-12">
                       <label for="manpower">Equipment</label>
                       <input type="text" id = "equipment" name = "equipment" class = "form-control" style = "text-align: right" autocomplete = "off" required>
                     </div>
+
                     <div class="col-md-2">
                       <label for="no_ofpersons">No.</label>
-                      <input type="text" class = "form-control" id = "no_ofpersons" name = "no_ofpersons">
+                      <input type="number" class = "form-control" id = "no_ofpersons" name = "no_ofpersons" style = "text-align: right" autocomplete = "off"  required>
                     </div>
                     <div class="col-md-2">
                       <label for="no_ofheaddays">No. Of Days</label>
-                      <input type="text" class = "form-control" id = "no_headdays" name = "no_headdays">
+                      <input type="number" class = "form-control" id = "no_ofheaddays" name = "no_ofheaddays" style = "text-align: right" autocomplete = "off"  required>
                     </div>
                     <div class="col-md-2">
                       <label for="totalDays">Total Days</label>
-                      <input type="text" class = "form-control" id = "totalDays" name = "totalDays">
+                      <input type="number" class = "form-control" id = "no_mandays" name = "no_mandays" style = "text-align: right" autocomplete = "off"  readonly required>
                     </div>
                     <div class="col-md-2">
                       <label for="daily_rate">Rate/Day</label>
-                      <input type="number" class = "form-control" id = "daily_rate" name = "daily_rate">
+                      <input type="number" class = "form-control" id = "daily_rate" name = "daily_rate" style = "text-align: right" autocomplete = "off"  required>
                     </div>
-                    <div class="col-md-2">
-                      <label for="totalDays">Amount</label>
-                      <input type="number" class = "form-control" id = "amount" name = "amount">
+                    <div class="col-md-4">
+                      <label for="amount">Amount</label>
+                      <input type="number" class = "form-control" id = "total_amount" name = "amount" style = "text-align: right" autocomplete = "off"  readonly required>
                     </div>
                   </div>
                   <input type="submit" style = "display: none">
                   <br>
                   <div class="row"></div>
                   <div class="col-md-12">
-                    <table id = "tbl_ecC" class="table table-bordered table-striped" style = "table-layout: fixed; ">
-                      <thead style = "background-color: #1C518A; color: white;">
+                    <table id = "tbl_eec" class="table table-bordered table-striped" style = "table-layout: fixed; ">
+                      <thead class = "bg-warning">
                       <tr>
                         <th>Equipments</th>
                         <th>No.</th>
@@ -314,6 +314,98 @@
                         <th>Total Days</th>
                         <th>Rate/Day</th>
                         <th>Amount</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Actions</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                    
+                      </tbody>
+                      <tfoot>
+                    
+                      </tfoot>
+                    </table>
+                  </div>
+              </div>
+              <div class="modal-footer ">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal" id = "ecm_close">X Close</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
+      <!-- ESTIMATED LABOR COSTS -->
+      <div class="modal fade elc_modal" id="modal-xl">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header" style = "background-color: #1C518A; color: white;">
+              <div class="row">
+                <div class="col-md-12">
+                <h5 class = "modal-title" id = "elc_title"></h5>
+                </div>
+                <div class="col-md-12">
+                  <h9 class="modal-title" id = "elc_description_modaltitle"></h9>
+                </div>
+              </div>
+             
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <ul id = "elc_ajaxresponse"></ul>
+            <form action="" method="post" id = "elc_form">
+              @csrf
+              <input type="text" style = "display: none" id = "elc_construction_id" class = "form-control" name = "construction_id">
+              <input type="text" style = "display: none" name = "elc_id" id = "elc_id">
+              <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label for="manpower">Manpower</label>
+                      <input type="text" id = "manpower" list = "manpowers" name = "manpower" class = "form-control" style = "text-align: right" autocomplete = "off" required>
+                      <datalist id = "manpowers">
+                      </datalist>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="no_ofpersons">No.</label>
+                      <input type="number" class = "form-control" id = "elc_no_ofpersons" name = "no_ofpersons" style = "text-align: right" autocomplete = "off"  required>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="no_ofheaddays">No. Of Days</label>
+                      <input type="number" class = "form-control" id = "elc_no_ofheaddays" name = "no_ofheaddays" style = "text-align: right" autocomplete = "off"  required>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="totalDays">Man Days</label>
+                      <input type="number" class = "form-control" id = "elc_no_mandays" name = "no_mandays" style = "text-align: right" autocomplete = "off"  readonly required>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="daily_rate">Rate/Day</label>
+                      <input type="number" class = "form-control" id = "elc_daily_rate" name = "daily_rate" style = "text-align: right" autocomplete = "off"  required>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="amount">Amount</label>
+                      <input type="number" class = "form-control" id = "elc_total_amount" name = "amount" style = "text-align: right" autocomplete = "off"  readonly required>
+                    </div>
+                  </div>
+                  <input type="submit" style = "display: none">
+                  <br>
+                  <div class="row"></div>
+                  <div class="col-md-12">
+                    <table id = "tbl_elc" class="table table-bordered table-striped" style = "table-layout: fixed; ">
+                      <thead style = "background-color: #1C518A; color: white;">
+                      <tr>
+                        <th>Manpower</th>
+                        <th>No.</th>
+                        <th>No. of Days</th>
+                        <th>Man Days</th>
+                        <th>Rate/Day</th>
+                        <th>Amount</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
                         <th>Actions</th>
                       </tr>
                       </thead>
@@ -349,8 +441,7 @@
   $(document).ready(function(e){
     show_allData();
     show_allConstructionTypes();
-    show_allEquipments();
-    
+    show_allDepartments();
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -445,6 +536,92 @@
       $("#ecm_form").trigger('reset');
       $("#ecm_modal").modal('hide');
     })
+    $("#no_ofheaddays").on('keyup', function(e){
+      e.preventDefault();
+
+      var no_headdays = $(this).val();
+      var no_ofpersons = $("#no_ofpersons").val()*1;
+      $("#no_mandays").val(no_headdays*no_ofpersons);
+    })
+    $("#elc_no_ofheaddays").on('keyup', function(e){
+      e.preventDefault();
+
+      var no_headdays = $(this).val();
+      var no_ofpersons = $("#elc_no_ofpersons").val()*1;
+      $("#elc_no_mandays").val(no_headdays*no_ofpersons);
+    })
+    $("#elc_daily_rate").on('keyup', function(e){
+      e.preventDefault();
+
+      var daily_rate = $(this).val();
+      var totalDays = $("#elc_no_mandays").val()*1;
+      $("#elc_total_amount").val(daily_rate*totalDays);
+    })
+    $("#daily_rate").on('keyup', function(e){
+      e.preventDefault();
+
+      var daily_rate = $(this).val();
+      var totalDays = $("#no_mandays").val()*1;
+      $("#total_amount").val(daily_rate*totalDays);
+    })
+    $("#eec_form").on('submit', function(e){
+      e.preventDefault();
+
+      $.ajax({
+        type: 'POST',
+        url: '/eec_actions',
+        data: $(this).serializeArray(),
+        dataType: 'json',
+        success:  function(response){
+          if(response.status == 400){
+            $("#eec_ajaxresponse").html("");
+            $("#eec_ajaxresponse").removeClass('alert alert-danger');
+            $("#eec_ajaxresponse").addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $("#eec_ajaxresponse").append('<li>'+err_values+'</li>');
+            });
+          }
+          if(response.status == 200){
+            alert(response.success);
+            $("#eec_form").trigger('reset');
+          }
+          if(response.status == 401){
+            alert(response.fail);
+          }
+          show_allEquipments();
+        }
+      })
+    })
+    $("#elc_form").on('submit', function(e){
+      e.preventDefault();
+
+      $.ajax({
+        type: 'POST',
+        url: '/elc_actions',
+        data: $(this).serializeArray(),
+        dataType: 'json',
+        success:  function(response){
+          if(response.status == 400){
+            $("#elc_ajaxresponse").html("");
+            $("#elc_ajaxresponse").removeClass('alert alert-danger');
+            $("#elc_ajaxresponse").addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $("#elc_ajaxresponse").append('<li>'+err_values+'</li>');
+            });
+          }
+          if(response.status == 200){
+            alert(response.success);
+            $("#elc_form").trigger('reset');
+            var id = $("#selection_construction_id").val();
+            $("#elc_construction_id").val(id);
+          }
+          if(response.status == 401){
+            alert(response.fail);
+          }
+          show_allLaborCosts();
+        }
+      })
+    })
     $("#ecm_form").on('submit', function(e){
       e.preventDefault();
 
@@ -466,6 +643,8 @@
             alert("Material Cost Successfully Estimated!");
             $("#ecm_modal").modal('hide');
             $("#ecm_form").trigger('reset');
+            var id = $("#selection_construction_id").val();
+            $("#ecm_construction_id").val(id);
           }
           show_allECM();
         }
@@ -519,11 +698,91 @@
      
       $(".estimation_selection_modal").modal('show');
     })
+    $("body").on('click', '.eec_remove', function(e){
+      var id = $(this).data('id');
 
+      if(confirm("Are you sure do you want to delete this item?"))
+      {
+        $.ajax({
+          type: 'post',
+          url: '/eec_actions',
+          data: {
+            remove: id
+          },
+          dataType: 'json',
+          success: function(response)
+          {
+            if(response.status == 200) alert(response.success);
+            show_allEquipments();
+          }
+        })
+      }
+    })
+    $("body").on('click', '.elc_remove', function(e){
+      var id = $(this).data('id');
+
+      if(confirm("Are you sure do you want to delete this item?"))
+      {
+        $.ajax({
+          type: 'post',
+          url: '/elc_actions',
+          data: {
+            remove: id
+          },
+          dataType: 'json',
+          success: function(response)
+          {
+            if(response.status == 200) alert(response.success);
+            show_allLaborCosts();
+          }
+        })
+      }
+    })
+    $("body").on('click', '.eec_edit', function(e){
+      e.preventDefault();
+      var eec_id = $(this).data('id');
+      $.ajax({
+        type: 'GET',
+        url: '/get_equipmentData/'+eec_id,
+        dataType: 'json',
+        success: function(response)
+        {
+          $("#eec_id").val(response[0].id);
+          $("#equipment").val(response[0].equipment);
+          $("#no_ofpersons").val(response[0].no_ofpersons);
+          $("#no_ofheaddays").val(response[0].no_ofheaddays);
+          $("#no_mandays").val(response[0].no_mandays);
+          $("#daily_rate").val(response[0].daily_rate);
+          $("#total_amount").val(response[0].amount);
+        },
+        error: function(response){ alert("Something went wrong! Please reload your page")}
+      })
+    })
+    $("body").on('click', '.elc_edit', function(e){
+      e.preventDefault();
+      var elc_id = $(this).data('id');
+      $.ajax({
+        type: 'GET',
+        url: '/get_laborData/'+elc_id,
+        dataType: 'json',
+        success: function(response)
+        {
+          $("#elc_id").val(response.id);
+          $("#manpower").val(response.manpower);
+          $("#elc_no_ofpersons").val(response.no_ofpersons);
+          $("#elc_no_ofheaddays").val(response.no_ofheaddays);
+          $("#elc_no_mandays").val(response.no_mandays);
+          $("#elc_daily_rate").val(response.daily_rate);
+          $("#elc_total_amount").val(response.amount);
+        },
+        error: function(response){ alert("Something went wrong! Please reload your page")}
+      })
+    })
     //estimation cost modals
     $("#btn_equipmentcost").on('click', function(e){
       $(".estimation_selection_modal").modal('hide');
       var id = $("#selection_construction_id").val();
+      $("#eec_construction_id").val(id);
       $.ajax({
         type: 'GET',
         url: '/show_construction/'+id,
@@ -532,7 +791,7 @@
         {
           $("#eec_title").text(response[0].construction_type.toUpperCase());
           $("#eec_description_modaltitle").text(response[0].construction_name+" ( ESTIMATION OF EQUIPMENT COST )");
-          show_allECM();
+          show_allEquipments();
         }
       })
      
@@ -543,11 +802,102 @@
       $(".estimation_selection_modal").modal('hide');
       $(".emc_modal").modal('show');
     })
-    function show_allEquipments() 
+    $("#btn_rentalcost").on('click', function(e)
     {
+      $(".estimation_selection_modal").modal('hide');
+      var id = $("#selection_construction_id").val();
+      $("#eec_construction_id").val(id);
+      $("#elc_construction_id").val(id);
       $.ajax({
         type: 'GET',
-        url: '/get_allEquipments',
+        url: '/show_construction/'+id,
+        dataType: 'json',
+        success:  function(response)
+        {
+          $("#elc_title").text(response[0].construction_type.toUpperCase());
+          $("#elc_description_modaltitle").text(response[0].construction_name+" ( ESTIMATION OF LABOR COST )");
+          show_allLaborCosts();
+        }
+      })
+     
+      $(".elc_modal").modal('show');
+    })
+    $("#manpower").on('input', function(e){
+      e.preventDefault();
+      var id = $(this).val();
+      $.ajax({
+        type: 'get',
+        url: '/count_allLaborers/'+id,
+        dataType: 'json',
+        success: function(data)
+        {
+          $("#elc_no_ofpersons").val(data[0].total);
+        },
+        error: function(response)
+        {
+          alert("Server error: Unmatch item in database")
+        }
+      })
+    })
+    function show_allDepartments()
+    {
+      $.ajax({
+        type: 'get',
+        url: '/get_allDepartments',
+        dataType: 'json',
+        success: function(data)
+        {
+          var option = "";
+          for(var i = 0; i<data.length; i++)
+          {
+            option += "<option>"+data[i].departmentname+"<option>";
+          }
+          $("#manpowers").html(option);
+        }
+      })
+    }
+    function show_allLaborCosts()
+    {
+      var construction_id = $("#selection_construction_id").val();
+      $.ajax({
+        type: 'GET',
+        url: '/get_allLaborCosts/'+construction_id,
+        dataType: 'json',
+        success:  function (data)
+        {
+          var row = "";
+          for(var i = 0; i<data.length; i++)
+          {
+            row += '<tr>';
+            row += '<td>'+data[i].manpower+'</td>';
+            row += '<td>'+data[i].no_ofpersons+'</td>';
+            row += '<td>'+data[i].no_ofheaddays+'</td>';
+            row += '<td>'+data[i].no_mandays+'</td>';
+            row += '<td>'+data[i].daily_rate+'</td>';
+            row += '<td>'+data[i].amount+'</td>';
+            row += '<td style = "font-size: 10px">'+data[i].created_at+'</td>';
+            row += '<td style = "font-size: 10px">'+data[i].updated_at+'</td>';
+            row += '<td align = "center">';
+            row += '<a class = "btn btn-outline-primary btn-sm elc_edit" data-id = '+data[i].id+'><i class = "fa fa-edit"></i> </a>';
+            row += '<a class = "btn btn-outline-danger btn-sm elc_remove" data-id = '+data[i].id+'><i class = "fa fa-trash"></i> </a>';
+            row += '</td>';
+            row += '</tr>';
+          }
+          $("#tbl_elc tbody").html(row);
+        },
+        error: function (data)
+        {
+          alert('Something went wrong! Please reload the page.');
+        }
+      })
+
+    }
+    function show_allEquipments() 
+    {
+      var id = $("#selection_construction_id").val();
+      $.ajax({
+        type: 'GET',
+        url: '/get_allEquipments/'+id,
         dataType: 'json',
         success:  function (data)
         {
@@ -557,19 +907,19 @@
             row += '<tr>';
             row += '<td>'+data[i].equipment+'</td>';
             row += '<td>'+data[i].no_ofpersons+'</td>';
-            row += '<td>'+data[i].no_headdays+'</td>';
+            row += '<td>'+data[i].no_ofheaddays+'</td>';
             row += '<td>'+data[i].no_mandays+'</td>';
             row += '<td>'+data[i].daily_rate+'</td>';
             row += '<td>'+data[i].amount+'</td>';
-            row += '<td>'+data[i].created_at+'</td>';
-            row += '<td>'+data[i].updated_at+'</td>';
+            row += '<td style = "font-size: 10px">'+data[i].created_at+'</td>';
+            row += '<td style = "font-size: 10px">'+data[i].updated_at+'</td>';
             row += '<td align = "center">';
-            row += '<a class = "btn btn-outline-primary btn-sm ecc_edit" data-id = '+data[i].id +'><i class = "fa fa-edit"></i> </a>';
-            row += '<a class = "btn btn-outline-danger btn-sm ecc_remove" data-id = '+data[i].id+'><i class = "fa fa-trash"></i> </a>';
+            row += '<a class = "btn btn-outline-primary btn-sm eec_edit" data-id = '+data[i].id+'><i class = "fa fa-edit"></i> </a>';
+            row += '<a class = "btn btn-outline-danger btn-sm eec_remove" data-id = '+data[i].id+'><i class = "fa fa-trash"></i> </a>';
             row += '</td>';
             row += '</tr>';
           }
-          $("#tbl_ecc tbody").html(row);
+          $("#tbl_eec tbody").html(row);
         },
         error: function (data)
         {

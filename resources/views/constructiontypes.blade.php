@@ -61,7 +61,7 @@
 
               <div class="card-body">
                 <table id="tbl_constructiontypes" class="table table-bordered table-striped" style = "table-layout: absolute">
-                  <thead>
+                  <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>ID</th>
                     <th>Type</th>
@@ -99,7 +99,7 @@
           <!-- <div class="overlay">
               <i class="fas fa-2x fa-sync fa-spin"></i>
           </div> -->
-          <div class="modal-header" >
+          <div class="modal-header" style = "background-color: #1C518A; color: white;">
             <h4 class="modal-title" ></h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -114,7 +114,8 @@
                 <div class="form-group">
                   <label for="construction">Construction/Repair/Improvements</label>
                   <input type="text" style = "display: none" val = "" id = "id" name = "id">
-                  <input type="text" name = "construction_type" id= "construction_type" class = "form-control" autocomplete ='off' autofocus>
+                  <!-- <input type="text" name = "construction_type" id= "construction_type" class = "form-control" autocomplete ='off' autofocus> -->
+                  <textarea class= "form-control" name="construction_type" id="construction_type" cols="30" rows="10" autofocus></textarea>
                 </div>
               </div>
           
@@ -136,7 +137,7 @@
             <!-- <div class="overlay">
                 <i class="fas fa-2x fa-sync fa-spin"></i>
             </div> -->
-            <div class="modal-header">
+            <div class="modal-header " >
               <h4 class="modal-title">Add Construction (SOW ) </h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -187,7 +188,7 @@
 <script type = "text/javascript">
 
  $(document).ready(function(){
-  show_allData();
+    show_allData();
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -273,9 +274,10 @@
             html += "<td >"+data[i].created_at+"</td>";
             html += "<td>"+data[i].updated_at+"</td>";
             html += '<td align = "center"> '+
-                        '<a class = "btn btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
-                        '<a class = "btn btn-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
-                        '<a class = "btn btn-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
+                    
+                        '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
+                        '<a class = "btn btn-sm btn-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
+                        '<a class = "btn btn-sm btn-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
                      '</td>';
         
             html += "</tr>";

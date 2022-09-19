@@ -436,7 +436,23 @@
 
 <!-- REQUIRED SCRIPTS -->
 @include('scripts/footer')
-
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 <script>
   $(document).ready(function(e){
     show_allData();
@@ -938,14 +954,16 @@
           var row = "";
           for(var i = 0; i<data.length; i++)
           {
+            var status = status = '<a style = "color: red"><i class = ""></i> On Process</a>';
+            if(data[i].status == 1) status = '<a class = "btn btn-outline-dark  btn-sm btn_emc" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype = '+data[i].construction_type+'><i class = "fa fa-eye"></i> Estimate Cost</a>';
             row += '<tr>';
             row += '<td>'+data[i].construction_id+'</td>';
             row += '<td>'+data[i].construction_type+'</td>';
             row += '<td>'+data[i].construction_name+'</td>';
             row += '<td>'+data[i].created_at+'</td>';
             row += '<td>'+data[i].updated_at+'</td>';
-            row += '<td align = "center">';
-            row += '<a class = "btn btn-outline-dark  btn-sm btn_emc" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype = '+data[i].construction_type+'><i class = "fa fa-eye"></i> Estimate Cost</a>';
+            row += '<td style = "text-align:center">';
+            row += status;
             row += '<a class = "btn btn-outline-primary btn-sm edit" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype_name = '+data[i].construction_type+'><i class = "fa fa-edit"></i> </a>';
             row += '<a class = "btn btn-outline-danger btn-sm remove" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype_name = '+data[i].construction_type+'><i class = "fa fa-trash"></i> </a>';
             row += '</td>';

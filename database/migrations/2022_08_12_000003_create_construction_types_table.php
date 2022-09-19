@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('construction_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('construction_type');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

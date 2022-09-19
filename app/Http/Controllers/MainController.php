@@ -12,6 +12,9 @@ use App\Models\EstimatedMaterialCost;
 use App\Models\EstimatedEquipmentRentalCost;
 use Illuminate\Support\Facades\Validator;
 use App\Models\EstimatedLaborCost;
+use App\Models\Schedules;
+use App\Models\UserJobRequestSchedule;
+use App\Models\JobRequestSchedule;
 
 class MainController extends Controller
 {
@@ -60,6 +63,15 @@ class MainController extends Controller
         $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
         from construction_types, constructions
         where construction_types.id = constructions.constructiontype_id
+        order by construction_types.construction_type asc');
+        echo json_encode($data);
+    }
+    public function get_allconstructions_approved()
+    {
+        $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
+        from construction_types, constructions
+        where construction_types.id = constructions.constructiontype_id
+        and construction_types.status = 1
         order by constructions.id desc');
         echo json_encode($data);
     }
@@ -122,6 +134,16 @@ class MainController extends Controller
     public function get_allconstructiontypes()
     {
         $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES");
+        echo json_encode($data);
+    }
+    public function get_allconstructiontypes_approved()
+    {
+        $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES WHERE status = 1");
+        echo json_encode($data);
+    }
+    public function get_allconstructiontypes_unapproved()
+    {
+        $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES WHERE status = 0 ORDER BY created_at DESC");
         echo json_encode($data);
     }
     public function delete_constructiontype($id)
@@ -502,6 +524,16 @@ class MainController extends Controller
   
     //SCHEDULING 
 
+    public function get_schedules()
+    {
+        $data = DB::select('select construction_types.*, constructions.*, schedules.*, jobrequestschedules.*, userjobrequestschedules.*, constructions.construction_name as title
+        from construction_types, constructions, schedules, jobrequestschedules, userjobrequestschedules
+        where construction_types.id = constructions.constructiontype_id
+        and schedules.id = jobrequestschedules.schedule_id
+        and constructions.id = jobrequestschedules.jobrequest_id
+        and jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id');
+        echo json_encode($data);
+    }
     public function scheduling(Request $request) 
     {
         if(!empty(session('LoggedUser')))
@@ -513,9 +545,14 @@ class MainController extends Controller
             ];
             if($request->ajax())
             {
-                $data = DB::select('select * from schedules
-                                    where start >= "'.$request->start.'"
-                                    and end <= "'.$request->end.'"');
+                $data = DB::select('select construction_types.*, constructions.*, schedules.*, jobrequestschedules.*, userjobrequestschedules.*, constructions.construction_name as title
+                                    from construction_types, constructions, schedules, jobrequestschedules, userjobrequestschedules
+                                    where construction_types.id = constructions.constructiontype_id
+                                    and schedules.id = jobrequestschedules.schedule_id
+                                    and constructions.id = jobrequestschedules.jobrequest_id
+                                    and jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id
+                                    and schedules.date(start) >= "'.$request->start.'"
+                                    and schedules.date(end) <= "'.$request->end.'"');
                 echo json_encode($data);
             }
             return view('scheduling', $data);
@@ -524,5 +561,178 @@ class MainController extends Controller
         {
             return redirect('/');
         }
+    }
+    public function jobrequests()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = User::where('id', '=', session('LoggedUser'))->first();
+    
+            $data = [
+                'userinfo' => $userinfo
+            ];
+            return view('jobrequests_reports', $data);
+        }
+        else return redirect('/')->with('Fail','You must logged in!');
+    }
+    public function manpowers()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = User::where('id', '=', session('LoggedUser'))->first();
+    
+            $data = [
+                'userinfo' => $userinfo
+            ];
+            return view('manpowers', $data);
+        }
+        else return redirect('/')->with('Fail','You must logged in!');
+    }
+    public function scheduling_actions(Request $request)
+    {
+        if($request->ajax())
+        {
+            $schedule = Schedules::whereDate('start', '=', date($request->start))
+                                ->whereDate('end', '=', date($request->end))->first();
+            if(empty($schedule) || $schedule == "")
+            {
+                $schedule = new Schedules();
+                $schedule->start = date($request->start);
+                $schedule->end = date($request->end);
+                $schedule->save();
+                $schedule = $schedule->id;
+            }
+            else $schedule = $schedule->id;
+
+            $jobrequest_schedule  = JobRequestSchedule::where('schedule_id', '=', $schedule)
+                                                ->where('jobrequest_id', '=', $request->constructiion)
+                                                ->first();
+            if(empty($jobrequest_schedule) || $jobrequest_schedule == "")
+            {
+                $jobrequest_schedule = new JobRequestSchedule;
+                $jobrequest_schedule->last_actionBy = session('LoggedUser');
+                $jobrequest_schedule->schedule_id = $schedule;
+                $jobrequest_schedule->jobrequest_id = $request->construction;
+                $jobrequest_schedule->save();
+                $jobrequest_schedule = $jobrequest_schedule->id;
+            }
+            else
+            {
+                $jobrequest_schedule = $jobrequest_schedule->id;
+            }
+
+            $foremans = $request->foremans;
+            $laborers = $request->laborers;
+
+            $total_added_foremans = 0;
+            $total_notadded_foremans = 0;
+            $foremans_notsaved = [];
+
+            $total_added_laborers = 0;
+            $total_notadded_laborers = 0;
+            $laborers_notsaved = [];
+            for($i = 0; $i<count($foremans); $i++)
+            {
+                $user = UserJobRequestSchedule::where('user_id', '=', $foremans[$i])
+                                        ->where('jobrequestsched_id', '=', $jobrequest_schedule)
+                                        ->first();
+                
+                if(empty($user) || $user == "")
+                {
+                    $user = new UserJobRequestSchedule;
+                    $user->user_id = $foremans[$i];
+                    $user->jobrequestsched_id = $jobrequest_schedule;
+                    $user->save();
+                    $user = $user->id;
+                    $total_added_foremans += 1;
+                }
+                else
+                {
+                    $foremans_notsaved = [
+                        'user' => $user_id
+                    ];
+                    $total_notadded_foremans += 1;
+                }
+            }
+            for($i = 0; $i<count($laborers); $i++)
+            {
+                $user = UserJobRequestSchedule::where('user_id', '=', $laborers[$i])
+                                        ->where('jobrequestsched_id', '=', $jobrequest_schedule)
+                                        ->first();
+                
+                if(empty($user) || $user == "")
+                {
+                    $user = new UserJobRequestSchedule;
+                    $user->user_id = $laborers[$i];
+                    $user->jobrequestsched_id = $jobrequest_schedule;
+                    $user->save();
+                    $user = $user->id;
+                    $total_added_laborers += 1;
+                }
+                else
+                {
+                    $laborers_notsaved = [
+                        'user' => $user_id
+                    ];
+                    $total_notadded_laborers += 1;
+                }
+            }
+            return response()->json([
+                'status' => 200,
+                'total_added_laborers' => $total_added_laborers,
+                'total_added_foremans' => $total_added_foremans,
+                'total_notadded_laborers' => $total_notadded_laborers,
+                'total_notadded_foremans' => $total_notadded_foremans,
+                'foremans_notsaved' => $foremans_notsaved,
+                'laborers_notsaved' => $laborers_notsaved,
+            ]);
+        }
+    }
+
+    public function funds_availability(Request $request)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userInfo = User::where('id', '=', session('LoggedUser'))->first();
+            $data = [
+                'userinfo' => $userInfo
+            ];
+            return view('funds_availability', $data);
+        }
+        return redirect('/')->with('fail', 'Please login');
+    }
+    public function approve_jobRequest($id)
+    {
+        $construction_type = ConstructionTypes::findOrFail($id);
+        if(! $construction_type )
+        {
+            return response()->json([
+                'status' => 400, 
+                'error_msg' => 'Server error: in finding construction type'
+            ]);
+        }
+        else
+        {
+            $construction_type->status = 1;
+            $construction_type->update();
+            return response()->json([
+                'status' => 200, 
+                'success' => 'The job request has been successfully approved!'
+            ]);
+        }
+    }
+    public function search_constructiontypes(Request $request)
+    {
+        $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
+        from construction_types, constructions
+        where construction_types.id = constructions.constructiontype_id
+        and construction_types.id = "'.$request->construction_type.'"
+        order by constructions.construction_name asc');
+        dd($data);
+        // return redirect()->back()->with('constructions', $data);
+    }
+    public function jobrequests_report()
+    {
+        return view('jobrequests_reportprint');
     }
 }

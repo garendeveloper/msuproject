@@ -122,9 +122,6 @@
  <div class="modal fade open_modal" id="modal-info">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <!-- <div class="overlay">
-              <i class="fas fa-2x fa-sync fa-spin"></i>
-          </div> -->
           <div class="modal-header" style = "background-color: #1C518A; color: white;">
             <h4 class="modal-title" ></h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -137,15 +134,39 @@
           <form action="#" id = "schedule_form">
               <div class="modal-body">
                 @csrf
-                <div class="form-group">
-                  <label for="construction">Constructions/Job Requests</label>
-                  <select class = "form-control" name="construction" id="construction">
+                <input type="date" style = "display:none" id = "start" name ="start">
+                <input type="date" style = "display: none" id = "end" name = "end">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="construction">Approved; Constructions/Job Requests</label>
+                      <select class = "form-control" name="construction" id="construction">
 
-                  </select>
-                  
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Select Foreman/s</label>
+                      <div class="select2-purple">
+                        <select class="select2" name = "foremans[]" id = "foremans" multiple="multiple" data-placeholder="Select a foreman" data-dropdown-css-class="select2-purple" style="width: 100%; height: 50px" >
+
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Select Laborers</label>
+                      <div class="select2-blue">
+                        <select class="select2" name = "laborers[]" id = "laborers" multiple="multiple" data-placeholder="Select a laborer" data-dropdown-css-class="select2-blue" style="width: 100%;" >
+    
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-          
               <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" id = "btn_save">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -163,6 +184,7 @@
 <script src="adminlte3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- jQuery UI -->
 <script src="adminlte3/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="adminlte3/plugins/select2/js/select2.full.min.js"></script>
 <!-- AdminLTE App -->
 <script src="adminlte3/dist/js/adminlte.min.js"></script>
 <!-- fullCalendar 2.2.5 -->
@@ -172,27 +194,112 @@
 <script src="adminlte3/dist/js/demo.js"></script>
 <!-- Page specific script -->
 <script>
-  alert("Please click on the calendar to add schedule")
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+  })
+</script>
+<script>
+  // alert("Please click on the calendar to add schedule")
   show_allJobRequests();
+  show_allLaborers();
+  show_allForemans();
   function show_allJobRequests()
   {
     $.ajax({
       type: 'get',
-      url: '/get_allconstructions',
+      url: '/get_allconstructions_approved',
+      dataType: 'json',
+      success: function(data)
+      {
+        var option = "";
+        option += '<option> -- Select Here --</option>'
+        for(var i = 0; i<data.length; i++)
+        {
+          option += '<option value = '+data[i].construction_id+'>'+data[i].construction_type+': '+data[i].construction_name+'</option>';
+        }
+        $("#construction").html(option);
+      }
+    })
+  }
+  function show_allLaborers()
+  {
+    $.ajax({
+      type: 'get',
+      url: '/get_allLaborers',
       dataType: 'json',
       success: function(data)
       {
         var option = "";
         for(var i = 0; i<data.length; i++)
         {
-          option += '<option value = '+data[i].construction_id+'>'+data[i].construction_name+'</option>';
+          option += '<option value = '+data[i].user_id+'>'+data[i].name+'</option>';
         }
-        $("#construction").html(option);
+        $("#laborers").html(option);
+      }
+    })
+  }
+  function show_allForemans()
+  {
+    $.ajax({
+      type: 'get',
+      url: '/get_allForemans',
+      dataType: 'json',
+      success: function(data)
+      {
+        var option = "";
+        for(var i = 0; i<data.length; i++)
+        {
+          option += '<option value = '+data[i].user_id+'>'+data[i].name+'</option>';
+        }
+        $("#foremans").html(option);
       }
     })
   }
   $(function () {
 
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    })
+    $("#schedule_form").on('submit', function(e){
+      e.preventDefault();
+      var data =$(this).serialize();
+      $.ajax({
+        type: 'post',
+        url: '/scheduling_actions',
+        data: data,
+        dataType: 'json',
+        success: function(response){
+          if(response.status == 200)
+          {
+            alert("Job request successfully on scheduled!");
+            $("#open_modal").modal('hide');
+            $("#schedule_form").trigger('reset');
+            $("#foremans").text("");
+            $("#laborers").text("");
+          }
+          if(response.status == 400)
+          {
+            $("#ajaxresponse").html("");
+            $("#ajaxresponse").removeClass('alert alert-danger');
+            $("#ajaxresponse").addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $("#ajaxresponse").append('<li>'+err_values+'</li>');
+            });
+          }
+        },
+        error: function(response){
+          alert("Server error: Reload your page!");
+        }
+      })
+    })
     /* initialize the external events
      -----------------------------------------------------------------*/
     function ini_events(ele) {
@@ -257,22 +364,26 @@
       },
       themeSystem: 'bootstrap',
       //Random default events
-      events: '/scheduling',
+      events: '/get_schedules',
       selectable: true,
       selectHelper: true,
       editable  : true,
-      droppable : true, // this allows things to be dropped onto the calendar !!!
-      drop      : function(info) {
-        // is the "remove after drop" checkbox checked?
-        if (checkbox.checked) {
-          // if so, remove the element from the "Draggable Events" list
-          info.draggedEl.parentNode.removeChild(info.draggedEl);
-        }
-      },
       select: function(start, end, allDay)
       {
+        var start_month = start.start.getMonth()+1;
+        var start_day = start.start.getDate();
+        var start_year = start.start.getFullYear();
+        if(start_month > 9) start_month = 0+""+start_month;
+
+        var end_month = start.end.getMonth()+1;
+        var end_day = start.end.getDate();
+        var end_year = start.end.getFullYear();
+        if(end_month > 9) end_month = 0+""+end_month;
         $(".open_modal").modal('show');
-        $(".modal-title").text('Add new schedule');
+        $(".modal-title").text('Add Schedule');
+  
+        $("#start").val(start_year+"-"+start_month+"-"+start_day);
+        $("#end").val(end_year+"-"+end_month+"-"+end_day);
       }
     });
 

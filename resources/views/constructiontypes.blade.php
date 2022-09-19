@@ -65,6 +65,7 @@
                   <tr>
                     <th>ID</th>
                     <th>Type</th>
+                    <th>Status</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
                     <th style = "text-align: center">Actions</th>
@@ -184,7 +185,23 @@
 
 <!-- REQUIRED SCRIPTS -->
 @include('scripts/footer')
-
+<script>
+  $(function () {
+    $("#tbl_constructiontypes").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#tbl_constructiontypes_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 <script type = "text/javascript">
 
  $(document).ready(function(){
@@ -195,7 +212,7 @@
       }
     });
     
-    $('#tbl_constructiontypes').DataTable({ pagingType: 'full_numbers',});
+    // $('#tbl_constructiontypes').DataTable({ pagingType: 'full_numbers',});
     $("#btn_addconstructiontype").on('click', function(e){
       e.preventDefault();
       $("#addform").trigger('reset');
@@ -268,23 +285,24 @@
           var html = "";
           for(var i = 0; i<data.length; i++)
           {
+            var status = "<span class = 'badge badge-warning'>Still process</span>";
+            if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
+            
             html += "<tr style = 'text-align:center'>";
             html += "<td>"+data[i].id+"</td>";
             html += "<td>"+toTitleCase(data[i].construction_type)+"</td>";
+            html += "<td>"+status+"</td>";
             html += "<td >"+data[i].created_at+"</td>";
             html += "<td>"+data[i].updated_at+"</td>";
             html += '<td align = "center"> '+
-                    
-                        '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
+                        // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
                         '<a class = "btn btn-sm btn-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
                         '<a class = "btn btn-sm btn-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
                      '</td>';
         
             html += "</tr>";
           }
-         
           $("#tbody_constructiontypes").html(html);
-         
         },
         error: function(response){
           alert("Something went wrong in fetching data in database.");
@@ -315,9 +333,8 @@
     });
 
     $("body").on('click', '.remove', function(){
-      
       var id = $(this).data('id');
-
+      
       if(confirm("Are you sure you want to remove this item?")) {
         $.ajax({
           type: 'POST',

@@ -15,14 +15,22 @@ return new class extends Migration
     {
         Schema::create('jobrequestschedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable()->default(0);
-            $table->foreign('user_id')
+            $table->unsignedBigInteger('last_actionBy');
+            $table->foreign('last_actionBy')
                     ->references('id')
-                    ->on('users');
+                    ->on('users')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
             $table->unsignedBigInteger('schedule_id');
             $table->foreign('schedule_id')
                     ->references('id')
                     ->on('schedules')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->unsignedBigInteger('jobrequest_id');
+            $table->foreign('jobrequest_id')
+                    ->references('id')
+                    ->on('constructions')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->integer('status')->default(0);

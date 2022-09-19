@@ -63,7 +63,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/funds') }}" class="nav-link">
+            <a href="{{ url('/checking_fundsAvailability') }}" class="nav-link">
               <i class="nav-icon fa fa-square"></i>
               <p>Funds Availability</p>
             </a>
@@ -73,6 +73,29 @@
               <i class="nav-icon fa fa-square"></i>
               <p>Schedules</p>
             </a>
+          </li>
+          <li class="nav-item">
+            <a href="" class="nav-link">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                Reports
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('/jobrequests')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Job Requests</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/manpowers')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manpowers</p>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a href="{{ url('/logout') }}" class="nav-link">

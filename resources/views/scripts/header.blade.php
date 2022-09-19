@@ -14,8 +14,12 @@
   <!-- fullCalendar -->
   <link rel="stylesheet" href="adminlte3/plugins/fullcalendar/main.css">
 <!-- SweetAlert2 -->
-
-  <link rel="stylesheet" href="adminlte3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+<link rel="stylesheet" href="adminlte3/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<link rel="stylesheet" href="adminlte3/plugins/select2/css/select2.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="adminlte3/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="adminlte3/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<link rel="stylesheet" href="adminlte3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 <!-- IonIcons -->
 <link rel="stylesheet" href="adminlte3/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <!-- Theme style -->

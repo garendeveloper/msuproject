@@ -14,10 +14,11 @@
 <script src="adminlte3/plugins/jszip/jszip.min.js"></script>
 <script src="adminlte3/plugins/pdfmake/pdfmake.min.js"></script>
 <script src="adminlte3/plugins/pdfmake/vfs_fonts.js"></script>
+
 <script src="adminlte3/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="adminlte3/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="adminlte3/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
+<script src="adminlte3/plugins/moment/moment.min.js"></script>
 <!-- OPTIONAL SCRIPTS -->
 <script src="adminlte3/plugins/chart.js/Chart.min.js"></script>
 <!-- AdminLTE for demo purposes -->

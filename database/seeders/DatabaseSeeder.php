@@ -15,8 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-          ConstructionTypes::factory(5)->create();
+   
+        ConstructionTypes::factory(5)->create();
+
         \App\Models\Construction::factory(5)->create();
         \App\Models\Departments::factory()->create([
             'departmentname' => 'PPU HEAD',
@@ -34,7 +35,10 @@ class DatabaseSeeder extends Seeder
         \App\Models\Departments::factory()->create([
           'departmentname' => 'LABORER',
         ]);
-
+        \App\Models\Departments::factory()->create([
+          'departmentname' => 'FOREMAN',
+        ]);
+        \App\Models\User::factory(50)->create();
         \App\Models\User::factory()->create([
           'department_id' => '1',
           'name' => 'PPU HEAD',

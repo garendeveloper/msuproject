@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use DB;
 class UserController extends Controller
 {
     /**
@@ -24,6 +24,22 @@ class UserController extends Controller
     {
         $users = User::all();
         echo json_encode($users);
+    }
+    public function get_allLaborers()
+    {
+        $data = DB::select('select users.id as user_id, users.*, departments.*
+                            from users, departments
+                            where departments.id = users.department_id
+                            and departments.departmentname = "Laborer"');
+        echo json_encode($data);
+    }
+    public function get_allForemans()
+    {
+        $data = DB::select('select users.id as user_id, users.*, departments.*
+                            from users, departments
+                            where departments.id = users.department_id
+                            and departments.departmentname = "Foreman"');
+        echo json_encode($data);
     }
     /**
      * Show the form for creating a new resource.

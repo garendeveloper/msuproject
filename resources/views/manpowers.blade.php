@@ -93,7 +93,7 @@
             </ul>
             <form id = "form" action="" method = "post">
               <div class="modal-body">
-                {{csrf_token}}
+                @csrf
                 <input type="hidden" value = "" id = "id" name = "id">
                
                 <div class="form-group">

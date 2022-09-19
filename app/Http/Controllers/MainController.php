@@ -555,7 +555,7 @@ class MainController extends Controller
                                     and schedules.date(end) <= "'.$request->end.'"');
                 echo json_encode($data);
             }
-            return view('scheduling', $data);
+            return view('schedulingtask', $data);
         }
         else
         {

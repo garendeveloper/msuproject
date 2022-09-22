@@ -14,9 +14,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        $userinfo = [
-            'userinfo' => User::where('id', '=', session('LoggedUser'))->first()
+        $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+                            from departments, users 
+                            where departments.id = users.department_id
+                            and users.id = "'.session('LoggedUser').'"');
+        $data = [
+            'userinfo' => $userInfo
         ];
         return view('users', $userinfo);
     }

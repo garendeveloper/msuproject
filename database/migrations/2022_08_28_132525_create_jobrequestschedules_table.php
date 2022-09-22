@@ -34,6 +34,7 @@ return new class extends Migration
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->integer('status')->default(0);
+            $table->string('color')->nullable();
             $table->timestamps();
         });
     }

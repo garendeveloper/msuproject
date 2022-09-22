@@ -27,7 +27,11 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userinfo = ['userinfo' => User::where('id', '=', session('LoggedUser'))->first()];
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $userinfo = ['userinfo' => $userinfo];
             return view('dashboard', $userinfo);
         }
         else
@@ -39,7 +43,11 @@ class MainController extends Controller
     public function constructions() 
     {
         if(!empty(session('LoggedUser'))){
-            $userinfo = User::where('id', '=', session('LoggedUser'))->first();
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+
             $constructions = DB::select('select construction_types.*, constructions.* 
                                 from construction_types, constructions
                                 where construction_types.id = constructions.constructiontype_id');
@@ -73,6 +81,15 @@ class MainController extends Controller
         where construction_types.id = constructions.constructiontype_id
         and construction_types.status = 1
         order by constructions.id desc');
+        echo json_encode($data);
+    }
+    public function get_allconstructions_approved_forscheduling()
+    {
+        $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
+                            from construction_types, constructions
+                            where construction_types.id = constructions.constructiontype_id
+                            and construction_types.status = 1');
+
         echo json_encode($data);
     }
     public function construction_actions(Request $request)
@@ -168,7 +185,10 @@ class MainController extends Controller
     public function constructiontypes()
     {
         if(!empty(session('LoggedUser'))){
-            $userinfo = User::where('id', '=', session('LoggedUser'))->first();
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+            from departments, users 
+            where departments.id = users.department_id
+            and users.id = "'.session('LoggedUser').'"');
             $constructiontypes = ConstructionTypes::select('*')->orderby('id', 'desc')->get();
             $data = [
                 'userinfo' => $userinfo,
@@ -183,7 +203,11 @@ class MainController extends Controller
     public function materials()
     {
         if(!empty(session('LoggedUser'))){
-            $userinfo = User::where('id', '=', session('LoggedUser'))->first();
+            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+                        from departments, users 
+                        where departments.id = users.department_id
+                        and users.id = "'.session('LoggedUser').'"');
+
             $materials = Materials::all();
             $data = [
                 'userinfo' => $userinfo,
@@ -526,34 +550,35 @@ class MainController extends Controller
 
     public function get_schedules()
     {
-        $data = DB::select('select construction_types.*, constructions.*, schedules.*, jobrequestschedules.*, userjobrequestschedules.*, constructions.construction_name as title
-        from construction_types, constructions, schedules, jobrequestschedules, userjobrequestschedules
+        $data = DB::select('select construction_types.construction_type, constructions.construction_name as title, jobrequestschedules.id, schedules.start, schedules.end, jobrequestschedules.color
+        from  construction_types, constructions, schedules, jobrequestschedules
         where construction_types.id = constructions.constructiontype_id
         and schedules.id = jobrequestschedules.schedule_id
-        and constructions.id = jobrequestschedules.jobrequest_id
-        and jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id');
+        and constructions.id = jobrequestschedules.jobrequest_id');
         echo json_encode($data);
     }
     public function scheduling(Request $request) 
     {
         if(!empty(session('LoggedUser')))
         {
-            $userinfo = User::where('id', '=', session('LoggedUser'))->first();
-    
+            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+
             $data = [
-                'userinfo' => $userinfo
+                'userinfo' => $userInfo
             ];
             if($request->ajax())
             {
-                $data = DB::select('select construction_types.*, constructions.*, schedules.*, jobrequestschedules.*, userjobrequestschedules.*, constructions.construction_name as title
-                                    from construction_types, constructions, schedules, jobrequestschedules, userjobrequestschedules
-                                    where construction_types.id = constructions.constructiontype_id
-                                    and schedules.id = jobrequestschedules.schedule_id
-                                    and constructions.id = jobrequestschedules.jobrequest_id
-                                    and jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id
-                                    and schedules.date(start) >= "'.$request->start.'"
-                                    and schedules.date(end) <= "'.$request->end.'"');
-                echo json_encode($data);
+                $data = DB::select('select construction_types.*, constructions.*, schedules.*, jobrequestschedules.*, constructions.construction_name as title
+                from  construction_types, constructions, schedules, jobrequestschedules
+                where construction_types.id = constructions.constructiontype_id
+                and schedules.id = jobrequestschedules.schedule_id
+                and constructions.id = jobrequestschedules.jobrequest_id
+                and date(schedules.start) >= "'.date($request->start).'"
+                and date(schedules.end) <= "'.date($request->end).'"');
+                return response()->json($data);
             }
             return view('schedulingtask', $data);
         }
@@ -566,10 +591,12 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userinfo = User::where('id', '=', session('LoggedUser'))->first();
-    
+            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+                            from departments, users 
+                            where departments.id = users.department_id
+                            and users.id = "'.session('LoggedUser').'"');
             $data = [
-                'userinfo' => $userinfo
+                'userinfo' => $userInfo
             ];
             return view('jobrequests_reports', $data);
         }
@@ -579,10 +606,14 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userinfo = User::where('id', '=', session('LoggedUser'))->first();
-    
+            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+            from departments, users 
+            where departments.id = users.department_id
+            and users.id = "'.session('LoggedUser').'"');
+
+            $userInfo = User::where('id', '=', session('LoggedUser'))->first();
             $data = [
-                'userinfo' => $userinfo
+                'userinfo' => $userInfo
             ];
             return view('manpowers', $data);
         }
@@ -591,101 +622,183 @@ class MainController extends Controller
     public function scheduling_actions(Request $request)
     {
         if($request->ajax())
-        {
-            $schedule = Schedules::whereDate('start', '=', date($request->start))
-                                ->whereDate('end', '=', date($request->end))->first();
-            if(empty($schedule) || $schedule == "")
+        {   
+            if($request->type == 'delete')
             {
-                $schedule = new Schedules();
-                $schedule->start = date($request->start);
-                $schedule->end = date($request->end);
-                $schedule->save();
-                $schedule = $schedule->id;
-            }
-            else $schedule = $schedule->id;
-
-            $jobrequest_schedule  = JobRequestSchedule::where('schedule_id', '=', $schedule)
-                                                ->where('jobrequest_id', '=', $request->constructiion)
-                                                ->first();
-            if(empty($jobrequest_schedule) || $jobrequest_schedule == "")
-            {
-                $jobrequest_schedule = new JobRequestSchedule;
-                $jobrequest_schedule->last_actionBy = session('LoggedUser');
-                $jobrequest_schedule->schedule_id = $schedule;
-                $jobrequest_schedule->jobrequest_id = $request->construction;
-                $jobrequest_schedule->save();
-                $jobrequest_schedule = $jobrequest_schedule->id;
+                $jobrequest_schedule = JobRequestSchedule::findOrFail($request->id);
+                if(!$jobrequest_schedule)
+                {
+                    return response()->json([
+                        'status' => 400,
+                        'fail' => 'Server Error: Cannot find the job request id',
+                    ]);
+                }
+                else
+                {
+                    $jobrequest_schedule->delete();
+                    return response()->json([
+                        'status' => 200,
+                        'success' => 'Job request successfully removed',
+                    ]);
+                }
             }
             else
             {
-                $jobrequest_schedule = $jobrequest_schedule->id;
-            }
-
-            $foremans = $request->foremans;
-            $laborers = $request->laborers;
-
-            $total_added_foremans = 0;
-            $total_notadded_foremans = 0;
-            $foremans_notsaved = [];
-
-            $total_added_laborers = 0;
-            $total_notadded_laborers = 0;
-            $laborers_notsaved = [];
-            for($i = 0; $i<count($foremans); $i++)
-            {
-                $user = UserJobRequestSchedule::where('user_id', '=', $foremans[$i])
-                                        ->where('jobrequestsched_id', '=', $jobrequest_schedule)
-                                        ->first();
-                
-                if(empty($user) || $user == "")
+                $validator = Validator::make($request->all(), [
+                    'start' => 'required|date',
+                    'end' => 'required|date',
+                ]);
+                if($validator->fails())
                 {
-                    $user = new UserJobRequestSchedule;
-                    $user->user_id = $foremans[$i];
-                    $user->jobrequestsched_id = $jobrequest_schedule;
-                    $user->save();
-                    $user = $user->id;
-                    $total_added_foremans += 1;
+                    return response()->json([
+                        'status' => 400,
+                        'errors' => $validator->messages()
+                    ]);
+                }
+                $schedule = Schedules::whereDate('start', '=', $request->start)
+                                    ->whereDate('end', '=', $request->end)->first();
+                if(empty($schedule) || $schedule == "")
+                {
+                    $schedule = new Schedules();
+                    $schedule->start = $request->start;
+                    $schedule->end = $request->end;
+                    $schedule->save();
+                    $schedule = $schedule->id;
+                }
+                else $schedule = $schedule->id;
+
+                if($request->type == 'update')
+                {
+                    $jobrequest_schedule = JobRequestSchedule::findOrFail($request->id);
+                    if(!$jobrequest_schedule)
+                    {
+                        return response()->json([
+                            'status' => 400,
+                            'fail' => 'Server Error: Cannot find the job request id',
+                        ]);
+                    }
+                    else
+                    {
+                        $jobrequest_schedule->schedule_id = $schedule;
+                        $jobrequest_schedule->update();
+                        return response()->json([
+                            'status' => 200,
+                            'success' => 'Job request successfully moved the schedule',
+                        ]);
+                    }
                 }
                 else
                 {
-                    $foremans_notsaved = [
-                        'user' => $user_id
-                    ];
-                    $total_notadded_foremans += 1;
+
+                    $validator = Validator::make($request->all(), [
+                        'start' => 'required|date',
+                        'end' => 'required|date',
+                        'construction' => 'required'
+                    ]);
+                    if($validator->fails())
+                    {
+                        return response()->json([
+                            'status' => 400,
+                            'errors' => $validator->messages()
+                        ]);
+                    }
+                    else
+                    {
+
+                        $jobrequest_schedule  = JobRequestSchedule::where('status', '=', 0)
+                                                        ->where('jobrequest_id', '=', $request->construction)
+                                                        ->first();
+                        if($jobrequest_schedule == "")
+                        {
+                            $jobrequest_schedule = new JobRequestSchedule;
+                            $jobrequest_schedule->last_actionBy = session('LoggedUser');
+                            $jobrequest_schedule->schedule_id = $schedule;
+                            $jobrequest_schedule->jobrequest_id = $request->construction;
+                            $jobrequest_schedule->color = $request->color;
+                            $jobrequest_schedule->save();
+                            $jobrequest_schedule = $jobrequest_schedule->id;
+                            return response()->json([
+                                'status' => 200,
+                                'success' => 'Job request successfully on scheduled!'
+                            ]);
+                        }
+                        else
+                        {
+                            return response()->json([
+                                'status' => 401,
+                                'fail' => 'Job request already on scheduled!'
+                            ]);
+                        }
+                        
+
+                    // $foremans = $request->foremans;
+                    // $laborers = $request->laborers;
+
+                    // $total_added_foremans = 0;
+                    // $total_notadded_foremans = 0;
+                    // $foremans_notsaved = [];
+
+                    // $total_added_laborers = 0;
+                    // $total_notadded_laborers = 0;
+                    // $laborers_notsaved = [];
+                    // for($i = 0; $i<count($foremans); $i++)
+                    // {
+                    //     $user = UserJobRequestSchedule::where('user_id', '=', $foremans[$i])
+                    //                             ->where('jobrequestsched_id', '=', $jobrequest_schedule)
+                    //                             ->first();
+                        
+                    //     if($user == "")
+                    //     {
+                    //         $user = new UserJobRequestSchedule;
+                    //         $user->user_id = $foremans[$i];
+                    //         $user->jobrequestsched_id = $jobrequest_schedule;
+                    //         $user->save();
+                    //         $user = $user->id;
+                    //         $total_added_foremans += 1;
+                    //     }
+                    //     else
+                    //     {
+                    //         $foremans_notsaved[] = [
+                    //             'user' => $user_id
+                    //         ];
+                    //         $total_notadded_foremans += 1;
+                    //     }
+                    // }
+                    // for($i = 0; $i<count($laborers); $i++)
+                    // {
+                    //     $user = UserJobRequestSchedule::where('user_id', '=', $laborers[$i])
+                    //                             ->where('jobrequestsched_id', '=', $jobrequest_schedule)
+                    //                             ->first();
+                        
+                    //     if($user == "")
+                    //     {
+                    //         $user = new UserJobRequestSchedule;
+                    //         $user->user_id = $laborers[$i];
+                    //         $user->jobrequestsched_id = $jobrequest_schedule;
+                    //         $user->save();
+                    //         $user = $user->id;
+                    //         $total_added_laborers += 1;
+                    //     }
+                    //     else
+                    //     {
+                    //         $laborers_notsaved[] = [
+                    //             'user' => $user_id
+                    //         ];
+                    //         $total_notadded_laborers += 1;
+                    //     }
+                    // }
+                    // return response()->json([
+                    //     'status' => 200,
+                    //     'total_added_laborers' => $total_added_laborers,
+                    //     'total_added_foremans' => $total_added_foremans,
+                    //     'total_notadded_laborers' => $total_notadded_laborers,
+                    //     'total_notadded_foremans' => $total_notadded_foremans,
+                    //     'foremans_notsaved' => $foremans_notsaved,
+                    //     'laborers_notsaved' => $laborers_notsaved,
+                    // ]);
+                    }
                 }
             }
-            for($i = 0; $i<count($laborers); $i++)
-            {
-                $user = UserJobRequestSchedule::where('user_id', '=', $laborers[$i])
-                                        ->where('jobrequestsched_id', '=', $jobrequest_schedule)
-                                        ->first();
-                
-                if(empty($user) || $user == "")
-                {
-                    $user = new UserJobRequestSchedule;
-                    $user->user_id = $laborers[$i];
-                    $user->jobrequestsched_id = $jobrequest_schedule;
-                    $user->save();
-                    $user = $user->id;
-                    $total_added_laborers += 1;
-                }
-                else
-                {
-                    $laborers_notsaved = [
-                        'user' => $user_id
-                    ];
-                    $total_notadded_laborers += 1;
-                }
-            }
-            return response()->json([
-                'status' => 200,
-                'total_added_laborers' => $total_added_laborers,
-                'total_added_foremans' => $total_added_foremans,
-                'total_notadded_laborers' => $total_notadded_laborers,
-                'total_notadded_foremans' => $total_notadded_foremans,
-                'foremans_notsaved' => $foremans_notsaved,
-                'laborers_notsaved' => $laborers_notsaved,
-            ]);
         }
     }
 
@@ -693,7 +806,11 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = User::where('id', '=', session('LoggedUser'))->first();
+            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+                                from departments, users 
+                                where departments.id = users.department_id
+                                and users.id = "'.session('LoggedUser').'"');
+
             $data = [
                 'userinfo' => $userInfo
             ];

@@ -3,7 +3,15 @@
 <head>
   @include('scripts/header')
   <link href='fullcalendar/lib/main.css' rel='stylesheet' />
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="adminlte3/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
   <link href='fullcalendar/lib/main.min.css' rel='stylesheet' />
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="adminlte3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+      <!-- Bootstrap4 Duallistbox -->
+  <link rel="stylesheet" href="adminlte3/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="adminlte3/plugins/toastr/toastr.min.css">
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -149,15 +157,16 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Select Foreman/s</label>
-                      <div class="select2-purple">
-                        <select class="select2" name = "foremans[]" id = "foremans" multiple="multiple" data-placeholder="Select a foreman" data-dropdown-css-class="select2-purple" style="width: 100%; height: 50px" >
-
-                        </select>
+                      <label>Color picker with addon:</label>
+                      <div class="input-group my-colorpicker2">
+                        <input type="text" name = "color" class="form-control" readonly>
+                        <div class="input-group-append">
+                          <span class="input-group-text"><i class="fas fa-square"></i></span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12">
+                  <!-- <div class="col-md-12">
                     <div class="form-group">
                       <label>Select Laborers</label>
                       <div class="select2-blue">
@@ -166,7 +175,7 @@
                         </select>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="modal-footer">
@@ -180,7 +189,100 @@
       <!-- /.modal-dialog -->
     </div>
       <!-- /.modal -->
+      <div class="modal fade  selection_modal" id="modal-lg">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <!-- <div class="overlay">
+                <i class="fas fa-2x fa-sync fa-spin"></i>
+            </div> -->
+            <div class="modal-header" style = "background-color: #1C518A; color: white;">
+              <div class = "row">
+                <div class="col-md-12">
+                    <h4 class="modal-title" id = "sm_modaltitle" > SELECT ON THE ITEMS</h4>
+                </div>
+                <div class="col-md-12">
+                    <h9 class="modal-title" id = "sm_descriptiontitle" > SELECT ON THE ITEMS</h9>
+                </div>
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                @csrf
+                <input type="text" style = "display: none" id = "jobrequest_id">
+                <!-- <div class="row">
+                    <div class="col-md-3">
+                      <a class = "btn btn-app bg-success" id = "btn_complete" style = "width: 200px; font-size: 16px; height: 80px" ><i class = "fa fa-check"></i> Complete</a>
+                    </div>
+                    <div class="col-md-3">
+                      <a class = "btn btn-app bg-primary" id = "btn_update" style = "width: 200px; font-size: 16px; height: 80px" ><i class = "fa fa-edit"></i> Update Color</a>
+                    </div>
+                    <div class="col-md-3">
+                      <a class = "btn btn-app bg-warning" id = "btn_scheduleManpower" style = "width: 200px; font-size: 16px; height: 80px" ><i class = "fa fa-users"></i> Schedule Manpowers</a>
+                    </div>
+                    <div class="col-md-3">
+                      <a class = "btn btn-app bg-danger" id = "btn_remove" style = "width: 200px; font-size: 16px; height: 80px" ><i class = "fa fa-trash"></i> Remove</a>
+                    </div>
+                </div> -->
+                <!-- <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Multiple</label>
+                      <select class="duallistbox" id = "laborers" multiple>
+                      </select>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="row">
+                  <div class="col-md-6">
+                    <table id = "manpowers" class = "table table-stripped table-hover">
+                      <thead>
+                        <tr>
+                          <th style = "text-align: center">Manpowers</th>
+                          <th></th>
+                        </tr>
+                        <tr>
+                          <th>Search</th>
+                          <th>
+                            <input type="text" class = "form-control" >
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-md-6">
+                    <table id = "selected_persons" class = "table table-stripped table-hover">
+                      <thead>
+                      <tr>
+                          <th style = "text-align: center">Selected For Constructions</th>
+                          <th></th>
+                        </tr>
+                        <tr>
+                          <th>Search</th>
+                          <th>
+                            <input type="text" class = "form-control" >
+                          </th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
 <!-- jQuery -->
+
 <script src="adminlte3/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script src="adminlte3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -189,15 +291,25 @@
 <script src="adminlte3/plugins/select2/js/select2.full.min.js"></script>
 <!-- AdminLTE App -->
 <script src="adminlte3/dist/js/adminlte.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="adminlte3/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="adminlte3/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+<!-- Toastr -->
+<script src="adminlte3/plugins/toastr/toastr.min.js"></script>
 <!-- fullCalendar 2.2.5 -->
 <script src="adminlte3/plugins/moment/moment.min.js"></script>
 <script src='fullcalendar/lib/main.js'></script>
 <script src='fullcalendar/lib/main.min.js'></script>
+<!-- bootstrap color picker -->
+<script src="adminlte3/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
 <!-- AdminLTE for demo purposes -->
 <script src="adminlte3/dist/js/demo.js"></script>
 <!-- Page specific script -->
 <script>
   $(function () {
+    
     //Initialize Select2 Elements
     $('.select2').select2()
 
@@ -205,31 +317,204 @@
     $('.select2bs4').select2({
       theme: 'bootstrap4'
     })
+     //Colorpicker
+     $('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    $('.my-colorpicker2').colorpicker()
+     //Bootstrap Duallistbox
+     $('.duallistbox').bootstrapDualListbox()
   })
 </script>
+
 <script>
-    $(function(){
-      show_allJobRequests();
+$(function(){
+  var Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
+
+    $('.swalDefaultSuccess').click(function() {
+    
+    });
+  show_allJobRequests();
   show_allLaborers();
   show_allForemans();
+  var calendarE1 = document.getElementById('calendar');
+  var calendar = new FullCalendar.Calendar(calendarE1, {
+    initialView: 'dayGridMonth',
+    selectable: true,
+    events: '/get_schedules',
+    themeSystem: 'bootstrap',
+    selectHelper: true,
+    select: function(select, start, end, allDay)
+    {
+      var start = new Date(select.start);
+      // var start = ((start.getMonth() > 8) ? (start.getMonth() + 1) : ('0' + (start.getMonth() + 1))) + '/' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate())) + '/' + start.getFullYear();
+      var start = ((start.getMonth() > 8) ? start.getFullYear() + '-' + (start.getMonth() + 1): start.getFullYear() + '-' + ('0' + (start.getMonth() + 1))) + '-' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate()));
+      var end = new Date(select.end);
+      var end = ((end.getMonth() > 8) ? end.getFullYear() + '-' +(end.getMonth() + 1 ): end.getFullYear() + '-' + ('0' + (end.getMonth() + 1))) + '-' + ((end.getDate() > 9) ? end.getDate(): ('0' + end.getDate()));
+      $(".open_modal").modal('show');
+      $(".modal-title").text('Schedule job request');
+      $("#ajaxresponse").html("");
+      $("#schedule_form").trigger('reset');
+      $("#start").val(start);
+      $("#end").val(end);
+    },
+    editable: true,
+    eventResize: async function(event, delta)
+    {
+      var start = new Date(event.event.start)
+      var start = ((start.getMonth() > 8) ? start.getFullYear() + '-' + (start.getMonth() + 1): start.getFullYear() + '-' + ('0' + (start.getMonth() + 1))) + '-' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate()));
+      var end = new Date(event.event.end);
+      var end = ((end.getMonth() > 8) ? end.getFullYear() + '-' +(end.getMonth() + 1 ): end.getFullYear() + '-' + ('0' + (end.getMonth() + 1))) + '-' + ((end.getDate() > 9) ? end.getDate(): ('0' + end.getDate()));
+      var id = event.event.id;
+      $.ajax({
+        type: 'post',
+        url: '/scheduling_actions',
+        data: {
+          type: 'update',
+          start: start,
+          end: end,
+          id: id,
+        },
+        dataType: 'json',
+        success: function(response)
+        {
+          if(response.status == 200)
+          {
+            Toast.fire({
+              icon: 'success',
+              title: response.success
+            })
+            calendar.refetchEvents();
+          }
+          if(response.status == 400)
+          {
+            alert(response.fail);
+          }
+        }
+      })
+    },
+    eventDrop: async function(event, delta)
+    {
+      var start = new Date(event.event.start)
+      var start = ((start.getMonth() > 8) ? start.getFullYear() + '-' + (start.getMonth() + 1): start.getFullYear() + '-' + ('0' + (start.getMonth() + 1))) + '-' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate()));
+      var end = new Date(event.event.end);
+      var end = ((end.getMonth() > 8) ? end.getFullYear() + '-' +(end.getMonth() + 1 ): end.getFullYear() + '-' + ('0' + (end.getMonth() + 1))) + '-' + ((end.getDate() > 9) ? end.getDate(): ('0' + end.getDate()));
+      var id = event.event.id;
+      $.ajax({
+        type: 'post',
+        url: '/scheduling_actions',
+        data: {
+          type: 'update',
+          start: start,
+          end: end,
+          id: id,
+        },
+        dataType: 'json',
+        success: function(response)
+        {
+          if(response.status == 200)
+          {
+            Toast.fire({
+              icon: 'success',
+              title: response.success
+            })
+            calendar.refetchEvents();
+          }
+          if(response.status == 400)
+          {
+            alert(response.fail);
+          }
+        }
+      })
+    },
+    eventClick: function(event)
+    {
+      var id = event.event.id;
+      var title = event.event.title;
+      var start = new Date(event.event.start)
+      var start = ((start.getMonth() > 8) ? start.getFullYear() + '-' + (start.getMonth() + 1): start.getFullYear() + '-' + ('0' + (start.getMonth() + 1))) + '-' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate()));
+      var end = new Date(event.event.end);
+      var end = ((end.getMonth() > 8) ? end.getFullYear() + '-' +(end.getMonth() + 1 ): end.getFullYear() + '-' + ('0' + (end.getMonth() + 1))) + '-' + ((end.getDate() > 9) ? end.getDate(): ('0' + end.getDate()));
+      $("#sm_modaltitle").text(title);
+      $("#sm_descriptiontitle").text("FROM "+start+" TO "+end);
+      $(".selection_modal").modal({
+            backdrop: 'static',
+            keyboard: false,
+        }, 'show');
+      $("#jobrequest_id").val(id);
+    }
+  })
+  calendar.render();
+  $("#btn_remove").on('click', function(e){
+    e.preventDefault();
+    var id = $("#jobrequest_id").val();
+    if(confirm("Are you sure you want to remove the job request in the schedule?"))
+    {
+      $.ajax({
+        type: 'post',
+        url: '/scheduling_actions',
+        data: {
+          id: id,
+          type: 'delete',
+        },
+        dataType: 'json',
+        success:  function(response)
+        {
+          if(response.status == 200)
+          {
+            alert(response.success);
+            $(".selection_modal").modal('hide');
+            $("#jobrequest_id").val("");
+            calendar.refetchEvents();
+          }
+          if(response.status == 400)
+          {
+            alert(response.fail);
+          }
+        }
+      })
+    }
+  })
+  function check_jobRequests(constructionid)
+  {
+    $.ajaxSetup({
+      type: 'get',
+      url: '/get_allconstructions_approved_forscheduling/'+constructionid,
+      dataType: 'json',
+      async: false,
+      contentType: false,
+      success: function(data)
+      {
+        var result = false;
+        if(data[0].totalJR > 0) result = true;
+        return result;
+      }
+    })
+  }
   function show_allJobRequests()
   {
     $.ajax({
       type: 'get',
-      url: '/get_allconstructions_approved',
+      url: '/get_allconstructions_approved_forscheduling',
       dataType: 'json',
       success: function(data)
       {
         var option = "";
-        option += '<option> -- Select Here --</option>'
-        for(var i = 0; i<data.length; i++)
+        option += '<option value = ""> -- Select Here --</option>';
+        var jobrequests = data;
+        for(var i = 0; i<jobrequests.length; i++)
         {
-          option += '<option value = '+data[i].construction_id+'>'+data[i].construction_type+': '+data[i].construction_name+'</option>';
+            option += '<option value = '+jobrequests[i].construction_id+' >'+jobrequests[i].construction_type+': '+jobrequests[i].construction_name+'</option>';
         }
         $("#construction").html(option);
       }
     })
   }
+
   function show_allLaborers()
   {
     $.ajax({
@@ -238,15 +523,24 @@
       dataType: 'json',
       success: function(data)
       {
-        var option = "";
+        var row = "";
         for(var i = 0; i<data.length; i++)
         {
-          option += '<option value = '+data[i].user_id+'>'+data[i].name+'</option>';
+          row += '<tr>';
+          row += '<td >'+data[i].name+'</td>';
+          row += '<td align = "right"> <a class = "btn btn-warning btn-sm manpower" data-name = '+data[i].name+' data-id = '+data[i].user_id+'> >> </a> </td>'
+          row += '</tr>';
         }
-        $("#laborers").html(option);
+        $("#manpowers tbody").html(row);
       }
     })
   }
+  $("body").on('click', '.manpower', function(response){
+    var id = $(this).data('id');
+    var name = $(this).data('name');
+    var td = '<tr><td align = "left"> <a class = "btn btn-danger btn-sm s_manpower" data-name = '+name+' data-id = '+id+'> << </a> </td><td>'+name+'</td></tr>';
+    $("#selected_persons").append(td);
+  })
   function show_allForemans()
   {
     $.ajax({
@@ -265,65 +559,54 @@
     })
   }
   $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  })
+  $("#schedule_form").on('submit', function(e){
+    e.preventDefault();
+    var data =$(this).serialize();
+    $.ajax({
+      type: 'post',
+      url: '/scheduling_actions',
+      data: data,
+      dataType: 'json',
+      success: function(response){
+        if(response.status == 200)
+        {
+          calendar.refetchEvents();
+          alert(response.success);
+          $(".open_modal").modal('hide');
+          $("#schedule_form").trigger('reset');
+          $("#foremans").text("");
+          $("#laborers").text("");
+          
+        }
+        if(response.status == 401)
+        {
+          alert(response.fail)
+        }
+        if(response.status == 400)
+        {
+          $("#ajaxresponse").html("");
+          $("#ajaxresponse").removeClass('alert alert-danger');
+          $("#ajaxresponse").addClass('alert alert-danger');
+          $.each(response.errors, function (key, err_values){
+            $("#ajaxresponse").append('<li>'+err_values+'</li>');
+          });
+        }
+        // alert("Total added laborers: "+response.total_added_laborers+"\n"+
+        //       "Total_added_foremans: "+response.total_added_foremans+"\n"+
+        //       "Foremans not saved: "+response.foremans_notsaved+"\n"+
+        //       "Laborers not saved: "+response.laborers_notsaved);
+        show_allJobRequests();
+      },
+      error: function(response){
+        alert("Server error: Reload your page!");
       }
     })
-    $("#schedule_form").on('submit', function(e){
-      e.preventDefault();
-      var data =$(this).serialize();
-      $.ajax({
-        type: 'post',
-        url: '/scheduling_actions',
-        data: data,
-        dataType: 'json',
-        success: function(response){
-          if(response.status == 200)
-          {
-            alert("Job request successfully on scheduled!");
-            $("#open_modal").modal('hide');
-            $("#schedule_form").trigger('reset');
-            $("#foremans").text("");
-            $("#laborers").text("");
-          }
-          if(response.status == 400)
-          {
-            $("#ajaxresponse").html("");
-            $("#ajaxresponse").removeClass('alert alert-danger');
-            $("#ajaxresponse").addClass('alert alert-danger');
-            $.each(response.errors, function (key, err_values){
-              $("#ajaxresponse").append('<li>'+err_values+'</li>');
-            });
-          }
-        },
-        error: function(response){
-          alert("Server error: Reload your page!");
-        }
-      })
-    })
-
-        var calendarE1 = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarE1, {
-            initialView: 'dayGridMonth',
-            selectable: true,
-            select: function(select, start, end, allDay, view)
-            {
-              var start = new Date(select.start);
-              var start = ((start.getMonth() > 8) ? (start.getMonth() + 1) : ('0' + (start.getMonth() + 1))) + '/' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate())) + '/' + start.getFullYear();
-
-              var end = new Date(select.end);
-              var end = ((end.getMonth() > 8) ? (end.getMonth() + 1) : ('0' + (end.getMonth() + 1))) + '/' + ((end.getDate()-1 > 9) ? end.getDate()-1: ('0' + end.getDate()-1)) + '/' + end.getFullYear();
-            
-              $(".open_modal").modal('show');
-              $(".modal-title").text('Add Schedule');
-    
-              $("#start").val(start);
-              $("#end").val(end);
-            }
-        })
-    
-        calendar.render();
-    })
+  })
+})
 </script>
 </body>
 </html>

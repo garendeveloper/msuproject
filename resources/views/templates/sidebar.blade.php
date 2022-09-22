@@ -19,7 +19,7 @@
           </div>
      
         <div class="info">
-          <a href="#" class="d-block">{{ $userinfo['name'] }}</a>
+          <a href="#" class="d-block">{{ $userinfo[0]->name }}</a>
         </div>
       </div>
 
@@ -39,13 +39,22 @@
               </p>
             </a>
           </li>
+            @if($userinfo[0]->departmentname == "PPU HEAD")
+              <li class="nav-item">
+              <a href="{{ url('/users') }}" class="nav-link">
+                <i class="nav-icon fa fa-users"></i>
+                <p>Users</p>
+              </a>
+            </li>
+            @endif
+       
           <li class="nav-item">
-            <a href="{{ url('/users') }}" class="nav-link">
-              <i class="nav-icon fa fa-users"></i>
-              <p>Users</p>
+            <a href="{{ url('/constructiontypes') }}" class="nav-link">
+              <i class="nav-icon fa fa-square"></i>
+              <p>Const. Repairs&Impr.</p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="" class="nav-link">
               <i class="nav-icon fas fa-circle"></i>
               <p>
@@ -61,13 +70,14 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="{{ url('/checking_fundsAvailability') }}" class="nav-link">
               <i class="nav-icon fa fa-square"></i>
               <p>Funds Availability</p>
             </a>
           </li>
+          
           <li class="nav-item">
             <a href="{{ url('/scheduling') }}" class="nav-link">
               <i class="nav-icon fa fa-square"></i>

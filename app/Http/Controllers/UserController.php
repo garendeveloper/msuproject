@@ -21,7 +21,7 @@ class UserController extends Controller
         $data = [
             'userinfo' => $userInfo
         ];
-        return view('users', $userinfo);
+        return view('users', $data);
     }
     public function get_all()
     {

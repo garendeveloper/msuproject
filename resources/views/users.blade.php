@@ -1,3 +1,9 @@
+@if($userinfo[0]->departmentname == "FINANCIAL DIVISION")
+  <script>
+    alert("You do not have the authority to visit this page!")
+    window.location.href = "/checking_fundsAvailability";
+  </script>
+@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +30,10 @@
 
     <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+     <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+  </div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -51,7 +61,7 @@
               
                 <div class="row">
                   <div class="col md-6">
-                    <button class = "btn btn-primary btn-sm" id = "btn_modal" type = "button" align = "left"><i class = "fa fa-user-plus"></i> Add User</button>
+                    <button class = "btn btn-outline-primary" id = "btn_modal" type = "button" align = "left"><i class = "fa fa-user-plus"></i> Add User</button>
                   </div>
                   <div class="col-md-6">
                   <input class="form-control" id = "search" type="search" placeholder="Search Item" aria-label="Search">
@@ -97,7 +107,7 @@
   
   <!-- modal -->
   <div class="modal fade modal" id="modal-info">
-      <div class="modal-dialog" >
+      <div class="modal-dialog modal-lg" >
         <div class="modal-content"  >
           <!-- <div class="overlay">
               <i class="fas fa-2x fa-sync fa-spin"></i>
@@ -133,7 +143,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="construction">Email</label>
-                        <input type="email" name = "email" id= "email" class = "form-control" required>
+                        <input type="email" name = "email" id= "email" class = "form-control">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -150,8 +160,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" id = "save">Save</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-outline-primary btn-block" id = "save"><i class = "fa fa-save"></i> Save</button>
             </div>
           </form>
         </div>
@@ -208,8 +217,8 @@
                         row += "<td style = 'font-size: 10px'>"+new Date(data[i].created_at)+"</td>";
                         row += "<td style = 'font-size: 10px'>"+new Date(data[i].updated_at)+"</td>";
                         row +=  "<td style = 'text-align: center'>"+
-                                    "<button class = 'btn btn-primary edit'><i class = 'fa fa-edit'></i></button>"+
-                                    "<button class = 'btn btn-danger remove'><i class = 'fa fa-trash'></i></button>"+
+                                    "<button class = 'btn btn-outline-primary btn-sm edit'><i class = 'fa fa-edit'></i></button>"+
+                                    "<button class = 'btn btn-outline-danger btn-sm remove'><i class = 'fa fa-trash'></i></button>"+
                                 "</td>";
                         row += "</tr>";
                     }
@@ -221,7 +230,10 @@
     $("#btn_modal").on('click', function(e){
         e.preventDefault();
         $("form").trigger('reset');
-        $(".modal").modal('show');
+        $(".modal").modal({
+          backdrop: 'static',
+          keyboard: false,
+        }, 'show');
         $('.modal-title').text('Add User');
 
     })

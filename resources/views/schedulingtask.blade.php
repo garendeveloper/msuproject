@@ -1,3 +1,9 @@
+@if($userinfo[0]->departmentname == "FINANCIAL DIVISION")
+  <script>
+    alert("You do not have the authority to visit this page!")
+    window.location.href = "/checking_fundsAvailability";
+  </script>
+@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +21,10 @@
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
+   <!-- Preloader -->
+   <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+  </div>
     <!-- Navbar -->
     @include('templates/navbar')
   <!-- /.navbar -->
@@ -304,8 +314,7 @@
 <!-- bootstrap color picker -->
 <script src="adminlte3/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
 <!-- Tempusdominus Bootstrap 4 -->
-<!-- AdminLTE for demo purposes -->
-<script src="adminlte3/dist/js/demo.js"></script>
+
 <!-- Page specific script -->
 <script>
   $(function () {

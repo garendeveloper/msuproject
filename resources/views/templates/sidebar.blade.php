@@ -30,7 +30,8 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open" id = "dashboard">
+
+          <li class="nav-item" id = "dashboard" id = "dashboard">
             <a href="{{ url('/dashboard') }}" class="nav-link" >
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -47,7 +48,7 @@
               </a>
             </li>
             @endif
-       
+
           <li class="nav-item">
             <a href="{{ url('/constructiontypes') }}" class="nav-link">
               <i class="nav-icon fa fa-square"></i>
@@ -81,7 +82,7 @@
           <li class="nav-item">
             <a href="{{ url('/scheduling') }}" class="nav-link">
               <i class="nav-icon fa fa-square"></i>
-              <p>Schedules</p>
+              <p>Scheduling</p>
             </a>
           </li>
           <li class="nav-item">
@@ -125,4 +126,3 @@
     <!-- Control sidebar content goes here -->
   </aside>
 
-  

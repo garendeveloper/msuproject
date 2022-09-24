@@ -18,7 +18,6 @@ class LoginController extends Controller
     {
         $request->validate([
             'username' => 'required|min:5|max:45',
-            'department' => 'required',
             'password' => 'required',
         ]);
 
@@ -28,10 +27,14 @@ class LoginController extends Controller
             return back()->with('fail', 'Sorry, we do not recognize your username');
         }
         else{
-            $department = Departments::where('departmentname', '=', $request->department)->first();
-            if(Hash::check($request->password, $userInfo->password) AND ($department->id == $userInfo->department_id)){
+            // $department = Departments::where('departmentname', '=', $request->department)->first();
+            if(Hash::check($request->password, $userInfo->password)){
                 $request->session()->put('LoggedUser', $userInfo->id);
-                return redirect('/dashboard');
+                $check_department = Departments::where('id', $userInfo->department_id)->first();
+                if($check_department->departmentname == "PPU HEAD" || $check_department->departmentname == "ppuhead")  return redirect('/dashboard');
+                else if($check_department->departmentname == "FINANCIAL DIVISION" || $check_department->departmentname == "financial")  return redirect('/checking_fundsAvailability');
+                else if($check_department->departmentname == "PPU PERSONNEL" || $check_department->departmentname == "ppupersonnel")  return redirect('/constructiontypes');
+                else return back()->with('fail', 'Sorry, You have not permission to access the system.');
             }
             else{
                 return back()->with('fail', 'Please check your password or username.');
@@ -42,7 +45,7 @@ class LoginController extends Controller
     {
         if(session()->has('LoggedUser')){
             session()->pull('LoggedUser');
-            return redirect('/');
+            return redirect('/')->with('success', 'Thank you for your time! Explore again!');
         }
     }
 }

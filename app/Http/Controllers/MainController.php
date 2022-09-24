@@ -36,7 +36,7 @@ class MainController extends Controller
         }
         else
         {
-            return redirect('/');
+            return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
     
@@ -59,6 +59,28 @@ class MainController extends Controller
         }
         else{
             return redirect('/');
+        }
+    }
+    public function constructionsbyID($id)
+    {
+        if(!empty(session('LoggedUser'))){
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+
+            $constructions = DB::select('select construction_types.*, constructions.* 
+                                from construction_types, constructions
+                                where construction_types.id = constructions.constructiontype_id
+                                and construction_types.id = "'.$id.'"');
+            $data = [
+                'userinfo' => $userinfo,
+                'constructions' => $constructions,
+            ];
+            return view('constructionsByID', $data);
+        }
+        else{
+            return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
     public function get_constructiondata($id)
@@ -197,7 +219,7 @@ class MainController extends Controller
             return view('constructiontypes', $data);
         }
         else{
-            return redirect('/');
+            return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
     public function materials()
@@ -216,7 +238,7 @@ class MainController extends Controller
             return view('materials', $data);
         }
         else{
-            return redirect('/');
+            return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
     public function addconstructiontype(Request $request)
@@ -584,7 +606,7 @@ class MainController extends Controller
         }
         else
         {
-            return redirect('/');
+            return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
     public function jobrequests()
@@ -600,7 +622,7 @@ class MainController extends Controller
             ];
             return view('jobrequests_reports', $data);
         }
-        else return redirect('/')->with('Fail','You must logged in!');
+        else  return redirect('/')->with('fail', 'You must be logged in!');
     }
     public function manpowers()
     {
@@ -610,14 +632,12 @@ class MainController extends Controller
             from departments, users 
             where departments.id = users.department_id
             and users.id = "'.session('LoggedUser').'"');
-
-            $userInfo = User::where('id', '=', session('LoggedUser'))->first();
             $data = [
                 'userinfo' => $userInfo
             ];
             return view('manpowers', $data);
         }
-        else return redirect('/')->with('Fail','You must logged in!');
+        else   return redirect('/')->with('fail', 'You must be logged in!');
     }
     public function scheduling_actions(Request $request)
     {
@@ -816,7 +836,7 @@ class MainController extends Controller
             ];
             return view('funds_availability', $data);
         }
-        return redirect('/')->with('fail', 'Please login');
+       return redirect('/')->with('fail', 'You must be logged in!');
     }
     public function approve_jobRequest($id)
     {
@@ -850,6 +870,18 @@ class MainController extends Controller
     }
     public function jobrequests_report()
     {
-        return view('jobrequests_reportprint');
+        if(!empty(session('LoggedUser')))
+        {
+            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+                                from departments, users 
+                                where departments.id = users.department_id
+                                and users.id = "'.session('LoggedUser').'"');
+
+            $data = [
+                'userinfo' => $userInfo
+            ];
+            return view('jobrequests_reportprint', $data);
+        }
+       return redirect('/')->with('fail', 'You must be logged in!');
     }
 }

@@ -22,8 +22,22 @@
 <link rel="stylesheet" href="adminlte3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 <!-- IonIcons -->
 <link rel="stylesheet" href="adminlte3/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="adminlte3/dist/css/adminlte.min.css">
+
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="adminlte3/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="adminlte3/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="adminlte3/plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="adminlte3/dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="adminlte3/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="adminlte3/plugins/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="adminlte3/plugins/summernote/summernote-bs4.min.css">
+
 <style>
     [class*=sidebar-dark-] {
         background-color: #0e1822;

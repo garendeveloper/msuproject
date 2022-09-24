@@ -190,8 +190,6 @@
 <!-- fullCalendar 2.2.5 -->
 <script src="adminlte3/plugins/moment/moment.min.js"></script>
 <script src="adminlte3/plugins/fullcalendar/main.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="adminlte3/dist/js/demo.js"></script>
 <!-- Page specific script -->
 <script>
   $(function () {

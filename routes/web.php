@@ -43,7 +43,7 @@ Route::get('get_allLaborCosts/{id}', [MainController::class, 'get_allLaborCosts'
 Route::post('elc_actions', [MainController::class, 'labor_actions']);
 Route::get('get_allEquipments/{id}', [MainController::class, 'get_allEquipments']);
 Route::post('eec_actions', [MainController::class, 'equipment_actions']);
-Route::get('/constructions/{id}', [MainController::class, 'constructions']);
+
 Route::get('count_allLaborers/{id}', [MainController::class, 'count_allLaborers']);
 Route::get('get_allDepartments', [MainController::class, 'get_allDepartments']);
 Route::get('get_equipmentData/{id}', [MainController::class, 'get_equipmentData']);
@@ -66,6 +66,6 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/jobrequests', [MainController::class, 'jobrequests']);
     Route::get('/jobrequests_report', [MainController::class, 'jobrequests_report']);
     Route::get('/manpowers', [MainController::class, 'manpowers']);
-   
+    Route::get('/constructions/{id}', [MainController::class, 'constructionsbyID']);
 });
 

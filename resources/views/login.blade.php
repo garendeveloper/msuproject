@@ -18,6 +18,10 @@
     }
 </style>
 <body class="hold-transition login-page">
+   <!-- Preloader -->
+   <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+  </div>
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
@@ -37,7 +41,14 @@
            <p> {{ Session::get('fail') }} </p> 
         </div>
     @endif
+
+    @if(Session::get('Fail'))
+        <div class="alert alert-danger">
+           <p> {{ Session::get('fail') }} </p> 
+        </div>
+    @endif
     <div class="card-body">
+      <h5 style = "text-align: center">MSUN JRSched System</h5>
       <p class="login-box-msg">Sign in to start your session</p>
       <form action="{{ url('/loginuser') }}" method="post">
         @csrf
@@ -52,15 +63,6 @@
         @if($errors->has('username'))
             <span class = "text-danger">{{$errors->first('username')}}</span>
           @endif
-        <div class="input-group mb-3">
-          <select name="department" class = "form-control select2" id="usertype">
-            <option value="">--SELECT USER TYPE --</option>
-            <option value="ppu head"> PPU HEAD </option>
-            <option value="financial division"> FINANCIAL DIVISION </option>
-            <option value="ppu personnel"> PPU PERSONNEL </option>
-            <option value="job requestor"> JOB REQUESTOR </option>
-          </select>
-        </div>
         @if($errors->has('usertype'))
             <span class = "text-danger">{{$errors->first('usertype')}}</span>
           @endif
@@ -82,12 +84,9 @@
           <!-- /.col -->
         </div>
       </form>
-
-    
-
-      <p class="mb-1">
+      <!-- <p class="mb-1">
         <a href="forgot-password.html">I forgot my password</a>
-      </p>
+      </p> -->
       <p class="mb-0">
         <a href="https://msunaawan.edu.ph" class="text-center">Go to MSU Naawan Website</a>
       </p>
@@ -100,7 +99,5 @@
 
 <!-- REQUIRED SCRIPTS -->
 @include('scripts/footer')
-
-
 </body>
 </html>

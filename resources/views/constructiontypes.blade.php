@@ -1,3 +1,9 @@
+@if($userinfo[0]->departmentname == "FINANCIAL DIVISION")
+  <script>
+    alert("You do not have the authority to visit this page!")
+    window.location.href = "/checking_fundsAvailability";
+  </script>
+@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +20,10 @@
 -->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
+   <!-- Preloader -->
+   <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+  </div>
   <!-- Navbar -->
   @include('templates/navbar')
   <!-- /.navbar -->
@@ -51,12 +61,14 @@
               <div class="card-header">
                 <div class="row">
                   <div class="col md-6">
-                  <button class = "btn btn-primary btn-sm" id = "btn_addconstructiontype" type = "button" align = "left"><i class = "fa fa-plus"></i> Add Construction Type</button>
-                  <a  href="{{ url('/constructions') }}" class = "btn btn-default btn-sm"  align = "right"><i class = "fa fa-arrow-right"></i> View Scope of Works</a>
+                  <button class = "btn btn-outline-primary btn-sm" id = "btn_addconstructiontype" type = "button" align = "left"><i class = "fa fa-plus"></i> Add Construction Type</button>
+                  <a  href="{{ url('/constructions') }}" class = "btn btn-outline-primary btn-sm"  align = "right"><i class = "fa fa-arrow-right"></i> View Scope of Works</a>
+                  </div>
+                  <div class="col-md-6">
+                    <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search">
                   </div>
                 </div>
               </div>
-             
               <!-- /.card-header -->
 
               <div class="card-body">
@@ -64,7 +76,7 @@
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>ID</th>
-                    <th>Type</th>
+                    <th>Constructions/Repair/Improvement</th>
                     <th>Status</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
@@ -95,7 +107,7 @@
   
   <!-- modal -->
   <div class="modal fade modal_addconstructiontype" id="modal-info">
-      <div class="modal-dialog">
+      <div class="modal-dialog  modal-lg">
         <div class="modal-content">
           <!-- <div class="overlay">
               <i class="fas fa-2x fa-sync fa-spin"></i>
@@ -119,10 +131,8 @@
                   <textarea class= "form-control" name="construction_type" id="construction_type" cols="30" rows="10" autofocus></textarea>
                 </div>
               </div>
-          
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" id = "btn_save">Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-outline-primary btn-block" id = "btn_save"><i class = "fa fa-save"> </i> Save</button>
               </div>
             </form>
         </div>
@@ -133,7 +143,7 @@
       <!-- /.modal -->
  <!-- /.content-wrapper -->
  <div class="modal fade openmodal" id="modal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <!-- <div class="overlay">
                 <i class="fas fa-2x fa-sync fa-spin"></i>
@@ -187,18 +197,11 @@
 @include('scripts/footer')
 <script>
   $(function () {
-    $("#tbl_constructiontypes").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#tbl_constructiontypes_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+    $("#search").on('keyup', function(){
+      var value = $(this).val().toLowerCase();
+      $("#tbl_constructiontypes tbody tr").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
     });
   });
 </script>
@@ -216,7 +219,10 @@
     $("#btn_addconstructiontype").on('click', function(e){
       e.preventDefault();
       $("#addform").trigger('reset');
-      $(".modal_addconstructiontype").modal('show');
+      $(".modal_addconstructiontype").modal({
+        backdrop: 'static',
+        keyboard: false,
+      }, 'show');
       $(".modal-title").text('Add Construction Type');
     });
     // $("#search").on('keyup', function(){
@@ -296,10 +302,10 @@
             html += "<td>"+data[i].updated_at+"</td>";
             html += '<td align = "center"> '+
                         // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
-                        '<a class = "btn btn-sm btn-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
-                        '<a class = "btn btn-sm btn-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
+                        '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
+                        '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
+                        // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
                      '</td>';
-        
             html += "</tr>";
           }
           $("#tbody_constructiontypes").html(html);
@@ -316,6 +322,9 @@
     }
     $("body").on('click', '.edit', function(){
       var id = $(this).data('id');  
+      $("form").trigger('reset');
+      $("#ajaxresponse").html("");
+      $("#ajaxresponse").removeClass("alert alert-danger");
       $.ajax({
         type: 'GET',
         url: '/get_constructiondata/'+id,

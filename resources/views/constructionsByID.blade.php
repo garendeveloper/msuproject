@@ -20,10 +20,11 @@
 -->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
-   <!-- Preloader -->
-   <div class="preloader flex-column justify-content-center align-items-center">
+    <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
-  </div>
+  </div>v
+
   <!-- Navbar -->
   @include('templates/navbar')
   <!-- /.navbar -->
@@ -39,7 +40,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Constructions (Scope of Work) && (Estimation of Cost)</h1>
+            <h1>Constructions (Scope of Work);  Estimation of Cost</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -75,7 +76,7 @@
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>ID</th>
-                    <th>Constructions/Repair/Improvements</th>
+                    <th>Construction Type</th>
                     <th>Scope of work</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
@@ -104,7 +105,7 @@
   </div>
   <!-- /.content-wrapper -->
   <div class="modal fade openmodal" id="modal">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" style = "background-color: #1C518A; color: white;">
           <h4 class="modal-title" id = "c_modaltitle" >Add Construction (SOW ) </h4>
@@ -132,7 +133,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary btn-block" id = "save"><i class = "fa fa-save"></i> Save</button>
+            <button type="submit" class="btn btn-primary" id = "save">Save</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
           </div>
         </form>
       </div>
@@ -180,13 +182,13 @@
                       <input type="number" id = "unitcost" name = "unitcost" autocomplete = "off" step = "1" style = "text-align: right" class = "form-control" required>
                     </div>
                     <div class="col-md-2">
-                      <label for="quantity">Quantity</label>
-                      <input type="number" id = "quantity" name = "quantity" class = "form-control" style = "text-align: right" autocomplete = "off" required>
-                    </div> 
-                    <div class="col-md-2">
                       <label for="amount">Amount</label>
                       <input type="number" value = "0" id = "amount" name = "amount" autocomplete = "off" step = "1" style = "text-align: right" class = "form-control" readonly>
                     </div>
+                    <div class="col-md-2">
+                      <label for="quantity">Quantity</label>
+                      <input type="number" id = "quantity" name = "quantity" class = "form-control" style = "text-align: right" autocomplete = "off" required>
+                    </div> 
                   </div>
                   <input type="submit" style = "display: none">
                   <br>
@@ -213,6 +215,7 @@
                   </div>
               </div>
               <div class="modal-footer ">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal" id = "ecm_close">X Close</button>
               </div>
             </form>
           </div>
@@ -339,6 +342,7 @@
                   </div>
               </div>
               <div class="modal-footer ">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal" id = "ecm_close">X Close</button>
               </div>
             </form>
           </div>
@@ -428,6 +432,7 @@
                   </div>
               </div>
               <div class="modal-footer ">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal" id = "ecm_close">X Close</button>
               </div>
             </form>
           </div>
@@ -601,8 +606,6 @@
           if(response.status == 200){
             alert(response.success);
             $("#eec_form").trigger('reset');
-            var id = $("#selection_construction_id").val();
-            $("#eec_construction_id").val(id);
           }
           if(response.status == 401){
             alert(response.fail);
@@ -659,10 +662,9 @@
             });
           }
           if(response.status == 200){
-            alert(response.success);
+            alert("Material Cost Successfully Estimated!");
             $("#ecm_modal").modal('hide');
             $("#ecm_form").trigger('reset');
-            $("#emc_id").val("");
             var id = $("#selection_construction_id").val();
             $("#ecm_construction_id").val(id);
           }
@@ -715,11 +717,8 @@
           alert("Something went wrong in fetching data in database.")
         }
       })
-
-      $(".estimation_selection_modal").modal({
-            backdrop: 'static',
-            keyboard: false,
-        }, 'show');
+     
+      $(".estimation_selection_modal").modal('show');
     })
     $("body").on('click', '.eec_remove', function(e){
       var id = $(this).data('id');
@@ -803,10 +802,6 @@
     })
     //estimation cost modals
     $("#btn_equipmentcost").on('click', function(e){
-      $("#eec_ajaxresponse").html("");
-      $("#eec_ajaxresponse").removeClass('alert alert-danger');
-      $("#eec_form").trigger('reset');
-
       $(".estimation_selection_modal").modal('hide');
       var id = $("#selection_construction_id").val();
       $("#eec_construction_id").val(id);
@@ -821,26 +816,16 @@
           show_allEquipments();
         }
       })
-
-      $(".eec_modal").modal({
-            backdrop: 'static',
-            keyboard: false,
-        }, 'show');
+     
+      $(".eec_modal").modal('show');
     })
     $("#btn_materialcost").on('click', function(e)
     {
       $(".estimation_selection_modal").modal('hide');
-      $(".emc_modal").modal({
-            backdrop: 'static',
-            keyboard: false,
-        }, 'show');
+      $(".emc_modal").modal('show');
     })
     $("#btn_rentalcost").on('click', function(e)
     {
-      $("#elc_ajaxresponse").html("");
-      $("#elc_ajaxresponse").removeClass('alert alert-danger');
-      $("#elc_form").trigger('reset');
-
       $(".estimation_selection_modal").modal('hide');
       var id = $("#selection_construction_id").val();
       $("#eec_construction_id").val(id);
@@ -856,11 +841,8 @@
           show_allLaborCosts();
         }
       })
-
-      $(".elc_modal").modal({
-            backdrop: 'static',
-            keyboard: false,
-        }, 'show');
+     
+      $(".elc_modal").modal('show');
     })
     $("#manpower").on('input', function(e){
       e.preventDefault();
@@ -978,7 +960,7 @@
           var row = "";
           for(var i = 0; i<data.length; i++)
           {
-            var status = "<span class = 'badge badge-warning'>Pending</span>";
+            var status = status = '<a style = "color: red"><i class = ""></i> On Process</a>';
             if(data[i].status == 1) status = '<a class = "btn btn-outline-dark  btn-sm btn_emc" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype = '+data[i].construction_type+'><i class = "fa fa-eye"></i> Estimate Cost</a>';
             row += '<tr>';
             row += '<td>'+data[i].construction_id+'</td>';
@@ -1002,16 +984,8 @@
       })
     }
     $("#btn_openmodal").on('click', function(e){
+      $("#modal").modal('show');
       $("form").trigger('reset');
-      // $("#eec_ajaxresponse").html("");
-      // $("#eec_ajaxresponse").removeClass('alert alert-danger');
-      // $("#eec_ajaxresponse").addClass('alert alert-danger');
-      // $("#eec_form").trigger('reset');
-      $( "#c_modaltitle").text('Add Construction (SOW)');
-      $("#modal").modal({
-            backdrop: 'static',
-            keyboard: false,
-        }, 'show');
     });
     $("body").on('click', '.remove', function(e){
       e.preventDefault();
@@ -1045,19 +1019,6 @@
     
     $("body").on('click', '.edit', function(e){
       e.preventDefault();
-      $("#eec_ajaxresponse").html("");
-      $("#eec_ajaxresponse").removeClass('alert alert-danger');
-
-      $("#elc_ajaxresponse").html("");
-      $("#elc_ajaxresponse").removeClass('alert alert-danger');;
-
-      $("#emc_ajaxresponse").html("");
-      $("#emc_ajaxresponse").removeClass('alert alert-danger');
-
-      $("#ajaxresponse").html("");
-      $("#ajaxresponse").removeClass('alert alert-danger');
-      $("form").trigger('reset');
-
       var id = $(this).data('id');
       var constructiontype_id = $(this).data('constructiontype_id');
       var construction_name = $(this).data('construction_name');
@@ -1067,10 +1028,7 @@
       $("#constructiontype_id").val(constructiontype_id);
       $("#constructiontype_id").append(constructiontype_name);
       $("#c_modaltitle").text('Edit Scope Of Work');
-      $("#modal").modal({
-            backdrop: 'static',
-            keyboard: false,
-        }, 'show');
+      $("#modal").modal('show');
     });
     $("#form").on('submit', function(e){
       e.preventDefault();

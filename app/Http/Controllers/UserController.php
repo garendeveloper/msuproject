@@ -25,8 +25,29 @@ class UserController extends Controller
     }
     public function get_all()
     {
-        $users = User::all();
+        $users = DB::select('select users.*, users.id as user_id, departments.*
+                            from departments, users 
+                            where departments.id = users.department_id');
         echo json_encode($users);
+    }
+    public function change_retirementStatus(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        if($request->type == 'reemployed')
+        {
+            $user->retirementstatus = 0;
+            $user->update();
+        }
+        if($request->type == 'retired')
+        {
+            $user->retirementstatus = 1;
+            $user->update();
+           
+        }
+        return response()->json([
+            'status' => 200,
+            'success' => 'Status of employee has been successfully processed!'
+        ]);
     }
     public function get_allLaborers()
     {

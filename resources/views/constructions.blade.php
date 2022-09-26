@@ -20,10 +20,7 @@
 -->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
-   <!-- Preloader -->
-   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
-  </div>
+
   <!-- Navbar -->
   @include('templates/navbar')
   <!-- /.navbar -->
@@ -35,6 +32,9 @@
     <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+      <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+    </div>
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">

@@ -23,22 +23,15 @@ class DatabaseSeeder extends Seeder
             'departmentname' => 'PPU HEAD',
         ]);
         \App\Models\Departments::factory()->create([
-          'departmentname' => 'PPU PERSONNEL',
-        ]);
-        \App\Models\Departments::factory()->create([
           'departmentname' => 'FINANCIAL DIVISION',
         ]);
         \App\Models\Departments::factory()->create([
           'departmentname' => 'JOB REQUESTOR',
         ]);
-
-        \App\Models\Departments::factory()->create([
-          'departmentname' => 'LABORER',
-        ]);
         \App\Models\Departments::factory()->create([
           'departmentname' => 'FOREMAN',
         ]);
-        \App\Models\User::factory(50)->create();
+
         \App\Models\User::factory()->create([
           'department_id' => '1',
           'name' => 'PPU HEAD',
@@ -54,5 +47,15 @@ class DatabaseSeeder extends Seeder
           'email' => 'financialdivision@gmail.com',
           'password' => Hash::make('financediv')
         ]);
+
+        \App\Models\User::factory()->create([
+          'department_id' => '3',
+          'name' => 'JOB REQUESTOR',
+          'username' => 'jobrequestor',
+          'email' => 'jobrequestor@gmail.com',
+          'password' => Hash::make('jobrequestor')
+        ]);
+        \App\Models\User::factory(10)->create();
+       
     }
 }

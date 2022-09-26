@@ -88,7 +88,7 @@
         <a href="forgot-password.html">I forgot my password</a>
       </p> -->
       <p class="mb-0">
-        <a href="https://msunaawan.edu.ph" class="text-center">Go to MSU Naawan Website</a>
+        <a href="https://msunaawan.edu.ph" class = "" class="text-center">Go to MSU Naawan Website</a>
       </p>
     </div>
     <!-- /.card-body -->

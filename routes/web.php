@@ -55,6 +55,9 @@ Route::get('get_schedules', [MainController::class, 'get_schedules']);
 Route::get('/checking_fundsAvailability', [MainController::class, 'funds_availability']);
 Route::post('approve_jobRequest/{id}', [MainController::class, 'approve_jobRequest']);
 Route::post('/search_constructiontypes', [MainController::class, 'search_constructiontypes'])->name('/search_constructiontypes');
+
+Route::post('change_retirementStatus', [UserController::class, 'change_retirementStatus']);
+
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');
     Route::get('/dashboard', [MainController::class, 'index'])->name('/dashboard');
@@ -67,5 +70,6 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/jobrequests_report', [MainController::class, 'jobrequests_report']);
     Route::get('/manpowers', [MainController::class, 'manpowers']);
     Route::get('/constructions/{id}', [MainController::class, 'constructionsbyID']);
+    Route::get('/jobrequest_form', [MainController::class, 'jobrequest_form']);
 });
 

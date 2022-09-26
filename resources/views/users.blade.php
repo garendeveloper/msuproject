@@ -39,7 +39,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Users</h1>
+            <h1>Employees & Workers</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -70,13 +70,14 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="tbl_Users" style = "table-layout: fixed; width: 100%;  border: 1px solid black;" class="table table-bordered table-striped">
+                <table id="tbl_Users" style = "table-layout: absolute; width: 100%;  border: 1px solid black;" class="table table-bordered table-striped">
                   <thead style = "background-color: #1C518A;color: white; ">
                   <tr>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>Retirement Status</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
                    
@@ -209,18 +210,26 @@
                 }
                 else{
                     for(var i = 0; i<data.length; i++){
-                        row += "<tr>";
-                        row += "<td>"+data[i].id+"</td>";
-                        row += "<td>"+data[i].name+"</td>";
-                        row += "<td>"+data[i].username+"</td>";
-                        row += "<td>"+data[i].email+"</td>";
-                        row += "<td style = 'font-size: 10px'>"+new Date(data[i].created_at)+"</td>";
-                        row += "<td style = 'font-size: 10px'>"+new Date(data[i].updated_at)+"</td>";
-                        row +=  "<td style = 'text-align: center'>"+
-                                    "<button class = 'btn btn-outline-primary btn-sm edit'><i class = 'fa fa-edit'></i></button>"+
-                                    "<button class = 'btn btn-outline-danger btn-sm remove'><i class = 'fa fa-trash'></i></button>"+
-                                "</td>";
-                        row += "</tr>";
+                      var retirementstatus = "<span class = 'badge badge-success'>Employee</span>";
+                      var optionRetirement = "<button class = 'btn btn-outline-success btn-sm btn_retired' data-id = "+data[i].user_id+"><i class = 'fa fa-alarm'></i> Retired ?</button>";
+                      if(data[i].retirementstatus == 1)
+                      {
+                        retirementstatus = "<span class = 'badge badge-danger'>Retired</span>";
+                        optionRetirement = "<button class = 'btn btn-outline-warning btn-sm btn_reemployed' data-id = "+data[i].user_id+"><i class = 'fa fa-alarm'></i> Re-Employed ?</button>";
+                      } 
+                      row += "<tr>";
+                      row += "<td>"+data[i].id+"</td>";
+                      row += "<td>"+data[i].name+"</td>";
+                      row += "<td>"+data[i].username+"</td>";
+                      row += "<td>"+data[i].email+"</td>";
+                      row += "<td align = 'center'>"+retirementstatus+"</td>";
+                      row += "<td style = 'font-size: 10px'>"+new Date(data[i].created_at)+"</td>";
+                      row += "<td style = 'font-size: 10px'>"+new Date(data[i].updated_at)+"</td>";
+                      row +=  "<td style = 'text-align: center'>"+
+                                  "<button class = 'btn btn-outline-primary btn-sm edit' data-id = "+data[i].user_id+"><i class = 'fa fa-edit'></i> Edit</button>"+
+                                  optionRetirement+
+                              "</td>";
+                      row += "</tr>";
                     }
                 }
                 $("table tbody").html(row);
@@ -236,6 +245,57 @@
         }, 'show');
         $('.modal-title').text('Add User');
 
+    })
+   
+    $("body").on('click', '.btn_reemployed', function(e){
+      e.preventDefault();
+      var id = $(this).data('id');
+      if(confirm("Are you sure you want to proceed this process?\nThis action cannot be undone!\n\nPlease confirm ok otherwise cancel"))
+      $.ajax({
+        type: 'post',
+        url: '/change_retirementStatus',
+        data: {
+          type: 'reemployed',
+          id: id, 
+        },
+        success: function(response)
+        {
+          if(response.status == 200)
+          {
+            alert(response.success);
+            show_allData();
+          }
+          else
+          {
+            alert("Something went wrong!");
+          } 
+        }
+      })
+    })
+    $("body").on('click', '.btn_retired', function(e){
+      e.preventDefault();
+      var id = $(this).data('id');
+      if(confirm("Are you sure you want to proceed this process?\nThis action cannot be undone!\n\nPlease confirm ok otherwise cancel"))
+      $.ajax({
+        type: 'post',
+        url: '/change_retirementStatus',
+        data: {
+          type: 'retired',
+          id: id, 
+        },
+        success: function(response)
+        {
+          if(response.status == 200)
+          {
+            alert(response.success);
+            show_allData();
+          }
+          else
+          {
+            alert("Something went wrong!");
+          } 
+        }
+      })
     })
 </script>
 </body>

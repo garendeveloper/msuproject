@@ -3,12 +3,6 @@
     <div class="image" style = "text-align: center">
           <img src="adminlte3/dist/img/AdminLTELogo.png" style = "width: 200px; height: 200px;" class="brand-image img-circle elevation-2" alt="User Image">
         </div>
-
-    <!-- <a href="index3.html" class="brand-link">
-      <img src="adminlte3/dist/img/AdminLTELogo.png" style = "height: 120px; width: 50px; "  alt="AdminLTE Logo" class="brand-image img-circle" style="opacity: .8">
-    -->
-    <!-- </a> -->
-
     <!-- Sidebar -->
     <div class="sidebar ">
       <!-- Sidebar user panel (optional) -->
@@ -30,61 +24,50 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-
-          <li class="nav-item" id = "dashboard" id = "dashboard">
-            <a href="{{ url('/dashboard') }}" class="nav-link" >
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              
-              </p>
+          @if($userinfo[0]->departmentname == "PPU HEAD")
+            <li class="nav-item" id = "dashboard" id = "dashboard">
+              <a href="{{ url('/dashboard') }}" class="nav-link" >
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Dashboard
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+            <a href="{{ url('/constructiontypes') }}" class="nav-link">
+              <i class="nav-icon fa fa-square"></i>
+              <p>Projects</p>
             </a>
           </li>
-            @if($userinfo[0]->departmentname == "PPU HEAD")
-              <li class="nav-item">
+            <li class="nav-item">
               <a href="{{ url('/users') }}" class="nav-link">
                 <i class="nav-icon fa fa-users"></i>
                 <p>Users</p>
               </a>
             </li>
-            @endif
-
-          <li class="nav-item">
-            <a href="{{ url('/constructiontypes') }}" class="nav-link">
-              <i class="nav-icon fa fa-square"></i>
-              <p>Const. Repairs&Impr.</p>
-            </a>
-          </li>
-          <!-- <li class="nav-item">
-            <a href="" class="nav-link">
-              <i class="nav-icon fas fa-circle"></i>
-              <p>
-                Constructions
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ url('/constructiontypes')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Construction Types</p>
-                </a>
-              </li>
-            </ul>
-          </li> -->
-          <li class="nav-item">
-            <a href="{{ url('/checking_fundsAvailability') }}" class="nav-link">
-              <i class="nav-icon fa fa-square"></i>
-              <p>Funds Availability</p>
-            </a>
-          </li>
-          
-          <li class="nav-item">
+            <li class="nav-item">
             <a href="{{ url('/scheduling') }}" class="nav-link">
               <i class="nav-icon fa fa-square"></i>
               <p>Scheduling</p>
             </a>
           </li>
+          @endif
+          @if($userinfo[0]->departmentname == "FINANCIAL DIVISION")
+            <li class="nav-item">
+              <a href="{{ url('/checking_fundsAvailability') }}" class="nav-link">
+                <i class="nav-icon fa fa-square"></i>
+                <p>Funds Availability</p>
+              </a>
+            </li>
+          @endif
+          @if($userinfo[0]->departmentname == "JOB REQUESTOR")
+            <li class="nav-item">
+              <a href="{{ url('/jobrequest_form') }}" class="nav-link">
+                <i class="nav-icon fa fa-square"></i>
+                <p>Job Requesting</p>
+              </a>
+            </li>
+          @endif
           <li class="nav-item">
             <a href="" class="nav-link">
               <i class="nav-icon fas fa-building"></i>

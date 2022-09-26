@@ -16,7 +16,7 @@
 <div class="wrapper">
    <!-- Preloader -->
    <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="MSUNLogo" height="500" width="500">
   </div>
   <!-- Navbar -->
   @include('templates/navbar')
@@ -52,7 +52,7 @@
           <div class="col-12">
             <div class="callout callout-info">
               <h5><i class="fas fa-info"></i> Note:</h5>
-              This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
+              This page has been enhanced for printing. Click the print button at the bottom of the job request form to test.
             </div>
 
 

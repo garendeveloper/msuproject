@@ -27,14 +27,13 @@ class LoginController extends Controller
             return back()->with('fail', 'Sorry, we do not recognize your username');
         }
         else{
-            // $department = Departments::where('departmentname', '=', $request->department)->first();
             if(Hash::check($request->password, $userInfo->password)){
                 $request->session()->put('LoggedUser', $userInfo->id);
                 $check_department = Departments::where('id', $userInfo->department_id)->first();
                 if($check_department->departmentname == "PPU HEAD" || $check_department->departmentname == "ppuhead")  return redirect('/dashboard');
+                else if($check_department->departmentname == "JOB REQUESTOR" || $check_department->departmentname == "jobrequestor")  return redirect('/jobrequest_form');
                 else if($check_department->departmentname == "FINANCIAL DIVISION" || $check_department->departmentname == "financial")  return redirect('/checking_fundsAvailability');
-                else if($check_department->departmentname == "PPU PERSONNEL" || $check_department->departmentname == "ppupersonnel")  return redirect('/constructiontypes');
-                else return back()->with('fail', 'Sorry, You have not permission to access the system.');
+                else return back()->with('fail', 'Sorry, You do not have permission to access the system.');
             }
             else{
                 return back()->with('fail', 'Please check your password or username.');

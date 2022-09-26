@@ -639,6 +639,21 @@ class MainController extends Controller
         }
         else   return redirect('/')->with('fail', 'You must be logged in!');
     }
+    public function jobrequest_form()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+            from departments, users 
+            where departments.id = users.department_id
+            and users.id = "'.session('LoggedUser').'"');
+            $data = [
+                'userinfo' => $userInfo
+            ];
+            return view('jobrequest_form', $data);
+        }
+        else   return redirect('/')->with('fail', 'You must be logged in!');
+    }
     public function scheduling_actions(Request $request)
     {
         if($request->ajax())

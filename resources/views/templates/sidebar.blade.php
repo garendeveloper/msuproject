@@ -1,8 +1,13 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <div class="image" style = "text-align: center">
+    <!-- <div class="image" style = "text-align: center">
           <img src="adminlte3/dist/img/AdminLTELogo.png" style = "width: 200px; height: 200px;" class="brand-image img-circle elevation-2" alt="User Image">
-        </div>
+        </div> -->
+
+    <div class="brand-link" style="float: middle">
+      <img src="adminlte3/dist/img/AdminLTELogo.png" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img class="brand-text"src="adminlte3/dist/img/sidebarManajr.png" style="height: 30px"> 
+    </div>
     <!-- Sidebar -->
     <div class="sidebar ">
       <!-- Sidebar user panel (optional) -->
@@ -35,7 +40,7 @@
             </li>
             <li class="nav-item">
             <a href="{{ url('/constructiontypes') }}" class="nav-link">
-              <i class="nav-icon fa fa-square"></i>
+              <i class="nav-icon fas fa-edit"></i>
               <p>Projects</p>
             </a>
           </li>
@@ -47,7 +52,7 @@
             </li>
             <li class="nav-item">
             <a href="{{ url('/scheduling') }}" class="nav-link">
-              <i class="nav-icon fa fa-square"></i>
+              <i class="nav-icon far fa-calendar-alt"></i>
               <p>Scheduling</p>
             </a>
           </li>

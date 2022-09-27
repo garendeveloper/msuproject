@@ -24,7 +24,7 @@ class LoginController extends Controller
         $userInfo  = User::where('username', '=', $request->username)->first();
         
         if(!$userInfo){
-            return back()->with('fail', 'Sorry, we do not recognize your username');
+            return back()->with('fail', 'Sorry, but you do not have access to the system.');
         }
         else{
             if(Hash::check($request->password, $userInfo->password)){
@@ -33,10 +33,10 @@ class LoginController extends Controller
                 if($check_department->departmentname == "PPU HEAD" || $check_department->departmentname == "ppuhead")  return redirect('/dashboard');
                 else if($check_department->departmentname == "JOB REQUESTOR" || $check_department->departmentname == "jobrequestor")  return redirect('/jobrequest_form');
                 else if($check_department->departmentname == "FINANCIAL DIVISION" || $check_department->departmentname == "financial")  return redirect('/checking_fundsAvailability');
-                else return back()->with('fail', 'Sorry, You do not have permission to access the system.');
+                else return back()->with('fail', 'Sorry, you do not have permission to access the system.');
             }
             else{
-                return back()->with('fail', 'Please check your password or username.');
+                return back()->with('fail', 'Please check your username or password.');
             }
         }
     }
@@ -44,7 +44,7 @@ class LoginController extends Controller
     {
         if(session()->has('LoggedUser')){
             session()->pull('LoggedUser');
-            return redirect('/')->with('success', 'Thank you for your time! Explore again!');
+            return redirect('/')->with('success', 'Thank you for your time. Stay safe!');
         }
     }
 }

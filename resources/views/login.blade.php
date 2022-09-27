@@ -14,13 +14,15 @@
 -->
 <style>
     .login-page{
-        background-color: #0e1822;
+        background-image: url(adminlte3/dist/img/AdminLoginBG.png);
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 </style>
 <body class="hold-transition login-page">
    <!-- Preloader -->
    <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+    <img class="animation__wobble" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="100" width="100">
   </div>
 <div class="login-box">
   <!-- /.login-logo -->
@@ -48,7 +50,8 @@
         </div>
     @endif
     <div class="card-body">
-      <h5 style = "text-align: center">MSUN JRSched System</h5>
+      <!--<h5 style = "text-align: center">ScheManajr System</h5>-->
+      <img src="adminlte3/dist/img/manajr.png" style="display:block; margin: 10px; margin-left: auto; margin-right: auto; height: 40px">
       <p class="login-box-msg">Sign in to start your session</p>
       <form action="{{ url('/loginuser') }}" method="post">
         @csrf
@@ -87,8 +90,9 @@
       <!-- <p class="mb-1">
         <a href="forgot-password.html">I forgot my password</a>
       </p> -->
-      <p class="mb-0">
-        <a href="https://msunaawan.edu.ph" class = "" class="text-center">Go to MSU Naawan Website</a>
+      <p class="mb-0" style="margin-top: 15px">
+        <a href="https://msunaawan.edu.ph" class = "" class="text-center" target="_blank">
+          Go to MSU Naawan Website</a>
       </p>
     </div>
     <!-- /.card-body -->

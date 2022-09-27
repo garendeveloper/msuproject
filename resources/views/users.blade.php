@@ -211,10 +211,10 @@
                 else{
                     for(var i = 0; i<data.length; i++){
                       var retirementstatus = "<span class = 'badge badge-success'>Employee</span>";
-                      var optionRetirement = "<button class = 'btn btn-outline-success btn-sm btn_retired' data-id = "+data[i].user_id+"><i class = 'fa fa-alarm'></i> Retired ?</button>";
+                      var optionRetirement = "<button class = 'btn btn-outline-success btn-sm btn_retired' data-id = "+data[i].user_id+"><i class = 'fa fa-alarm'></i> Resigned ?</button>";
                       if(data[i].retirementstatus == 1)
                       {
-                        retirementstatus = "<span class = 'badge badge-danger'>Retired</span>";
+                        retirementstatus = "<span class = 'badge badge-danger'>Resigned</span>";
                         optionRetirement = "<button class = 'btn btn-outline-warning btn-sm btn_reemployed' data-id = "+data[i].user_id+"><i class = 'fa fa-alarm'></i> Re-Employed ?</button>";
                       } 
                       row += "<tr>";

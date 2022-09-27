@@ -66,10 +66,16 @@
             </li>
           @endif
           @if($userinfo[0]->departmentname == "JOB REQUESTOR")
+          <li class="nav-item">
+              <a href="{{ url('/alljobrequests') }}" class="nav-link">
+                <i class="nav-icon fa fa-square"></i>
+                <p>My Job Requests</p>
+              </a>
+            </li>
             <li class="nav-item">
               <a href="{{ url('/jobrequest_form') }}" class="nav-link">
                 <i class="nav-icon fa fa-square"></i>
-                <p>Job Requesting</p>
+                <p>Request Job</p>
               </a>
             </li>
           @endif

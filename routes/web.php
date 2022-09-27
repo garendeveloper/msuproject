@@ -71,5 +71,6 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/manpowers', [MainController::class, 'manpowers']);
     Route::get('/constructions/{id}', [MainController::class, 'constructionsbyID']);
     Route::get('/jobrequest_form', [MainController::class, 'jobrequest_form']);
+    Route::get('/alljobrequests', [MainController::class, 'alljobrequests']);
 });
 

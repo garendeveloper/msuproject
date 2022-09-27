@@ -111,7 +111,7 @@
                 <div class="col-sm-10 invoice-col">
                     <address>
                         Note: Every request for construction, repair, or improvement of building to be undertaken 
-                        must be accomplished by this JOB REQUEST to be accomplished in triplicate <br>
+                        must be accomplished by this JOB REQUEST to be accomplished in triplicate <br> <br>
                     </address>
                 </div>
                 <!-- /.col -->
@@ -126,19 +126,20 @@
 
               <div class="row invoice-info" style = "border-top: 3px solid black">
                 <div class="col-sm-12 invoice-col">
-                    <table style = "border-style: 3px solid black; height: 250px;" class = "table table-bordered">
-                        <tr>
-                            <td>sdf</td>
-                        </tr>
-                    </table>
+                    <br>
+                    <textarea name="constructiontype" id="constructiontype" cols="30" rows="10" style="border:solid 1px orange;" class = "form-control"></textarea>
+                    <br>
                 </div>
               </div>
               <!-- /.row -->
 
               <!-- this row will not appear when printing -->
               <div class="row no-print">
-                <div class="col-12">
+                <div class="col-6">
                   <a href="{{url('/jobrequests_report')}}" rel="noopener" target="_blank" class="btn btn-block btn-flat  btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                </div>
+                <div class="col-6">
+                  <a rel="noopener" id = "btn_add" class="btn btn-block btn-flat  btn-outline-success"><i class="fas fa-save"></i> Submit Request</a>
                 </div>
               </div>
             </div>
@@ -171,19 +172,41 @@
 <script>
   $(function () {
     show_allJobRequests();
-
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
     $("#tbl_jobrequests").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#tbl_jobrequests_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+    $("#btn_add").on('click', function(e) {
+      e.preventDefault();
+
+      var constructiontype = $("#constructiontype").val();
+
+      $.ajax({
+        type: "POST",
+        url: "/addconstructiontype",
+        data: {
+          construction_type: constructiontype,
+        },
+        dataType: "json",
+        success:  function(response){
+          if(response.status == 400){
+            alert("Please check your field!");
+          }
+          if(response.status == 200){
+            alert(response.success);
+            $(".modal_addconstructiontype").modal('hide');
+            $("#constructiontype").val();
+          }
+        },
+        error:  function(response, error){
+          alert("Something went wrong\nPlease contact your administrator for immediate actions!");
+        }
+      });
     });
     $('.select2').select2();
     function show_allJobRequests()
@@ -204,6 +227,7 @@
             }
         })
     }
+    
   });
 </script>
 </html>

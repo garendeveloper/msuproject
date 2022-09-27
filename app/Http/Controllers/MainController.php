@@ -172,7 +172,7 @@ class MainController extends Controller
     }
     public function get_allconstructiontypes()
     {
-        $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES");
+        $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES ORDER BY created_at DESC");
         echo json_encode($data);
     }
     public function get_allconstructiontypes_approved()
@@ -249,7 +249,7 @@ class MainController extends Controller
             $construction_type->update();
             return response()->json([
                 'status' => 200,
-                'success' => 'Data Updated successfully!',
+                'success' => 'Job Request Updated successfully!',
             ]);
        }
        else{
@@ -269,7 +269,7 @@ class MainController extends Controller
                 $construction_type->save();
                 return response()->json([
                     'status' => 200,
-                    'success' => 'Data added successfully!',
+                    'success' => 'Job request has been added successfully!',
                 ]);
             }
        }
@@ -896,6 +896,22 @@ class MainController extends Controller
                 'userinfo' => $userInfo
             ];
             return view('jobrequests_reportprint', $data);
+        }
+       return redirect('/')->with('fail', 'You must be logged in!');
+    }
+    public function alljobrequests()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+                                from departments, users 
+                                where departments.id = users.department_id
+                                and users.id = "'.session('LoggedUser').'"');
+
+            $data = [
+                'userinfo' => $userInfo
+            ];
+            return view('alljobrequests', $data);
         }
        return redirect('/')->with('fail', 'You must be logged in!');
     }

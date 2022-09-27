@@ -33,7 +33,7 @@ class LoginController extends Controller
                 if($check_department->departmentname == "PPU HEAD" || $check_department->departmentname == "ppuhead")  return redirect('/dashboard');
                 else if($check_department->departmentname == "JOB REQUESTOR" || $check_department->departmentname == "jobrequestor")  return redirect('/jobrequest_form');
                 else if($check_department->departmentname == "FINANCIAL DIVISION" || $check_department->departmentname == "financial")  return redirect('/checking_fundsAvailability');
-                else return back()->with('fail', 'Sorry, you do not have permission to access the system.');
+                else return back()->with('fail', 'Sorry, but you do not have permission to access the system.');
             }
             else{
                 return back()->with('fail', 'Please check your username or password.');

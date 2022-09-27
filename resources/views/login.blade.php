@@ -91,7 +91,7 @@
         <a href="forgot-password.html">I forgot my password</a>
       </p> -->
       <p class="mb-0" style="margin-top: 15px">
-        <a href="https://msunaawan.edu.ph" class = "" class="text-center" target="_blank">
+        <a href="https://msunaawan.edu.ph" class = "" class="text-center">
           Go to MSU Naawan Website</a>
       </p>
     </div>

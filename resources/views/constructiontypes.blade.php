@@ -38,16 +38,16 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Constructions/Repair/Improvements</h1>
+          <div class="col-sm-12">
+            <h1>Constructions/Repair/Improvements (JOB REQUESTS) ORDERED BY DATE </h1>
           </div>
-          <div class="col-sm-6">
+          <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
               <li class="breadcrumb-item"><a href="{{ url('/constructions') }}">Constructions</a> </li>
               <li class="breadcrumb-item active">Constructions/Repair/Improvements</li>
             </ol>
-          </div>
+          </div> -->
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -61,7 +61,7 @@
               <div class="card-header">
                 <div class="row">
                   <div class="col md-6">
-                  <button class = "btn btn-outline-primary btn-sm" id = "btn_addconstructiontype" type = "button" align = "left"><i class = "fa fa-plus"></i> Add Construction Type</button>
+                  <!-- <button class = "btn btn-outline-primary btn-sm" id = "btn_addconstructiontype" type = "button" align = "left"><i class = "fa fa-plus"></i> Add Construction Type</button> -->
                   <a  href="{{ url('/constructions') }}" class = "btn btn-outline-primary btn-sm"  align = "right"><i class = "fa fa-arrow-right"></i> View Scope of Works</a>
                   </div>
                   <div class="col-md-6">
@@ -75,12 +75,10 @@
                 <table id="tbl_constructiontypes" class="table table-bordered table-striped" style = "table-layout: absolute">
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
-                    <th>ID</th>
                     <th>Constructions/Repair/Improvement</th>
                     <th>Status</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
-                    <th style = "text-align: center">Actions</th>
                   </tr>
                   </thead>
                   <tbody id = "tbody_constructiontypes">
@@ -295,17 +293,16 @@
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
             
             html += "<tr style = 'text-align:center'>";
-            html += "<td>"+data[i].id+"</td>";
             html += "<td>"+toTitleCase(data[i].construction_type)+"</td>";
             html += "<td>"+status+"</td>";
             html += "<td >"+data[i].created_at+"</td>";
             html += "<td>"+data[i].updated_at+"</td>";
-            html += '<td align = "center"> '+
-                        // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
-                        '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
-                        '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
-                        // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
-                     '</td>';
+            // html += '<td align = "center"> '+
+            //             // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
+            //             // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
+            //             // '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
+            //             // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
+            //          '</td>';
             html += "</tr>";
           }
           $("#tbody_constructiontypes").html(html);

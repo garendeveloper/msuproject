@@ -21,9 +21,7 @@
           <a href="#" class="d-block">{{ $userinfo[0]->name }}</a>
         </div>
       </div>
-
-     
-
+      
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">

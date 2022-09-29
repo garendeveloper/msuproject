@@ -57,6 +57,13 @@ Route::post('approve_jobRequest/{id}', [MainController::class, 'approve_jobReque
 Route::post('/search_constructiontypes', [MainController::class, 'search_constructiontypes'])->name('/search_constructiontypes');
 
 Route::post('change_retirementStatus', [UserController::class, 'change_retirementStatus']);
+Route::post('changecolor', [MainController::class, 'changecolor']);
+Route::get('get_allScheduledWorkers', [MainController::class, 'get_allScheduledWorkers']);
+Route::get('check_worker/{id}', [MainController::class, 'check_worker']);
+Route::post('/manpower_actions', [MainController::class, 'manpower_actions']);
+Route::get('get_allworkers/{id}', [MainController::class, 'get_allworkers']);
+Route::get('remove_workerinschedule/{id}', [MainController::class, 'remove_workerinschedule']);
+Route::get('complete_schedule/{id}', [MainController::class, 'complete_schedule']);
 
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');

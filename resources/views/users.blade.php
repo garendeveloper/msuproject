@@ -73,11 +73,10 @@
                 <table id="tbl_Users" style = "table-layout: absolute; width: 100%;  border: 1px solid black;" class="table table-bordered table-striped">
                   <thead style = "background-color: #1C518A;color: white; ">
                   <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Retirement Status</th>
+                    <th>Employment Status</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
                    
@@ -218,13 +217,12 @@
                         optionRetirement = "<button class = 'btn btn-outline-warning btn-sm btn_reemployed' data-id = "+data[i].user_id+"><i class = 'fa fa-alarm'></i> Re-Employed ?</button>";
                       } 
                       row += "<tr>";
-                      row += "<td>"+data[i].id+"</td>";
                       row += "<td>"+data[i].name+"</td>";
                       row += "<td>"+data[i].username+"</td>";
                       row += "<td>"+data[i].email+"</td>";
                       row += "<td align = 'center'>"+retirementstatus+"</td>";
-                      row += "<td style = 'font-size: 10px'>"+new Date(data[i].created_at)+"</td>";
-                      row += "<td style = 'font-size: 10px'>"+new Date(data[i].updated_at)+"</td>";
+                      row += "<td style = 'font-size: 10px'>"+data[i].created_at+"</td>";
+                      row += "<td style = 'font-size: 10px'>"+data[i].updated_at+"</td>";
                       row +=  "<td style = 'text-align: center'>"+
                                   "<button class = 'btn btn-outline-primary btn-sm edit' data-id = "+data[i].user_id+"><i class = 'fa fa-edit'></i> Edit</button>"+
                                   optionRetirement+

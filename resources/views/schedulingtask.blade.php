@@ -189,8 +189,7 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" id = "btn_save">Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-outline-primary btn-block" id = "btn_save"><i class = "fa fa-save"></i> Submit</button>
               </div>
             </form>
         </div>
@@ -202,9 +201,6 @@
       <div class="modal fade  selection_modal" id="modal-lg">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
-            <!-- <div class="overlay">
-                <i class="fas fa-2x fa-sync fa-spin"></i>
-            </div> -->
             <div class="modal-header" style = "background-color: #1C518A; color: white;">
               <div class = "row">
                 <div class="col-md-12">
@@ -218,69 +214,57 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
               </div>
+              <ul id = "ajaxresponse1"></ul>
               <div class="modal-body">
+                <form action="" id = "manpowerform">
                 @csrf
-                <input type="text" style = "display: none" id = "jobrequest_id">
-                <!-- <div class="row">
-                    <div class="col-md-3">
-                      <a class = "btn btn-app bg-success" id = "btn_complete" style = "width: 200px; font-size: 16px; height: 80px" ><i class = "fa fa-check"></i> Complete</a>
-                    </div>
-                    <div class="col-md-3">
-                      <a class = "btn btn-app bg-primary" id = "btn_update" style = "width: 200px; font-size: 16px; height: 80px" ><i class = "fa fa-edit"></i> Update Color</a>
-                    </div>
-                    <div class="col-md-3">
-                      <a class = "btn btn-app bg-warning" id = "btn_scheduleManpower" style = "width: 200px; font-size: 16px; height: 80px" ><i class = "fa fa-users"></i> Schedule Manpowers</a>
-                    </div>
-                    <div class="col-md-3">
-                      <a class = "btn btn-app bg-danger" id = "btn_remove" style = "width: 200px; font-size: 16px; height: 80px" ><i class = "fa fa-trash"></i> Remove</a>
-                    </div>
-                </div> -->
-                <!-- <div class="row">
+                <input type="text" style = "display: none" name = "jobrequest_id" id = "jobrequest_id">
+                <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Multiple</label>
-                      <select class="duallistbox" id = "laborers" multiple>
-                      </select>
+                      <label>Select Head of Constructions (Foreman/s)</label>
+                      <div class="select2-blue">
+                        <select class="select2" name = "foremans[]" id = "foremans" multiple="multiple" data-placeholder="Select the company of ..." data-dropdown-css-class="select2-blue" style="width: 100%;" required>
+    
+                        </select>
+                      </div>
                     </div>
                   </div>
-                </div> -->
-                <div class="row">
-                  <div class="col-md-6">
-                    <table id = "manpowers" class = "table table-stripped table-hover">
-                      <thead>
-                        <tr>
-                          <th style = "text-align: center">Manpowers</th>
-                          <th></th>
-                        </tr>
-                        <tr>
-                          <th>Search</th>
-                          <th>
-                            <input type="text" class = "form-control" >
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
+                  <div class="col-md-12">
+                    <button class = "btn btn-outline-primary btn-block" type = "submit" ><i class = "fa fa-save"></i> Submit</button>
+                  </div>
+                  <br><br>
 
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="col-md-6">
-                    <table id = "selected_persons" class = "table table-stripped table-hover">
-                      <thead>
+                  <div class="col-md-12">
+                   <table class = "table table-stripped table-bordered table-hovered">
+                    <thead>
                       <tr>
-                          <th style = "text-align: center">Selected For Constructions</th>
-                          <th></th>
-                        </tr>
-                        <tr>
-                          <th>Search</th>
-                          <th>
-                            <input type="text" class = "form-control" >
-                          </th>
-                        </tr>
-                      </thead>
-                    </table>
+                        <th>Selected Worker Head/s (Foreman)</th>
+                        <th>Date Scheduled</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id = "selected_workers">
+
+                    </tbody>
+                   </table>
                   </div>
-                </div>
+                </div> <br> 
+              
+              </form>
+              <div class="row">
+                    <div class="col-md-6">
+                      <button class = "btn btn-outline-success btn-block" id = "btn_complete"><i class = "fa fa-check"></i> Complete</button>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="input-group my-colorpicker2">
+                          <input type="text" placeholder = "Choose color here" name = "color" id = "changecolor" class="form-control" readonly>
+                          <div class="input-group-append">
+                            <button class= "btn btn-sm btn-outline-primary" id = "btn_changecolor">Change color</button>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
               </div>
               <div class="modal-footer">
               </div>
@@ -336,7 +320,12 @@
 </script>
 
 <script>
-$(function(){
+$(document).ready(function() {
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  })
   var Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -364,7 +353,10 @@ $(function(){
       var start = ((start.getMonth() > 8) ? start.getFullYear() + '-' + (start.getMonth() + 1): start.getFullYear() + '-' + ('0' + (start.getMonth() + 1))) + '-' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate()));
       var end = new Date(select.end);
       var end = ((end.getMonth() > 8) ? end.getFullYear() + '-' +(end.getMonth() + 1 ): end.getFullYear() + '-' + ('0' + (end.getMonth() + 1))) + '-' + ((end.getDate() > 9) ? end.getDate(): ('0' + end.getDate()));
-      $(".open_modal").modal('show');
+      $(".open_modal").modal({
+        backdrop: 'static',
+        keyboard: false,
+      }, 'show');
       $(".modal-title").text('Schedule job request');
       $("#ajaxresponse").html("");
       $("#schedule_form").trigger('reset');
@@ -372,6 +364,7 @@ $(function(){
       $("#end").val(end);
     },
     editable: true,
+    
     eventResize: async function(event, delta)
     {
       var start = new Date(event.event.start)
@@ -448,6 +441,9 @@ $(function(){
       var start = ((start.getMonth() > 8) ? start.getFullYear() + '-' + (start.getMonth() + 1): start.getFullYear() + '-' + ('0' + (start.getMonth() + 1))) + '-' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate()));
       var end = new Date(event.event.end);
       var end = ((end.getMonth() > 8) ? end.getFullYear() + '-' +(end.getMonth() + 1 ): end.getFullYear() + '-' + ('0' + (end.getMonth() + 1))) + '-' + ((end.getDate() > 9) ? end.getDate(): ('0' + end.getDate()));
+      
+      show_allworkers(id);
+     
       $("#sm_modaltitle").text(title);
       $("#sm_descriptiontitle").text("FROM "+start+" TO "+end);
       $(".selection_modal").modal({
@@ -455,12 +451,14 @@ $(function(){
             keyboard: false,
         }, 'show');
       $("#jobrequest_id").val(id);
+      $("#changecolor").val("");
     }
   })
   calendar.render();
   $("#btn_remove").on('click', function(e){
     e.preventDefault();
     var id = $("#jobrequest_id").val();
+
     if(confirm("Are you sure you want to remove the job request in the schedule?"))
     {
       $.ajax({
@@ -484,6 +482,169 @@ $(function(){
           {
             alert(response.fail);
           }
+        }
+      })
+    }
+  })
+  function show_allworkers(id)
+  {
+    $.ajax({
+        type: 'get',
+        url: '/get_allworkers/'+id,
+        dataType: 'json',
+        success: function(data)
+        {
+          var row = "";
+          for(var i = 0; i<data.length; i++)
+          {
+            row += "<tr>";
+            row += "<td data-id = "+data[i].userjobrequest_id+">"+data[i].name+"</td>";
+            row += "<td data-id = "+data[i].userjobrequest_id+">"+data[i].created_at+"</td>";
+            row += "<td  style = 'text-align: center'><a  data-id = "+data[i].userjobrequest_id+"  class = 'btn btn-outline-danger btn-sm selectedworker'><i class = 'fa fa-'></i> Remove</a></td>";
+            row += "</tr>";
+          }
+          $("#selected_workers").html(row);
+        }
+      })
+  }
+  function show_allschedules()
+  {
+    $.ajax({
+        type: 'get',
+        url: '/get_schedules',
+        dataType: 'json',
+        success: function(data)
+        {
+          var row = "";
+          var events = new Array();
+          for(var i = 0; i<data.length; i++)
+          {
+            events.push(data[i].title);
+            // if(data[i].status == 0)
+            // {
+            //   // events => 
+            //   //   ['title', data[i].title]
+            //   //   ['color', data[i].color]
+            //   // ;
+         
+            // }
+            // if(data[i].status == 1)
+            // {
+            //   events => 
+            //     ['title', 'Completed']
+            //     ['color', data[i].color]
+            //   ;
+            // }
+          }
+          console.log(events)
+          return events;
+        }
+      })
+  }
+  $("body").on('click', '.selectedworker', function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    var jobrequest_id = $("#jobrequest_id").val();
+    if(confirm("Do you want to remove this person in this contruction?"))
+    {
+      $.ajax({  
+        type: 'get',
+        url: '/remove_workerinschedule/'+id,
+        dataType: 'json',
+        success: function(data)
+        {
+          if(data.status == 200)
+          {
+              Toast.fire({
+                  icon: 'success',
+                title: data.success
+              })
+              show_allworkers(jobrequest_id);
+              show_allForemans();
+          }
+          else
+          {
+            alert("Something went wrong in server");
+          }
+        }
+      })
+    }
+  })
+  $("#btn_complete").on('click', function(e){
+    e.preventDefault();
+    var jobrequest_id = $("#jobrequest_id").val();
+    if(confirm("Do you want to complete the construction on this schedule?\nThis action cannot be undone\n\nPress Ok otherwise Cancel"))
+    {
+      $.ajax({  
+        type: 'get',
+        url: '/complete_schedule/'+jobrequest_id,
+        dataType: 'json',
+        success: function(data)
+        {
+          if(data.status == 200)
+          {
+              Toast.fire({
+                  icon: 'success',
+                title: data.success
+              })
+              show_allForemans();
+          }
+          else
+          {
+            alert("Something went wrong in server");
+          }
+        }
+      })
+    }
+  })
+  $("#manpowerform").on('submit', function(e){
+    e.preventDefault();
+    var jobrequest_id = $("#jobrequest_id").val();
+    var data = $(this).serialize();
+    if(confirm("Do you want to proceed with the person/s selected?\nThis action cannot be undone\n\nPress Ok to proceed otherwise Cancel."))
+    {
+      $.ajax({
+        type: 'post',
+        url: '/manpower_actions',
+        data: data,
+        success: function(response)
+        {
+          if(response.status == 200)
+          {
+            calendar.refetchEvents();
+            Toast.fire({
+                icon: 'success',
+              title: response.success
+            })
+            $("#manpower_form").trigger('reset');
+            $("#foremans").text("");
+            $("#laborers").text("");
+            show_allForemans();
+            show_allworkers(jobrequest_id);
+            
+          }
+          if(response.status == 401)
+          {
+            alert(response.fail)
+          }
+          if(response.status == 400)
+          {
+            $("#ajaxresponse1").html("");
+            $("#ajaxresponse1").removeClass('alert alert-danger');
+            $("#ajaxresponse1").addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $("#ajaxresponse1").append('<li>'+err_values+'</li>');
+            });
+          }
+          if(response.users.length() > 0)
+          {
+            for(var i = 0; i<response.users.length(); i++)
+            {
+              console.log(response.users);
+            }
+          }
+          show_allForemans();
+          show_allJobRequests();
         }
       })
     }
@@ -535,43 +696,83 @@ $(function(){
         var row = "";
         for(var i = 0; i<data.length; i++)
         {
-          row += '<tr>';
-          row += '<td >'+data[i].name+'</td>';
-          row += '<td align = "right"> <a class = "btn btn-warning btn-sm manpower" data-name = '+data[i].name+' data-id = '+data[i].user_id+'> >> </a> </td>'
-          row += '</tr>';
+          row += '<td  class = "manpower"  data-name = '+data[i].name+' data-id = '+data[i].user_id+'>  '+data[i].name+' </td>';
         }
         $("#manpowers tbody").html(row);
       }
     })
   }
   $("body").on('click', '.manpower', function(response){
+    alert()
     var id = $(this).data('id');
     var name = $(this).data('name');
     var td = '<tr><td align = "left"> <a class = "btn btn-danger btn-sm s_manpower" data-name = '+name+' data-id = '+id+'> << </a> </td><td>'+name+'</td></tr>';
+    $(this).remove();
     $("#selected_persons").append(td);
+   
   })
+  $("#btn_changecolor").on('click', function(e){
+    var id = $("#jobrequest_id").val();
+
+    var value = $("#changecolor").val();
+    $.ajax({
+      type: 'post',
+      url: '/changecolor',
+      data: {color: value, id: id},
+      cache:false,
+      success: function(response)
+      {
+        if(response.status == 200)
+        {
+          calendar.refetchEvents();
+        }
+      }
+    })
+  })
+  function users()
+  {
+    var data;
+    $.ajax({
+      type: 'get',
+      url: '/get_allusers',
+      dataType: 'json',
+      success: function(data)
+      {
+        data = data;
+      }
+    })
+    return data;
+  }
+  function check_worker(id)
+  {
+    $.ajax({
+      type: 'get',
+      url: '/check_worker/'+id,
+      dataType: 'json',
+      success: function(data) 
+      {
+        return data;
+      },
+    })
+  }
   function show_allForemans()
   {
     $.ajax({
       type: 'get',
-      url: '/get_allForemans',
+      url: '/get_allScheduledWorkers',
       dataType: 'json',
       success: function(data)
       {
-        var option = "";
+        var row = "";
         for(var i = 0; i<data.length; i++)
         {
-          option += '<option value = '+data[i].user_id+'>'+data[i].name+'</option>';
+           row += "<option value = "+data[i].id+" >"+data[i].name+"</option>";
         }
-        $("#foremans").html(option);
+        $("#foremans").html(row);
       }
     })
   }
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  })
+
   $("#schedule_form").on('submit', function(e){
     e.preventDefault();
     var data =$(this).serialize();
@@ -589,7 +790,6 @@ $(function(){
           $("#schedule_form").trigger('reset');
           $("#foremans").text("");
           $("#laborers").text("");
-          
         }
         if(response.status == 401)
         {

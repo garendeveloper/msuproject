@@ -915,4 +915,121 @@ class MainController extends Controller
         }
        return redirect('/')->with('fail', 'You must be logged in!');
     }
+    public function changecolor(Request $request)
+    {
+        $jobrequest = JobRequestSchedule::findOrFail($request->id);
+        $jobrequest->color = $request->color;
+        $jobrequest->update();
+        return response()->json([
+            'status' => 200,
+            'success'=> 'Color has been successfully changed'
+        ]);
+    }
+    public function manpower_actions(Request $request)
+    {
+        $foremans = $request->foremans;
+        $jobrequest_id = $request->jobrequest_id;
+
+        $validator = Validator::make($request->all(), [
+            'foremans' => 'required',
+            'jobrequest_id' => 'required',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status' => 400,
+                'errors' =>$validator->messages
+            ]);
+        }
+        else
+        {
+            $users_existed = [];
+            for($i = 0; $i<count($foremans); $i++)
+            {
+                $check_ifExist = UserJobRequestSchedule::where('user_id', '=', $foremans[$i])
+                                                        ->where('jobrequestsched_id', '=', $jobrequest_id)->first();
+                
+                if($check_ifExist == "" || empty($check_ifExist))
+                {
+                    $userjrsched = new UserJobRequestSchedule;
+                    $userjrsched->jobrequestsched_id = $jobrequest_id;
+                    $userjrsched->user_id = $foremans[$i];
+                    $userjrsched->save();
+                }
+                else
+                {
+                    $users_existed = [
+                        'user' => $foremans[$i]
+                    ];
+                }
+            }
+            return response()->json([
+                'status' => 200,
+                'success' => 'Employee has been successfully scheduled.',
+                'users' => $users_existed,
+            ]);
+        }  
+        
+    }
+    public function get_allScheduledWorkers()
+    {
+        $data = DB::select('SELECT users.*
+        FROM users
+        WHERE id NOT IN 
+        (SELECT user_id 
+         FROM users, userjobrequestschedules, jobrequestschedules
+        WHERE users.id = userjobrequestschedules.user_id 
+        AND jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id
+        AND jobrequestschedules.status = 0)
+        and users.retirementstatus = 0 ');
+        
+        echo json_encode($data);
+    }
+    public function check_worker($id)
+    {
+        $check = 1;
+        $data = DB::select('SELECT distinct users.id as user_id
+                    FROM userjobrequestschedules, users, jobrequestschedules
+                    WHERE users.id  = userjobrequestschedules.user_id
+                    and jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id
+                    and jobrequestschedules.status = 0
+                    and users.id = "'.$id.'"');
+        if(empty($data)) 
+        {
+            $check  = 0;
+        }
+        echo json_encode($check);
+    }
+    public function get_allworkers($id)
+    {
+        $workers = DB::select('SELECT users.*, userjobrequestschedules.id as userjobrequest_id
+                            FROM users, userjobrequestschedules, jobrequestschedules
+                            WHERE users.id = userjobrequestschedules.user_id 
+                            AND jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id
+                            AND jobrequestschedules.status = 0
+                            and users.retirementstatus = 0 
+                            and jobrequestschedules.id = "'.$id.'"');
+        echo json_encode($workers);
+    }
+    public function remove_workerinschedule($userjobrequest_id)
+    {
+        $userjobrequest = UserJobRequestSchedule::findOrFail($userjobrequest_id);
+        $userjobrequest->delete();
+        return response()->json([
+            'status' => 200,
+            'success' => 'Selected Person successfully removed!'
+        ]);
+
+    }
+    public function complete_schedule($jobrequest_id)
+    {
+        $jobrequest = JobRequestSchedule::findOrFail($jobrequest_id);
+        $jobrequest->status = 1;
+        $jobrequest->update();
+        return response()->json([
+            'status' => 200,
+            'success' => 'Construction has been successfully completed!'
+        ]);
+    }
 }

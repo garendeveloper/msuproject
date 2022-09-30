@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Construction::factory(5)->create();
         \App\Models\Departments::factory()->create([
-            'departmentname' => 'ADMIN',
+            'departmentname' => 'PPU HEAD',
         ]);
         \App\Models\Departments::factory()->create([
           'departmentname' => 'FINANCIAL DIVISION',
@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\User::factory()->create([
-          'department_id' => '1',
+          'department_id' => '2',
           'designated_id' => '2',
           'name' => 'FINANCIAL DIVISION',
           'username' => 'financediv',
@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\User::factory()->create([
-          'department_id' => '1',
+          'department_id' => '2',
           'name' => 'JOB REQUESTOR',
           'designated_id' => '2',
           'username' => 'jobrequestor',

@@ -75,6 +75,8 @@
                   <tr>
                     <th>Name</th>
                     <th>Username</th>
+                    <th>User Type</th>
+                    <th>Designated Office</th>
                     <th>Email</th>
                     <th>Employment Status</th>
                     <th>Date Created</th>
@@ -219,6 +221,8 @@
                       row += "<tr>";
                       row += "<td>"+data[i].name+"</td>";
                       row += "<td>"+data[i].username+"</td>";
+                      row += "<td>"+data[i].departmentname+"</td>";
+                      row += "<td>"+data[i].designation+"</td>";
                       row += "<td>"+data[i].email+"</td>";
                       row += "<td align = 'center'>"+retirementstatus+"</td>";
                       row += "<td style = 'font-size: 10px'>"+data[i].created_at+"</td>";

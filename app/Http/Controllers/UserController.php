@@ -25,9 +25,10 @@ class UserController extends Controller
     }
     public function get_all()
     {
-        $users = DB::select('select users.*, users.id as user_id, departments.*
-                            from departments, users 
-                            where departments.id = users.department_id');
+        $users = DB::select('select users.*, users.id as user_id, departments.*, designated_offices.*
+                            from departments, users, designated_offices
+                            where departments.id = users.department_id
+                            and designated_offices.id = users.designated_id');
         echo json_encode($users);
     }
     public function change_retirementStatus(Request $request)

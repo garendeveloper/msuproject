@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Construction::factory(5)->create();
         \App\Models\Departments::factory()->create([
-            'departmentname' => 'PPU HEAD',
+            'departmentname' => 'ADMIN',
         ]);
         \App\Models\Departments::factory()->create([
           'departmentname' => 'FINANCIAL DIVISION',
@@ -32,8 +32,17 @@ class DatabaseSeeder extends Seeder
           'departmentname' => 'FOREMAN',
         ]);
 
+        \App\Models\DesignatedOffice::factory()->create([
+            'designation' => 'CSE BUILDING',
+        ]);
+
+        \App\Models\DesignatedOffice::factory()->create([
+          'designation' => 'CBAA BUILDING',
+        ]);
+
         \App\Models\User::factory()->create([
           'department_id' => '1',
+          'designated_id' => '1',
           'name' => 'PPU HEAD',
           'username' => 'ppuhead',
           'email' => 'ppuhead@gmail.com',
@@ -41,7 +50,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\User::factory()->create([
-          'department_id' => '2',
+          'department_id' => '1',
+          'designated_id' => '2',
           'name' => 'FINANCIAL DIVISION',
           'username' => 'financediv',
           'email' => 'financialdivision@gmail.com',
@@ -49,8 +59,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\User::factory()->create([
-          'department_id' => '3',
+          'department_id' => '1',
           'name' => 'JOB REQUESTOR',
+          'designated_id' => '2',
           'username' => 'jobrequestor',
           'email' => 'jobrequestor@gmail.com',
           'password' => Hash::make('jobrequestor')

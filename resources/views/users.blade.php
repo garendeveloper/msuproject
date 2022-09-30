@@ -210,7 +210,7 @@
                 else{
                     for(var i = 0; i<data.length; i++){
                       var retirementstatus = "<span class = 'badge badge-success'>Employee</span>";
-                      var optionRetirement = "<button class = 'btn btn-outline-success btn-sm btn_retired' data-id = "+data[i].user_id+"><i class = 'fa fa-alarm'></i> Resigned ?</button>";
+                      var optionRetirement = "<button class = 'btn btn-outline-danger btn-sm btn_retired' data-id = "+data[i].user_id+"><i class = 'fa fa-alarm'></i> Resigned ?</button>";
                       if(data[i].retirementstatus == 1)
                       {
                         retirementstatus = "<span class = 'badge badge-danger'>Resigned</span>";
@@ -242,7 +242,6 @@
           keyboard: false,
         }, 'show');
         $('.modal-title').text('Add User');
-
     })
    
     $("body").on('click', '.btn_reemployed', function(e){

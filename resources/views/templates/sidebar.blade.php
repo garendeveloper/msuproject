@@ -28,9 +28,11 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           @if($userinfo[0]->departmentname == "PPU HEAD")
+          
             <li class="nav-item" id = "dashboard" id = "dashboard">
               <a href="{{ url('/dashboard') }}" class="nav-link" >
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <i class="nav-icon fas fa-list-alt"></i>
+                <!-- <ion-icon name="icons/aperture-outline"></ion-icon> -->
                 <p>
                   Dashboard
                 </p>
@@ -38,13 +40,13 @@
             </li>
             <li class="nav-item">
             <a href="{{ url('/constructiontypes') }}" class="nav-link">
-              <i class="nav-icon fas fa-edit"></i>
+              <i class="nav-icon fas fa-building"></i>
               <p>Projects</p>
             </a>
           </li>
             <li class="nav-item">
               <a href="{{ url('/users') }}" class="nav-link">
-                <i class="nav-icon fa fa-users"></i>
+                <i class="nav-icon fa fa-street-view"></i>
                 <p>Users</p>
               </a>
             </li>
@@ -79,7 +81,7 @@
           @endif
           <li class="nav-item">
             <a href="" class="nav-link">
-              <i class="nav-icon fas fa-building"></i>
+              <i class="nav-icon fas fa-file"></i>
               <p>
                 Reports
                 <i class="right fas fa-angle-left"></i>
@@ -102,7 +104,7 @@
           </li>
           <li class="nav-item">
             <a href="{{ url('/logout') }}" class="nav-link">
-              <i class="nav-icon fa fa-arrow-right"></i>
+              <i class="nav-icon fas fa-arrow-right"></i>
               <p>Logout</p>
             </a>
           </li>

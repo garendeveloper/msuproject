@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
+            $table->foreignId('designated_id');
+            $table->foreign('designated_id')->references('id')->on('designated_offices');
             $table->string('name');
             $table->string('username');
             $table->string('email')->unique()->nullable();
@@ -24,7 +26,7 @@ return new class extends Migration
             $table->string('password');
             $table->integer('retirementstatus')->default(0);
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamps();   
         });
     }
 

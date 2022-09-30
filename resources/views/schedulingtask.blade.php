@@ -339,13 +339,24 @@ $(document).ready(function() {
   show_allJobRequests();
   show_allLaborers();
   show_allForemans();
+ 
   var calendarE1 = document.getElementById('calendar');
   var calendar = new FullCalendar.Calendar(calendarE1, {
-    initialView: 'dayGridMonth',
+    defaultView: 'dayGridMonth',
+    // plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+      // height: 'parent',
+    headerToolbar: {
+        left  : 'prev,next today',
+        center: 'title',
+        right : 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+    eventLimit: true,
+    navLinks: true,
     selectable: true,
     events: '/get_schedules',
     themeSystem: 'bootstrap',
     selectHelper: true,
+    draggable: false,
     select: function(select, start, end, allDay)
     {
       var start = new Date(select.start);
@@ -364,7 +375,6 @@ $(document).ready(function() {
       $("#end").val(end);
     },
     editable: true,
-    
     eventResize: async function(event, delta)
     {
       var start = new Date(event.event.start)
@@ -441,17 +451,39 @@ $(document).ready(function() {
       var start = ((start.getMonth() > 8) ? start.getFullYear() + '-' + (start.getMonth() + 1): start.getFullYear() + '-' + ('0' + (start.getMonth() + 1))) + '-' + ((start.getDate() > 9) ? start.getDate() : ('0' + start.getDate()));
       var end = new Date(event.event.end);
       var end = ((end.getMonth() > 8) ? end.getFullYear() + '-' +(end.getMonth() + 1 ): end.getFullYear() + '-' + ('0' + (end.getMonth() + 1))) + '-' + ((end.getDate() > 9) ? end.getDate(): ('0' + end.getDate()));
-      
-      show_allworkers(id);
-     
-      $("#sm_modaltitle").text(title);
-      $("#sm_descriptiontitle").text("FROM "+start+" TO "+end);
-      $(".selection_modal").modal({
-            backdrop: 'static',
-            keyboard: false,
-        }, 'show');
-      $("#jobrequest_id").val(id);
-      $("#changecolor").val("");
+
+      $.ajax({
+        type: 'get',
+        url: '/get_eventInfo/'+id,
+        dataType: 'json',
+        success: function(data)
+        {
+          if(data.status == 0)
+          {
+            show_allworkers(id);
+          
+            $("#sm_modaltitle").text(title);
+            $("#sm_descriptiontitle").text("FROM "+start+" TO "+end);
+            $(".selection_modal").modal({
+                  backdrop: 'static',
+                  keyboard: false,
+              }, 'show');
+            $("#jobrequest_id").val(id);
+            $("#changecolor").val("");
+          }
+          else
+          {
+            $(document).Toasts('create', {
+              class: 'bg-danger',
+              title: title,
+              body: 'On '+ new Date(data.updated_at),
+              autohide: true,
+              delay: 3000,
+              icon: 'danger',
+            })
+          }
+        }
+      })
     }
   })
   calendar.render();
@@ -507,40 +539,7 @@ $(document).ready(function() {
         }
       })
   }
-  function show_allschedules()
-  {
-    $.ajax({
-        type: 'get',
-        url: '/get_schedules',
-        dataType: 'json',
-        success: function(data)
-        {
-          var row = "";
-          var events = new Array();
-          for(var i = 0; i<data.length; i++)
-          {
-            events.push(data[i].title);
-            // if(data[i].status == 0)
-            // {
-            //   // events => 
-            //   //   ['title', data[i].title]
-            //   //   ['color', data[i].color]
-            //   // ;
-         
-            // }
-            // if(data[i].status == 1)
-            // {
-            //   events => 
-            //     ['title', 'Completed']
-            //     ['color', data[i].color]
-            //   ;
-            // }
-          }
-          console.log(events)
-          return events;
-        }
-      })
-  }
+
   $("body").on('click', '.selectedworker', function(e){
     e.preventDefault();
     var id = $(this).data('id');
@@ -573,6 +572,7 @@ $(document).ready(function() {
   $("#btn_complete").on('click', function(e){
     e.preventDefault();
     var jobrequest_id = $("#jobrequest_id").val();
+    
     if(confirm("Do you want to complete the construction on this schedule?\nThis action cannot be undone\n\nPress Ok otherwise Cancel"))
     {
       $.ajax({  
@@ -587,6 +587,9 @@ $(document).ready(function() {
                   icon: 'success',
                 title: data.success
               })
+              calendar.refetchEvents();
+              $("#manpower_form").trigger('reset');
+              $(".selection_modal").modal('hide');
               show_allForemans();
           }
           else

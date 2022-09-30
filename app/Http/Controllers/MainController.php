@@ -569,15 +569,50 @@ class MainController extends Controller
     }
   
     //SCHEDULING 
-
+    public function get_eventInfo($id)
+    {
+        $event = JobRequestSchedule::find($id);
+        echo json_encode($event);
+    }  
     public function get_schedules()
     {
-        $data = DB::select('select construction_types.construction_type, constructions.construction_name as title, jobrequestschedules.id, schedules.start, schedules.end, jobrequestschedules.color
+        $data = DB::select('select construction_types.construction_type, constructions.construction_name as title, jobrequestschedules.id, schedules.start, schedules.end, jobrequestschedules.color, jobrequestschedules.status
         from  construction_types, constructions, schedules, jobrequestschedules
         where construction_types.id = constructions.constructiontype_id
         and schedules.id = jobrequestschedules.schedule_id
         and constructions.id = jobrequestschedules.jobrequest_id');
-        echo json_encode($data);
+
+        $events = array();
+        foreach($data as $d)
+        {
+            if($d->status == 1)
+            {
+                $events[] = [
+                    'title' => 'THIS SCHEDULE HAS BEEN COMPLETED',
+                    'start' => $d->start,
+                    'end'   => $d->end,
+                    'id'    => $d->id,
+                    'color' => $d->color,
+                    'status' => $d->status,
+                    'editable' => false,
+                    'click' => false,
+                ];
+            }
+            else
+            {
+                $events[] = [
+                    'title' => $d->title,
+                    'start' => $d->start,
+                    'end'   => $d->end,
+                    'id'    => $d->id,
+                    'color' => $d->color,
+                    'status' => $d->status,
+                    'editable' => true,
+                    'click' => true,
+                ];
+            }
+        }
+        echo json_encode($events);
     }
     public function scheduling(Request $request) 
     {
@@ -764,73 +799,6 @@ class MainController extends Controller
                                 'fail' => 'Job request already on scheduled!'
                             ]);
                         }
-                        
-
-                    // $foremans = $request->foremans;
-                    // $laborers = $request->laborers;
-
-                    // $total_added_foremans = 0;
-                    // $total_notadded_foremans = 0;
-                    // $foremans_notsaved = [];
-
-                    // $total_added_laborers = 0;
-                    // $total_notadded_laborers = 0;
-                    // $laborers_notsaved = [];
-                    // for($i = 0; $i<count($foremans); $i++)
-                    // {
-                    //     $user = UserJobRequestSchedule::where('user_id', '=', $foremans[$i])
-                    //                             ->where('jobrequestsched_id', '=', $jobrequest_schedule)
-                    //                             ->first();
-                        
-                    //     if($user == "")
-                    //     {
-                    //         $user = new UserJobRequestSchedule;
-                    //         $user->user_id = $foremans[$i];
-                    //         $user->jobrequestsched_id = $jobrequest_schedule;
-                    //         $user->save();
-                    //         $user = $user->id;
-                    //         $total_added_foremans += 1;
-                    //     }
-                    //     else
-                    //     {
-                    //         $foremans_notsaved[] = [
-                    //             'user' => $user_id
-                    //         ];
-                    //         $total_notadded_foremans += 1;
-                    //     }
-                    // }
-                    // for($i = 0; $i<count($laborers); $i++)
-                    // {
-                    //     $user = UserJobRequestSchedule::where('user_id', '=', $laborers[$i])
-                    //                             ->where('jobrequestsched_id', '=', $jobrequest_schedule)
-                    //                             ->first();
-                        
-                    //     if($user == "")
-                    //     {
-                    //         $user = new UserJobRequestSchedule;
-                    //         $user->user_id = $laborers[$i];
-                    //         $user->jobrequestsched_id = $jobrequest_schedule;
-                    //         $user->save();
-                    //         $user = $user->id;
-                    //         $total_added_laborers += 1;
-                    //     }
-                    //     else
-                    //     {
-                    //         $laborers_notsaved[] = [
-                    //             'user' => $user_id
-                    //         ];
-                    //         $total_notadded_laborers += 1;
-                    //     }
-                    // }
-                    // return response()->json([
-                    //     'status' => 200,
-                    //     'total_added_laborers' => $total_added_laborers,
-                    //     'total_added_foremans' => $total_added_foremans,
-                    //     'total_notadded_laborers' => $total_notadded_laborers,
-                    //     'total_notadded_foremans' => $total_notadded_foremans,
-                    //     'foremans_notsaved' => $foremans_notsaved,
-                    //     'laborers_notsaved' => $laborers_notsaved,
-                    // ]);
                     }
                 }
             }

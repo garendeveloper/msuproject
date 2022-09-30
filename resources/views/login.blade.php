@@ -18,6 +18,13 @@
         background-repeat: no-repeat;
         background-size: cover;
     }
+    /* .login-box .card, .register-box .card {
+        margin-bottom: 0;
+        background-color: #ff5151;
+    } */
+    .card-primary.card-outline {
+        border-top: 3px solid #500015;
+    }
 </style>
 <body class="hold-transition login-page">
    <!-- Preloader -->
@@ -39,13 +46,13 @@
     @endif
 
     @if(Session::get('fail'))
-        <div class="alert alert-danger">
+        <div class="alert alert-danger" style = "color: white">
            <p> {{ Session::get('fail') }} </p> 
         </div>
     @endif
 
     @if(Session::get('Fail'))
-        <div class="alert alert-danger">
+        <div class="alert alert-danger" style = "color: white">
            <p> {{ Session::get('fail') }} </p> 
         </div>
     @endif
@@ -64,10 +71,10 @@
           </div>
         </div>
         @if($errors->has('username'))
-            <span class = "text-danger">{{$errors->first('username')}}</span>
+            <span style = "color: black">{{$errors->first('username')}}</span>
           @endif
         @if($errors->has('usertype'))
-            <span class = "text-danger">{{$errors->first('usertype')}}</span>
+            <span class = "text-danger" style = "color: white">{{$errors->first('usertype')}}</span>
           @endif
         <div class="input-group mb-3">
           <input autocomplete = "off" type="password" class="form-control" name = "password"  placeholder="Password">
@@ -78,7 +85,7 @@
           </div>
         </div>
         @if($errors->has('password'))
-            <span class = "text-danger">{{$errors->first('password')}}</span>
+            <span style = "color: black">{{$errors->first('password')}}</span>
           @endif
         <div class="row">
           <div class="col-12">

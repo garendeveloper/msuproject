@@ -16,6 +16,8 @@ use App\Http\Controllers\UserController;
 |
 */
 
+Route::get('constructionsbyID/{id1}', 'App\Http\Controllers\MainController@constructionsbyID');
+
 Route::get('/logout', [LoginController::class, 'logout']);
 Route::post('/loginuser', [LoginController::class, 'loginuser'])->name('/loginuser');
 Route::post('addconstructiontype', [MainController::class, 'addconstructiontype']);
@@ -65,6 +67,15 @@ Route::get('get_allworkers/{id}', [MainController::class, 'get_allworkers']);
 Route::get('remove_workerinschedule/{id}', [MainController::class, 'remove_workerinschedule']);
 Route::get('complete_schedule/{id}', [MainController::class, 'complete_schedule']);
 Route::get('get_eventInfo/{id}', [MainController::class, 'get_eventInfo']);
+Route::get('get_allDesignatedOffices', [MainController::class, 'get_allDesignatedOffices']);
+
+Route::get('get_jobrequestdata/{id}', [MainController::class, 'get_jobrequestdata']);
+//user _actions
+Route::get('/registration', [LoginController::class, 'registration']);
+Route::post('useractions', [UserController::class, 'useractions']);
+Route::get('get_userinfo/{id}', [UserController::class, 'get_userinfo']);
+Route::get('get_allconstructiontypesById', [MainController::class,'get_allconstructiontypesById']);
+Route::post('/register_jobrequestor', [LoginController::class, 'register_jobrequestor']);
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');
     Route::get('/dashboard', [MainController::class, 'index'])->name('/dashboard');
@@ -76,8 +87,9 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/jobrequests', [MainController::class, 'jobrequests']);
     Route::get('/jobrequests_report', [MainController::class, 'jobrequests_report']);
     Route::get('/manpowers', [MainController::class, 'manpowers']);
-    Route::get('/constructions/{id}', [MainController::class, 'constructionsbyID']);
-    Route::get('/jobrequest_form', [MainController::class, 'jobrequest_form']);
+
+   
+    Route::get('/jobrequest_form', [MainController::class, 'jobrequest_form']); 
     Route::get('/alljobrequests', [MainController::class, 'alljobrequests']);
 });
 

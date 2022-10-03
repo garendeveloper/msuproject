@@ -88,6 +88,31 @@ class MainController extends Controller
         $data = ConstructionTypes::findOrFail($id);
         echo json_encode($data);
     }
+    public function get_jobrequestdata($id)
+    {
+        $user= DB::select('select users.*, construction_types.*, designated_offices.*, departments.*, construction_types.created_at as dateRequested, construction_types.status
+        from users, construction_types, designated_offices, departments
+        where users.id = construction_types.user_id
+        and designated_offices.id = users.designated_id
+        and departments.id = users.department_id
+        and construction_types.id = "'.$id.'"');
+        
+        $scheduling_info = DB::select('select jobrequestschedules.status
+        from construction_types, jobrequestschedules, constructions
+        where constructions.id = jobrequestschedules.jobrequest_id
+        and construction_types.id = constructions.constructiontype_id
+        and construction_types.id = "'.$id.'"');
+        
+        if(empty($scheduling_info)) $scheduling_info[] = [
+            'status' => 0
+        ];
+
+        $data = [
+            'user' => $user,
+            'scheduling_info' => $scheduling_info
+        ];
+        echo json_encode($data);
+    }
     public function get_allconstructions()
     {
         $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
@@ -96,13 +121,17 @@ class MainController extends Controller
         order by construction_types.construction_type asc');
         echo json_encode($data);
     }
+   
     public function get_allconstructions_approved()
     {
         $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
         from construction_types, constructions
         where construction_types.id = constructions.constructiontype_id
         and construction_types.status = 1
-        order by constructions.id desc');
+        and constructions.id NOT IN (SELECT jobrequestschedules.jobrequest_id 
+                                          FROM jobrequestschedules
+                                          WHERE jobrequestschedules.status = 1)
+        order by constructions.id desc ');
         echo json_encode($data);
     }
     public function get_allconstructions_approved_forscheduling()
@@ -170,19 +199,43 @@ class MainController extends Controller
             }
         }
     }
+    //THIS IS THE ALGORITHM FOR FIFO
     public function get_allconstructiontypes()
     {
-        $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES ORDER BY created_at DESC");
+        $data = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name  
+                            FROM CONSTRUCTION_TYPES, users 
+                            WHERE users.id = construction_types.user_id 
+                            ORDER BY construction_types.created_at ASC");
+        echo json_encode($data);
+    }
+    public function get_allconstructiontypesById()
+    {
+        $user_id = session('LoggedUser');
+        $data = DB::SELECT('SELECT CONSTRUCTION_TYPES.*, users.name  
+                            FROM CONSTRUCTION_TYPES, users 
+                            WHERE users.id = construction_types.user_id 
+                            AND users.id = "'.$user_id.'"
+                            ORDER BY construction_types.created_at ASC');
         echo json_encode($data);
     }
     public function get_allconstructiontypes_approved()
     {
-        $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES WHERE status = 1");
+        // $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES WHERE status = 1");
+        $data = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name, designated_offices.designation
+        FROM CONSTRUCTION_TYPES, users, designated_offices
+        WHERE users.id = construction_types.user_id 
+        and designated_offices.id = users.designated_id
+        and construction_types.status = 1
+        ORDER BY construction_types.created_at ASC");
         echo json_encode($data);
     }
     public function get_allconstructiontypes_unapproved()
     {
-        $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES WHERE status = 0 ORDER BY created_at DESC");
+        $data = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name, designated_offices.designation
+        FROM CONSTRUCTION_TYPES, users, designated_offices
+        WHERE users.id = construction_types.user_id 
+        and designated_offices.id = users.designated_id
+        ORDER BY construction_types.created_at ASC");
         echo json_encode($data);
     }
     public function delete_constructiontype($id)
@@ -245,6 +298,7 @@ class MainController extends Controller
     {
        if(!empty($request->id)){
             $construction_type = ConstructionTypes::findOrFail($request->id);
+            $construction_type->user_id = session('LoggedUser');
             $construction_type->construction_type = $request->construction_type;
             $construction_type->update();
             return response()->json([
@@ -257,6 +311,7 @@ class MainController extends Controller
             'construction_type' => 'bail|required|min:5|max:191|unique:construction_types',
             ]);
 
+
             if($validate->fails()){
                 return response()->json([
                     'status' => 400,
@@ -265,6 +320,7 @@ class MainController extends Controller
             }
             else{
                 $construction_type = new ConstructionTypes;
+                $construction_type->user_id = session('LoggedUser');
                 $construction_type->construction_type = $request->construction_type;
                 $construction_type->save();
                 return response()->json([
@@ -285,6 +341,11 @@ class MainController extends Controller
     public function get_allDepartments()
     {
         $data = DB::select('select * from departments');
+        echo json_encode($data);
+    }
+    public function get_allDesignatedOffices()
+    {
+        $data = DB::select('select * from designated_offices');
         echo json_encode($data);
     }
     public function get_equipmentData($id)
@@ -678,9 +739,10 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-            from departments, users 
+            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+            from users, departments, designated_offices
             where departments.id = users.department_id
+            and designated_offices.id = users.designated_id
             and users.id = "'.session('LoggedUser').'"');
             $data = [
                 'userinfo' => $userInfo
@@ -883,6 +945,7 @@ class MainController extends Controller
         }
        return redirect('/')->with('fail', 'You must be logged in!');
     }
+   
     public function changecolor(Request $request)
     {
         $jobrequest = JobRequestSchedule::findOrFail($request->id);
@@ -942,10 +1005,11 @@ class MainController extends Controller
     }
     public function get_allScheduledWorkers()
     {
-        $data = DB::select('SELECT users.*
-        FROM users
-        WHERE id NOT IN 
-        (SELECT user_id 
+        $data = DB::select('SELECT users.*, departments.departmentname
+        FROM users, departments
+        WHERE departments.id = users.department_id
+        and users.id NOT IN 
+        (SELECT users.id as user_id 
          FROM users, userjobrequestschedules, jobrequestschedules
         WHERE users.id = userjobrequestschedules.user_id 
         AND jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id

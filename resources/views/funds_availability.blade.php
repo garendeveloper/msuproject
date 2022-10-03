@@ -45,7 +45,6 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ url('/ConstructionTypes') }}">Construction Types</a> </li>
               <li class="breadcrumb-item active">Funds availability</li>
             </ol>
           </div>
@@ -60,7 +59,14 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3>Approval of funds availability</h3>
+                <div class="row">
+                <div class="col-md-6">
+                    <h6>Job Requests For Funds Approval</h6> 
+                  </div>
+                  <div class="col-md-6">
+                    <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search">
+                  </div>
+                </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -68,7 +74,9 @@
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>Job Request</th>
-                    <th>Date Requested</th>
+                    <th style = "text-align: right">Requested By:</th>
+                    <th>Designation</th>
+                    <th>Date & Time Requested</th>
                     <th style = "text-align: center">Approval</th>
                   </tr>
                   </thead>
@@ -138,7 +146,16 @@
 
 <!-- REQUIRED SCRIPTS -->
 @include('scripts/footer')
-
+<script>
+  $(function () {
+    $("#search").on('keyup', function(){
+      var value = $(this).val().toLowerCase();
+      $("#tbl_constructiontypes tbody tr").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
 <script>
   $(document).ready(function(e){
     show_allData();
@@ -147,6 +164,17 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     })
+    var Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
+    function toTitleCase(str) {
+        return str.replace(/(?:^|\s)\w/g, function(match) {
+            return match.toUpperCase();
+        });
+    }
     function show_allData(){
       $.ajax({
         type: 'GET',
@@ -156,12 +184,17 @@
           var html = "";
           for(var i = 0; i<data.length; i++)
           {
+            var status = '<a style = "font-size: 12px" class = "btn btn-sm btn-warning approveRequest" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-check"></i> Approve</a>';
+            if(data[i].status == 1)  status = "<span class = 'badge badge-success'>Approved</span>";
+            
             var date = moment(data[i].created_at).format('MM-DD-yyyy');
             html += "<tr style = 'text-align:left'>";
-            html += "<td>"+data[i].construction_type.toUpperCase()+"</td>";
-            html += "<td>"+date+"</td>";
+            html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+"</td>";
+            html += "<td align = 'right'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
+            html += "<td>"+data[i].designation.toUpperCase()+"</td>";
+            html += "<td>"+data[i].created_at+"</td>";
             html += '<td align = "center"> '+
-                        '<a class = "btn btn-sm btn-warning approveRequest" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-check"></i> Approve</a>'+ 
+                        status +
                      '</td>';
             html += "</tr>";
           }
@@ -186,7 +219,10 @@
             {
               if(response.status == 200)
               {
-                alert(response.success);
+                Toast.fire({
+                  icon: 'success',
+                  title: response.success
+                })
               }
               else 
               {

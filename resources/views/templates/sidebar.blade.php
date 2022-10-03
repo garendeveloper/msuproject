@@ -39,11 +39,17 @@
               </a>
             </li>
             <li class="nav-item">
-            <a href="{{ url('/constructiontypes') }}" class="nav-link">
-              <i class="nav-icon fas fa-building"></i>
-              <p>Projects</p>
-            </a>
-          </li>
+              <a href="{{ url('/constructiontypes') }}" class="nav-link">
+                <i class="nav-icon fas fa-building"></i>
+                <p>Projects</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url('/constructions') }}" class="nav-link">
+                <i class="nav-icon fas fa-building"></i>
+                <p>Scope Of Works</p>
+              </a>
+            </li>
             <li class="nav-item">
               <a href="{{ url('/users') }}" class="nav-link">
                 <i class="nav-icon fa fa-street-view"></i>
@@ -55,6 +61,29 @@
               <i class="nav-icon far fa-calendar-alt"></i>
               <p>Scheduling</p>
             </a>
+          </li>
+          <li class="nav-item">
+            <a href="" class="nav-link">
+              <i class="nav-icon fas fa-file"></i>
+              <p>
+                Reports
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('/jobrequests')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Job Requests</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/manpowers')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manpowers</p>
+                </a>
+              </li>
+            </ul>
           </li>
           @endif
           @if($userinfo[0]->departmentname == "FINANCIAL DIVISION")
@@ -79,29 +108,7 @@
               </a>
             </li>
           @endif
-          <li class="nav-item">
-            <a href="" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>
-                Reports
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ url('/jobrequests')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Job Requests</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/manpowers')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Manpowers</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+         
           <li class="nav-item">
             <a href="{{ url('/logout') }}" class="nav-link">
               <i class="nav-icon fas fa-arrow-right"></i>

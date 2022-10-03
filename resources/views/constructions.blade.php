@@ -74,11 +74,8 @@
                 <table id="data-table" class="table table-bordered table-striped data-table" style = "table-layout: absolute; ">
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
-                    <th>ID</th>
                     <th>Constructions/Repair/Improvements</th>
                     <th>Scope of work</th>
-                    <th>Date Created</th>
-                    <th>Date Updated</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -967,6 +964,11 @@
         }
       })
     }
+    function toTitleCase(str) {
+        return str.replace(/(?:^|\s)\w/g, function(match) {
+            return match.toUpperCase();
+        });
+    }
     function show_allData()
     {
       $.ajax({
@@ -981,15 +983,16 @@
             var status = "<span class = 'badge badge-warning'>Pending</span>";
             if(data[i].status == 1) status = '<a class = "btn btn-outline-dark  btn-sm btn_emc" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype = '+data[i].construction_type+'><i class = "fa fa-eye"></i> Estimate Cost</a>';
             row += '<tr>';
-            row += '<td>'+data[i].construction_id+'</td>';
-            row += '<td>'+data[i].construction_type+'</td>';
-            row += '<td>'+data[i].construction_name+'</td>';
-            row += '<td>'+data[i].created_at+'</td>';
-            row += '<td>'+data[i].updated_at+'</td>';
+            // row += '<td>'+data[i].construction_id+'</td>';
+            row += '<td>'+toTitleCase(data[i].construction_type.toLowerCase())+'</td>';
+            row += '<td>'+toTitleCase(data[i].construction_name.toLowerCase())+'</td>';
+            // row += '<td>'+data[i].created_at+'</td>';
+            // row += '<td>'+data[i].updated_at+'</td>';
             row += '<td style = "text-align:center">';
             row += status;
             row += '<a class = "btn btn-outline-primary btn-sm edit" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype_name = '+data[i].construction_type+'><i class = "fa fa-edit"></i> </a>';
             row += '<a class = "btn btn-outline-danger btn-sm remove" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype_name = '+data[i].construction_type+'><i class = "fa fa-trash"></i> </a>';
+            row += '<a class = "btn btn-outline-primary btn-sm " href = "/constructionsbyID/'+data[i].construction_id+'" ><i class = "fa fa-eye"></i> </a>';
             row += '</td>';
             row += '</tr>';
           }

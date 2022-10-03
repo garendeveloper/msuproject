@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('retirementstatus')->default(0);
+            $table->string('phone_num')->nullable();
             $table->rememberToken();
             $table->timestamps();   
         });

@@ -6,13 +6,61 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Departments;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\DesignatedOffice;
 class LoginController extends Controller
 {
     public function index()
     {
         session()->pull('LoggedUser');
         return view('login');
+    }
+    public function registration()
+    {
+        session()->pull('LoggedUser');
+        return view('registrationform');
+    }
+    public function register_jobrequestor(Request $request)
+    {
+        $request->validate([
+            'name' => 'bail|required|min:5|unique:users',
+            'email' => 'email|min:5|unique:users',
+            'phone_num' => 'required|min:13',
+            'designation' => 'required',
+            'username' => 'required|min:5',
+            'password' => 'required|min:5',
+            'confirm_password' => 'required|min:5'
+        ]);
+
+        if($request->password == $request->confirm_password)
+        {
+            $designation = DesignatedOffice::where('designation', '=', $request->designation)->first();
+
+            if($designation == "")
+            {
+                $designation = new DesignatedOffice;
+                $designation->designation = $request->designation;
+                $designation->save();
+                $designation = $designation->id;
+            }
+            else $designation = $designation->id;
+
+            $department = Departments::where('departmentname', '=', "JOB REQUESTOR")->first();
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->phone_num = $request->phone_num;
+            $user->department_id = $department->id;
+            $user->designated_id = $designation;
+            $user->username = $request->username;
+            $user->password = Hash::make($request->password);
+            $user->save();
+            $request->session()->put('LoggedUser', $user->id);
+            return redirect('/jobrequest_form');
+        }
+        else 
+        {
+            return back()->with('fail', 'Password does not match!');
+        }
     }
     public function loginuser(Request $request)
     {

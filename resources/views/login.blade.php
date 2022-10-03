@@ -22,9 +22,7 @@
         margin-bottom: 0;
         background-color: #ff5151;
     } */
-    .card-primary.card-outline {
-        border-top: 3px solid #500015;
-    }
+
 </style>
 <body class="hold-transition login-page">
    <!-- Preloader -->
@@ -63,7 +61,7 @@
       <form action="{{ url('/loginuser') }}" method="post">
         @csrf
         <div class="input-group mb-3">
-          <input autocomplete = "off" type="text" class="form-control" value = "" name = "username" placeholder="Username">
+          <input autocomplete = "off" type="text" class="form-control" value = "{{ old('username') }}" name = "username" placeholder="Username">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -88,8 +86,11 @@
             <span style = "color: black">{{$errors->first('password')}}</span>
           @endif
         <div class="row">
-          <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          <div class="col-6">
+            <button type="submit" class="btn btn-sm btn-outline-primary btn-block"><i class = "fas fa-sign-up"></i> Sign In</button>
+          </div>
+          <div class="col-6">
+            <a href="{{ url('/registration') }}"  class = "btn btn-sm btn-outline-success btn-block"><i class = "fas fa-register"></i> Sign Up</a>
           </div>
           <!-- /.col -->
         </div>
@@ -98,7 +99,7 @@
         <a href="forgot-password.html">I forgot my password</a>
       </p> -->
       <p class="mb-0" style="margin-top: 15px">
-        <a href="https://msunaawan.edu.ph" class = "" class="text-center">
+        <a href="https://msunaawan.edu.ph" target = "_blank" class = "" class="text-center">
           Go to MSU Naawan Website</a>
       </p>
     </div>

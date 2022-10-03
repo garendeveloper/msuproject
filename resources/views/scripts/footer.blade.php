@@ -32,7 +32,10 @@
 <script src="adminlte3/plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="adminlte3/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-
+<!-- SweetAlert2 -->
+<script src="adminlte3/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Toastr -->
+<script src="adminlte3/plugins/toastr/toastr.min.js"></script>
 <!-- OPTIONAL SCRIPTS -->
 <script src="adminlte3/plugins/chart.js/Chart.min.js"></script>
 <!-- AdminLTE -->

@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('construction_types', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('construction_type');
             $table->integer('status')->default(0);
             $table->timestamps();

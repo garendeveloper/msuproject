@@ -16,9 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
    
-        ConstructionTypes::factory(5)->create();
-
-        \App\Models\Construction::factory(5)->create();
+       
         \App\Models\Departments::factory()->create([
             'departmentname' => 'PPU HEAD',
         ]);
@@ -67,6 +65,9 @@ class DatabaseSeeder extends Seeder
           'password' => Hash::make('jobrequestor')
         ]);
         \App\Models\User::factory(10)->create();
-       
+        
+        ConstructionTypes::factory(5)->create();
+
+        \App\Models\Construction::factory(5)->create();
     }
 }

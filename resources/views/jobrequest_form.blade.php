@@ -16,7 +16,7 @@
 <div class="wrapper">
    <!-- Preloader -->
    <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="MSUNLogo" height="500" width="500">
+    <img class="animation__wobble" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="100" width="100">
   </div>
   <!-- Navbar -->
   @include('templates/navbar')
@@ -50,17 +50,16 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="callout callout-info">
+          <div class="callout callout-info row no-print">
               <h5><i class="fas fa-info"></i> Note:</h5>
-              This page has been enhanced for printing. Click the print button at the bottom of the job request form to test.
+              This page has been enhanced for printing. Press Control + P to print the job request report.
             </div>
-
-
             <!-- Main content -->
             <div class="invoice p-3 mb-3">
               <!-- title row -->
               <div class="row">
                 <div class="col-12">
+                  
                 </div>
                 <!-- /.col -->
               </div>
@@ -78,7 +77,7 @@
                     <strong>Mindanao Sate University at Naawan</strong><br>
                     9023 Naawan, Misamis Oriental<br><br>
 
-                    <p><b>JOB REQUEST FORM</b> </p> <br><br>
+                    <p><b>JOB REQUEST FORM</b> </p> <br>
 
                   </center>
                 </div>
@@ -111,7 +110,7 @@
                 <div class="col-sm-10 invoice-col">
                     <address>
                         Note: Every request for construction, repair, or improvement of building to be undertaken 
-                        must be accomplished by this JOB REQUEST to be accomplished in triplicate <br> <br>
+                        must be accomplished by this JOB REQUEST to be accomplished in triplicate
                     </address>
                 </div>
                 <!-- /.col -->
@@ -124,22 +123,136 @@
               </div>
               <!-- /.row -->
 
-              <div class="row invoice-info" style = "border-top: 3px solid black">
+              <div class="row invoice-info" style = "border-top: 2px solid black">
                 <div class="col-sm-12 invoice-col">
-                    <br>
-                    <textarea name="constructiontype" id="constructiontype" cols="30" rows="10" style="border:solid 1px orange;" class = "form-control"></textarea>
+                BOX 1 (TO BE ACCOMPLISHED BY REQUISITIONING OFFICER) <BR>
+                Description of Construciton/Repair/Improvement to be taken:
+
+                </div>
+                <div class="col-sm-12 invoice-col" >
+                   
+                    <textarea name="constructiontype" id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required></textarea>
                     <br>
                 </div>
               </div>
               <!-- /.row -->
 
+              <div class="row invoice-info" >
+                <div class="col-sm-5 invoice-col">
+                  Requested By: 
+                  <br><br><br><br>
+
+                </div>
+                <div class="col-sm-7 invoice-col" style = " text-align: center">
+                  Contact No: <u> {{ $userinfo[0]->phone_num}} </u> <br>
+                  Email: <u> {{ $userinfo[0]->email}} </u> <br>
+                  <br><br><br>
+                </div>
+              </div>
+              <!-- /.row -->
+              <div class="row invoice-info" >
+                <div class="col-sm-5 invoice-col" style = "text-align:center">
+                 <ul style = "border-bottom: 1px solid black"><b> {{ $userinfo[0]->name}} </b></ul> 
+                  Name and Signature
+
+                </div>
+                <div class="col-sm-7 invoice-col" style = "text-align: center">
+                  Fund Source
+                </div>
+              </div>
+              <!-- /.row -->
+              <br><br>
+              <div class="row invoice-info" >
+                <div class="col-sm-5 invoice-col" style = "text-align:center">
+                 <ul style = "border-bottom: 1px solid black"><b> {{ $userinfo[0]->designation }} </b></ul> 
+                  Designation
+
+                </div>
+                <div class="col-sm-7 invoice-col" style = "text-align: center">
+                 
+                </div>
+              </div>
+              <br>
+
+              <div class="row invoice-info" >
+                <div class="col-sm-5 invoice-col">
+                 Noted by:
+
+                </div>
+                <div class="col-sm-7 invoice-col" style = "text-align: center">
+               
+                </div>
+              </div>
+              <br><br>
+
+              <div class="row invoice-info" >
+                <div class="col-sm-5 invoice-col"  style = "border-top: 1px solid black">
+           
+
+                </div>
+                <div class="col-sm-7 invoice-col" style = "text-align: center">
+                
+                </div>
+              </div>
+                <br>
+              <div class="row invoice-info" style = "border-top: 2px solid black">
+              
+              </div>
+              <div class="row invoice-info" >
+                <div class="col-sm-7 invoice-col">
+                  BOX 2 (TO BE ACCOMPLISHED BY PHYSICAL PLANT OFFICE) <br>
+                  To fill-up by Physical Plant Office <br>
+                  Action Taken: 
+
+                </div>
+                <div class="col-sm-5 invoice-col" style = "text-align: center">
+                
+                </div>
+              </div>
+                
+
+                <div class="row invoice-info" >
+                <div class="col-sm-2 invoice-col">
+                </div>
+                <div class="col-sm-4 invoice-col">
+                  Job Priority No: <br>
+                  Personnel Assigned: <br>
+                </div>
+                <div class="col-sm-6 invoice-col" style = "text-align: left">
+                  ______________________________________ <br>
+                  ______________________________________ <br>
+                  ______________________________________ <br>
+                  ______________________________________ <br>
+                  ______________________________________ <br>
+
+                </div>
+              </div>
+                <br> <br>
+                <div class="row invoice-info" >
+                <div class="col-sm-8 invoice-col" style = "text-align:center">
+                
+
+                </div>
+                <div class="col-sm-4 invoice-col" style = "text-align: center">
+                <ul style = "border-bottom: 1px solid black"><b> ENGR. WENNIE P. ASEQUIA </b></ul> 
+                  Chief, Physical Plant 
+                </div>
+              </div>
+              <br>
+
+                <div class="row invoice-info" style = "border-top: 2px solid black">
+              
+              </div>
+              <br>
+             
+              <!-- /.row -->
               <!-- this row will not appear when printing -->
               <div class="row no-print">
-                <div class="col-6">
+                <!-- <div class="col-6">
                   <a href="{{url('/jobrequests_report')}}" rel="noopener" target="_blank" class="btn btn-block btn-flat  btn-outline-primary"><i class="fas fa-print"></i> Print</a>
-                </div>
-                <div class="col-6">
-                  <a rel="noopener" id = "btn_add" class="btn btn-block btn-flat  btn-outline-success"><i class="fas fa-save"></i> Submit Request</a>
+                </div> -->
+                <div class="col-12">
+                  <a rel="noopener" id = "btn_add" class="btn btn-block btn-flat  btn-outline-primary"><i class="fas fa-save"></i> Submit Request</a>
                 </div>
               </div>
             </div>
@@ -195,12 +308,15 @@
         dataType: "json",
         success:  function(response){
           if(response.status == 400){
-            alert("Please check your field!");
+            $.each(response.errors, function (key, err_values){
+              alert(err_values)
+            });
           }
           if(response.status == 200){
             alert(response.success);
-            $(".modal_addconstructiontype").modal('hide');
-            $("#constructiontype").val();
+            window.location.href = "/alljobrequests";
+            // $(".modal_addconstructiontype").modal('hide');
+            $("#constructiontype").val(""); 
           }
         },
         error:  function(response, error){

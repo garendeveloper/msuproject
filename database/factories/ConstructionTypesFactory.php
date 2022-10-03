@@ -18,6 +18,7 @@ class ConstructionTypesFactory extends Factory
     {
         return [
             'construction_type' => Str::random(10),
+            'user_id' => 2,
         ];
     }
 }

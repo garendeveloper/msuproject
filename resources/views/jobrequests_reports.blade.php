@@ -50,9 +50,9 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="callout callout-info">
+            <div class="callout callout-info row no-print">
               <h5><i class="fas fa-info"></i> Note:</h5>
-              This page has been enhanced for printing. Click the print button at the bottom of the job request form to test.
+              This page has been enhanced for printing. Press Control + P to print the job request report.
             </div>
 
 
@@ -105,7 +105,7 @@
                 <!-- /.col -->
               </div>
               <!-- /.row -->
-              <div class="row invoice-info" style = "border-top: 3px solid black">
+              <div class="row invoice-info" style = "border-top: 2px solid black">
                 <div class="col-sm-12 invoice-col">
                     <address>
                         Description of Construction/Repair/Improvement to be undertaken:
@@ -142,7 +142,7 @@
                 <!-- /.col -->
               </div>
               <!-- /.row -->
-              <div class="row invoice-info" style = "border-top: 3px solid black">
+              <div class="row invoice-info" style = "border-top: 2px solid black">
                 <div class="col-sm-1 invoice-col">
                     <address>
                         II. <br>
@@ -175,7 +175,7 @@
               </div>
               <!-- /.row -->
 
-              <div class="row invoice-info" style = "border-top: 3px solid black"> 
+              <div class="row invoice-info" style = "border-top: 2px solid black"> 
                 <div class="col-sm-4 invoice-col">
                     <address>
                         FOR. <br>
@@ -200,7 +200,7 @@
               </div>
               <!-- /.row -->
 
-              <div class="row invoice-info" style = "border-top: 3px solid black">
+              <div class="row invoice-info" style = "border-top: 2px solid black">
                 <div class="col-sm-12 invoice-col">
                     <center>
                         COST ESTIMATES OF REQUEST <br>
@@ -228,11 +228,11 @@
                    <address>Remarks:</address>
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-1 invoice-col" style = "border-top: 3px solid black">
+                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
                    <address>III. </address>
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-11 invoice-col" style = "border-top: 3px solid black">
+                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
                    <address>ESTIMATES JOINTLY CHECKS AND SUBMITTED BY: </address>
                 </div>
                 <!-- /.col -->
@@ -272,12 +272,12 @@
                         Date: October 21, 2021 <br>
                     </address>
                 </div>
-                <div class="col-sm-1 invoice-col" style = "border-top: 3px solid black">
+                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
                     <address>
                         IV. 
                     </address>
                 </div>
-                <div class="col-sm-11 invoice-col" style = "border-top: 3px solid black">
+                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
                     <address>
                         Cost Chargeable Against Item No. <br>
                     </address>
@@ -288,12 +288,12 @@
                 </address>
                 </div>
                 
-                <div class="col-sm-1 invoice-col" style = "border-top: 3px solid black">
+                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
                     <address>
                         V. 
                     </address>
                 </div>
-                <div class="col-sm-11 invoice-col" style = "border-top: 3px solid black">
+                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
                     <address>
                        Recommending Approval: <br>
                     </address>
@@ -326,9 +326,9 @@
 
               <!-- this row will not appear when printing -->
               <div class="row no-print">
-                <div class="col-12">
+                <!-- <div class="col-12">
                   <a href="{{url('/jobrequests_report')}}" rel="noopener" target="_blank" class="btn btn-block btn-flat  btn-outline-primary"><i class="fas fa-print"></i> Print</a>
-                </div>
+                </div> -->
               </div>
             </div>
             <!-- /.invoice -->

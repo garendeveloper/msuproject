@@ -37,8 +37,14 @@
   <link rel="stylesheet" href="adminlte3/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="adminlte3/plugins/summernote/summernote-bs4.min.css">
-
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="adminlte3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+ <!-- Toastr -->
+ <link rel="stylesheet" href="adminlte3/plugins/toastr/toastr.min.css">
+   <!-- icheck bootstrap -->
+   <link rel="stylesheet" href="adminlte3/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 <style>
+
     [class*=sidebar-dark-] {
         background-color: #0e1822;
     }

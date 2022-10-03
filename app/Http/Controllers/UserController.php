@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use DB;
+use App\Models\Departments;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
@@ -28,7 +31,8 @@ class UserController extends Controller
         $users = DB::select('select users.*, users.id as user_id, departments.*, designated_offices.*
                             from departments, users, designated_offices
                             where departments.id = users.department_id
-                            and designated_offices.id = users.designated_id');
+                            and designated_offices.id = users.designated_id
+                            order by users.created_at desc');
         echo json_encode($users);
     }
     public function change_retirementStatus(Request $request)
@@ -66,69 +70,111 @@ class UserController extends Controller
                             and departments.departmentname = "Foreman"');
         echo json_encode($data);
     }
+    public function get_userinfo($user_id)
+    {
+        $data = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                            from users, departments, designated_offices
+                            where departments.id = users.department_id
+                            and designated_offices.id = users.designated_id
+                            and users.id = "'.$user_id.'"');
+        echo json_encode($data);
+    }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function useractions(Request $request)
     {
-        //
-    }
+        if($request->id != "" || !empty($request->id))
+        {
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|min:5',
+                'email' => 'email|min:5',
+                'departmentname' => 'required',
+                'designation' => 'required',
+            ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status' => 400,
+                    'errors' => $validator->messages()
+                ]);
+            }
+            else
+            {
+                $type = Departments::find($request->departmentname);
+                if($type->departmentname == "JOB REQUESTOR") $type = "jobrequestor";
+                $username = $request->name;
+                $password = Hash::make($type);
+                $user = User::find($request->id);
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->department_id = $request->departmentname;
+                $user->designated_id = $request->designation;
+                $user->username = $username;
+                $user->password = $password;
+                $user->update();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+                return response()->json([
+                    'status' => 200,
+                    'success' => 'User has been successfully updated!',
+                ]);
+            }
+        }
+        else
+        {
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|min:5|unique:users',
+                'email' => 'email|min:5|unique:users',
+                'departmentname' => 'required',
+                'designation' => 'required',
+            ]);
+    
+            if($validator->fails())
+            {
+                return response()->json([
+                    'status' => 400,
+                    'errors' => $validator->messages()
+                ]);
+            }
+            else
+            {
+                $check_user = User::where('designated_id', $request->designated_id)
+                                ->where('department_id', $request->department_id)
+                                ->where('name', $request->name)
+                                ->first();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+                if(empty($check_user) || $check_user == "")
+                {
+                    $type = Departments::find($request->departmentname);
+                    if($type == "JOB REQUESTOR") $type = "jobrequestor";
+                    $username = $request->name;
+                    $password = Hash::make($type);
+                    $user = new User();
+                    $user->name = $request->name;
+                    $user->email = $request->email;
+                    $user->department_id = $request->departmentname;
+                    $user->designated_id = $request->designation;
+                    $user->username = $username;
+                    $user->password = $password;
+                    $user->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+                    return response()->json([
+                        'status' => 200,
+                        'success' => 'User has been successfully added!',
+                    ]);
+                }
+                else
+                {
+                    return response()->json([
+                        'status' => 201,
+                        'fails' => 'Sorry, User details already exists!',
+                    ]);
+                }
+            }
+        }
+        
     }
 }

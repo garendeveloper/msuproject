@@ -54,136 +54,54 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <div class="col-md-3">
-          <a href="{{ url('/jobrequest_form') }}" class="btn btn-primary btn-block mb-3">Compose</a>
-
-          <div class="card" >
-            <div class="card-header">
-              <h3 class="card-title" align = "center">Information </h3>
-              <br><br>
-              <h4 class="card-title" id = "title" style = "font-weight: bold"></h4>
-            
-            </div>
-            <table id = "information" class = "table table-stripped table-bordered">
-
-            </table>
-            <div class="card-body p-0">
-              <!-- <ul class="nav nav-pills flex-column">
-                <li class="nav-item active">
-                  <a href="#" class="nav-link">
-                    <i class="fas fa-inbox"></i> Inbox
-                    <span class="badge bg-primary float-right">12</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-envelope"></i> Sent
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-file-alt"></i> Drafts
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="fas fa-filter"></i> Junk
-                    <span class="badge bg-warning float-right">65</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-trash-alt"></i> Trash
-                  </a>
-                </li>
-              </ul> -->
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-          <div class="card">
-          
-          </div>
-          <!-- /.card -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-9">
-          <div class="card card-primary card-outline">
-            <div class="card-header">
-              <h3 class="card-title">Inbox</h3>
-
-              <div class="card-tools">
-                <div class="input-group input-group-sm">
-                  <input type="text" id = "search" class="form-control" placeholder="Search Mail">
-                  <div class="input-group-append">
-                    <div class="btn btn-primary">
-                      <i class="fas fa-search"></i>
-                    </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col md-6">
+                  <!-- <button class = "btn btn-outline-primary btn-sm" id = "btn_addconstructiontype" type = "button" align = "left"><i class = "fa fa-plus"></i> Add Construction Type</button> -->
+                  <a  href="{{ url('/constructions') }}" class = "btn btn-outline-primary btn-sm"  align = "right"><i class = "fa fa-arrow-right"></i> View Scope of Works</a>
+                  </div>
+                  <div class="col-md-6">
+                    <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search">
                   </div>
                 </div>
               </div>
-              <!-- /.card-tools -->
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body p-0">
-              <div class="mailbox-controls">
-                <!-- Check all button -->
-                <!-- <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="far fa-square"></i>
-                </button> -->
-                <!-- <div class="btn-group">
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="far fa-trash-alt"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-reply"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-share"></i>
-                  </button>
-                </div> -->
-                <!-- /.btn-group -->
-                 <button type="button" id = "btn_refresh" class="btn btn-default btn-sm">
-                  <i class="fas fa-sync-alt"></i> 
-                </button>
+              <!-- /.card-header -->
 
-                  <!-- /.btn-group -->
-                </div>
-                <!-- /.float-right -->
-              </div>
-              <div class="table-responsive mailbox-messages">
-                <table id = "tbl_constructiontypes" class="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>Job Request</th>
-                      <th>Status</th>
-                      <th>Requested By: </th>
-                      <th>Date Requested</th>
-                      <th>Action</th>
-                    </tr>
+              <div class="card-body">
+                <table id="tbl_constructiontypes" class="table table-bordered table-striped" style = "table-layout: absolute">
+                  <thead style = "background-color: #1C518A; color: white;">
+                  <tr>
+                    <th>Constructions/Repair/Improvement</th>
+                    <th>Status</th>
+                    <th>Requested By Job Requestor</th>
+                    <th>Date Requested</th>
+                  </tr>
                   </thead>
                   <tbody id = "tbody_constructiontypes">
-                 
-                  </tbody>
-                </table>
-                <!-- /.table -->
-              </div>
-              <!-- /.mail-box-messages -->
-            </div>
-            <!-- /.card-body -->
-            <div class="card-footer p-0">
-              <div class="mailbox-controls">
 
+                  </tbody>
+                  <tfoot>
+                 
+                  </tfoot>
+                </table>
               </div>
+              <!-- /.card-body -->
             </div>
+            <!-- /.card -->
           </div>
-          <!-- /.card -->
+          <!-- /.col -->
         </div>
-        <!-- /.col -->
+        <!-- /.row -->
       </div>
-      <!-- /.row -->
+      <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
   
   <!-- modal -->
   <div class="modal fade modal_addconstructiontype" id="modal-info">
@@ -219,7 +137,7 @@
         <!-- /.modal-content -->
       </div>
       <!-- /.modal-dialog -->
-  
+    </div>
       <!-- /.modal -->
  <!-- /.content-wrapper -->
  <div class="modal fade openmodal" id="modal">
@@ -277,39 +195,6 @@
 @include('scripts/footer')
 <script>
   $(function () {
-    //Enable check and uncheck all functionality
-    $('.checkbox-toggle').click(function () {
-      var clicks = $(this).data('clicks')
-      if (clicks) {
-        //Uncheck all checkboxes
-        $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
-        $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
-      } else {
-        //Check all checkboxes
-        $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
-        $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
-      }
-      $(this).data('clicks', !clicks)
-    })
-
-    //Handle starring for font awesome
-    $('.mailbox-star').click(function (e) {
-      e.preventDefault()
-      //detect type
-      var $this = $(this).find('a > i')
-      var fa    = $this.hasClass('fa')
-
-      //Switch states
-      if (fa) {
-        $this.toggleClass('fa-star')
-        $this.toggleClass('fa-star-o')
-      }
-    })
-  })
-</script>
-
-<script>
-  $(function () {
     $("#search").on('keyup', function(){
       var value = $(this).val().toLowerCase();
       $("#tbl_constructiontypes tbody tr").filter(function(){
@@ -344,10 +229,6 @@
     //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     //   });
     // });
-    $("#btn_refresh").on('click', function(e){
-      e.preventDefault();
-      show_allData();
-    })
     $("body").on('click', '.addconstruction', function(e){
       e.preventDefault();
       var constructiontype_id = $(this).data('id');
@@ -412,16 +293,10 @@
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
             
             html += "<tr style = 'text-align:center'>";
-            html += "<td class='mailbox-name'><b>"+toTitleCase(data[i].construction_type.toLowerCase())+"</b></td>";
+            html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+"</td>";
             html += "<td>"+status+"</td>";
-            html += "<td style = 'color: blue'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
+            html += "<td>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
             html += "<td >"+data[i].created_at+"</td>";
-            html += '<td align = "center" > '+
-                        '<a class = "btn btn-sm btn-default info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i> View Info</a>'+ 
-                        // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
-                        // '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
-                        // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
-                     '</td>';
             // html += '<td align = "center"> '+
             //             // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
             //             // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
@@ -437,67 +312,6 @@
         }
       });
     }
-    $("body").on('click', '.info', function(e){
-      e.preventDefault();
-      var id = $(this).data('id');
-      $.ajax({
-        type: 'GET',
-        url: '/get_jobrequestdata/'+id,
-        dataType: 'json',
-        success: function(data){
-        
-          $("#title").text(toTitleCase(data.user[0].construction_type.toLowerCase()));
-          var user = '<tr>'+
-                        '<th>Requested By: </th>'+
-                        '<td>'+data.user[0].name+'</td>'+
-                      '</tr>';
-          user += '<tr>'+
-                    '<th>Designation</th>'+
-                    '<td>'+data.user[0].designation+'</td>'+
-                  '</tr>';
-          user += '<tr>'+
-                    '<th>Type</th>'+
-                    '<td>'+data.user[0].departmentname+'</td>'+
-                  '</tr>';
-           user += '<tr>'+
-                    '<th>Date Requested</th>'+
-                    '<td>'+data.user[0].dateRequested+'</td>'+
-                  '</tr>';
-          if(data.user[0].status == 1)
-          {
-            user += '<tr>'+
-                    '<th>Status</th>'+
-                    '<td> <span class = "badge badge-success">Approved</span></td>'+
-                  '</tr>';
-          }
-          if(data.user[0].status == 0)
-          {
-            user += '<tr>'+
-                    '<th>Approval Status</th>'+
-                    '<td> <span class = "badge badge-warning">Still Process</span></td>'+
-                  '</tr>';
-          }
-          if(data.scheduling_info[0].status == 0 || data.scheduling_info[0].status == " ")
-          {
-            user += '<tr>'+
-                    '<th>Scheduling Status</th>'+
-                    '<td> <span class = "badge badge-warning">On Process</span></td>'+
-                  '</tr>';
-          }
-          if(data.scheduling_info[0].status == 1)
-          {
-            user += '<tr>'+
-                    '<th>Scheduling Status</th>'+
-                    '<td> <span class = "badge badge-success">Completed</span></td>'+
-                  '</tr>';
-          }
-          $("#information").html(user);
-        },
-        error: function(response){
-          alert('Something went wrong in fetching data in database.');
-        }
-      });
-    })
     function toTitleCase(str) {
         return str.replace(/(?:^|\s)\w/g, function(match) {
             return match.toUpperCase();

@@ -22,9 +22,9 @@
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
    <!-- Preloader -->
-   <div class="preloader flex-column justify-content-center align-items-center">
+   <!-- <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
-  </div>
+  </div> -->
     <!-- Navbar -->
     @include('templates/navbar')
   <!-- /.navbar -->
@@ -332,7 +332,26 @@ $(document).ready(function() {
       showConfirmButton: false,
       timer: 3000
     });
-
+    function show_allForemans()
+  {
+    $.ajax({
+      type: 'get',
+      url: '/get_allScheduledWorkers',
+      dataType: 'json',
+      success: function(data)
+      {
+        var row = "";
+        for(var i = 0; i<data.length; i++)
+        {
+          if(data[i].departmentname == "FOREMAN")
+          {
+            row += "<option value = "+data[i].id+" >"+data[i].name+"</option>";
+          }
+        }
+        $("#foremans").html(row);
+      }
+    })
+  }
     $('.swalDefaultSuccess').click(function() {
     
     });
@@ -529,11 +548,12 @@ $(document).ready(function() {
           var row = "";
           for(var i = 0; i<data.length; i++)
           {
-            row += "<tr>";
-            row += "<td data-id = "+data[i].userjobrequest_id+">"+data[i].name+"</td>";
-            row += "<td data-id = "+data[i].userjobrequest_id+">"+data[i].created_at+"</td>";
-            row += "<td  style = 'text-align: center'><a  data-id = "+data[i].userjobrequest_id+"  class = 'btn btn-outline-danger btn-sm selectedworker'><i class = 'fa fa-'></i> Remove</a></td>";
-            row += "</tr>";
+              row += "<tr>";
+              row += "<td data-id = "+data[i].userjobrequest_id+">"+data[i].name+"</td>";
+              row += "<td data-id = "+data[i].userjobrequest_id+">"+data[i].created_at+"</td>";
+              row += "<td  style = 'text-align: center'><a  data-id = "+data[i].userjobrequest_id+"  class = 'btn btn-outline-danger btn-sm selectedworker'><i class = 'fa fa-'></i> Remove</a></td>";
+              row += "</tr>";
+            
           }
           $("#selected_workers").html(row);
         }
@@ -758,23 +778,7 @@ $(document).ready(function() {
       },
     })
   }
-  function show_allForemans()
-  {
-    $.ajax({
-      type: 'get',
-      url: '/get_allScheduledWorkers',
-      dataType: 'json',
-      success: function(data)
-      {
-        var row = "";
-        for(var i = 0; i<data.length; i++)
-        {
-           row += "<option value = "+data[i].id+" >"+data[i].name+"</option>";
-        }
-        $("#foremans").html(row);
-      }
-    })
-  }
+
 
   $("#schedule_form").on('submit', function(e){
     e.preventDefault();
@@ -793,6 +797,7 @@ $(document).ready(function() {
           $("#schedule_form").trigger('reset');
           $("#foremans").text("");
           $("#laborers").text("");
+          show_allForemans();
         }
         if(response.status == 401)
         {
@@ -812,6 +817,7 @@ $(document).ready(function() {
         //       "Foremans not saved: "+response.foremans_notsaved+"\n"+
         //       "Laborers not saved: "+response.laborers_notsaved);
         show_allJobRequests();
+        
       },
       error: function(response){
         alert("Server error: Reload your page!");

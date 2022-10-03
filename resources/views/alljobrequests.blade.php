@@ -77,7 +77,6 @@
                 <table id="tbl_constructiontypes" class="table table-bordered table-striped" style = "table-layout: absolute">
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
-                    <th>ID</th>
                     <th>Constructions/Repair/Improvement</th>
                     <th>Status</th>
                     <th>Date Created</th>
@@ -284,7 +283,7 @@
     function show_allData(){
       $.ajax({
         type: 'GET',
-        url: '/get_allconstructiontypes',
+        url: '/get_allconstructiontypesById',
         dataType: 'json',
         contentType: false,
         cache: false,
@@ -296,9 +295,8 @@
             var status = "<span class = 'badge badge-warning'>Still process</span>";
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
             
-            html += "<tr style = 'text-align:center'>";
-            html += "<td>"+data[i].id+"</td>";
-            html += "<td>"+toTitleCase(data[i].construction_type)+"</td>";
+            html += "<tr>";
+            html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+"</td>";
             html += "<td>"+status+"</td>";
             html += "<td >"+data[i].created_at+"</td>";
             html += "<td>"+data[i].updated_at+"</td>";

@@ -52,6 +52,9 @@
         background-color: #1C518A;
         color: #1f2d3d;
     }
+    body{
+      min-height: 100%;
+    }
     .nav-sidebar .nav-item>.nav-link {
     /* margin-bottom: -0.5rem; */
 }

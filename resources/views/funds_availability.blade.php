@@ -192,7 +192,7 @@
             html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+"</td>";
             html += "<td align = 'right'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
             html += "<td>"+data[i].designation.toUpperCase()+"</td>";
-            html += "<td>"+data[i].created_at+"</td>";
+            html += "<td>"+jQuery.timeago(data[i].created_at)+"</td>";
             html += '<td align = "center"> '+
                         status +
                      '</td>';

@@ -40,6 +40,7 @@
 <script src="adminlte3/plugins/chart.js/Chart.min.js"></script>
 <!-- AdminLTE -->
 <script src="adminlte3/dist/js/adminlte.js"></script>
+<script src="timeago.js"></script>
 <script>
     $(function(){
         $("#dashboard").on('click', function(e){

@@ -275,6 +275,7 @@
 
 <!-- REQUIRED SCRIPTS -->
 @include('scripts/footer')
+
 <script>
   $(function () {
     //Enable check and uncheck all functionality
@@ -415,7 +416,7 @@
             html += "<td class='mailbox-name'><b>"+toTitleCase(data[i].construction_type.toLowerCase())+"</b></td>";
             html += "<td>"+status+"</td>";
             html += "<td style = 'color: blue'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
-            html += "<td >"+data[i].created_at+"</td>";
+            html += "<td >"+jQuery.timeago(data[i].created_at)+"</td>";
             html += '<td align = "center" > '+
                         '<a class = "btn btn-sm btn-default info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i> View Info</a>'+ 
                         // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
@@ -461,7 +462,7 @@
                   '</tr>';
            user += '<tr>'+
                     '<th>Date Requested</th>'+
-                    '<td>'+data.user[0].dateRequested+'</td>'+
+                    '<td>'+jQuery.timeago(data.user[0].dateRequested)+'</td>'+
                   '</tr>';
           if(data.user[0].status == 1)
           {

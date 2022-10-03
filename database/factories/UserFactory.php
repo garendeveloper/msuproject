@@ -17,14 +17,16 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $username = fake()->name(); 
+
         return [
-            'department_id' => 4,
-            'designated_id' => 2,
-            'name' => fake()->name(),
-            'username' => 'foreman',
+            'department_id' => 3,
+            'designated_id' => random_int(2, 6),
+            'name' => $username,
+            'username' => $username,
             'email' => fake()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => Hash::make('foreman'), // password
+            'password' => Hash::make('jobrequestor'), // password
             'remember_token' => Str::random(10),
         ];
 

@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
    
-       
         \App\Models\Departments::factory()->create([
             'departmentname' => 'PPU HEAD',
         ]);
@@ -31,17 +30,34 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\DesignatedOffice::factory()->create([
-            'designation' => 'CSE BUILDING',
+          'designation' => 'Constructions Department',
+         ]);
+
+
+        \App\Models\DesignatedOffice::factory()->create([
+            'designation' => 'Department of Information Technology',
         ]);
 
         \App\Models\DesignatedOffice::factory()->create([
-          'designation' => 'CBAA BUILDING',
+          'designation' => 'Department of Business Administration',
+        ]);
+
+        \App\Models\DesignatedOffice::factory()->create([
+          'designation' => 'Department of Agroforestry',
+        ]);
+
+        \App\Models\DesignatedOffice::factory()->create([
+          'designation' => 'Department of Accountancy',
+        ]);
+
+        \App\Models\DesignatedOffice::factory()->create([
+          'designation' => 'Department of Fisheries',
         ]);
 
         \App\Models\User::factory()->create([
           'department_id' => '1',
           'designated_id' => '1',
-          'name' => 'PPU HEAD',
+          'name' => 'ENGR. WENNIE P. ASEQUIA',
           'username' => 'ppuhead',
           'email' => 'ppuhead@gmail.com',
           'password' => Hash::make('ppuhead')
@@ -49,25 +65,80 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\User::factory()->create([
           'department_id' => '2',
-          'designated_id' => '2',
-          'name' => 'FINANCIAL DIVISION',
-          'username' => 'financediv',
+          'designated_id' => '1',
+          'name' => 'RHODA P. ABARY, CPA',
+          'username' => 'financialdivision',
           'email' => 'financialdivision@gmail.com',
-          'password' => Hash::make('financediv')
+          'password' => Hash::make('financialdivision')
         ]);
 
         \App\Models\User::factory()->create([
-          'department_id' => '2',
-          'name' => 'JOB REQUESTOR',
-          'designated_id' => '2',
-          'username' => 'jobrequestor',
-          'email' => 'jobrequestor@gmail.com',
+          'department_id' => '4',
+          'name' => 'MC KENNETH P. TANECA',
+          'designated_id' => '1',
+          'username' => 'foreman',
+          'email' => 'foreman@gmail.com',
           'password' => Hash::make('jobrequestor')
         ]);
         \App\Models\User::factory(10)->create();
         
-        ConstructionTypes::factory(5)->create();
+        ConstructionTypes::factory(1)->create();
 
-        \App\Models\Construction::factory(5)->create();
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Demolition/Removal of Selected Structure',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Reinforced Concrete',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Reinforcing Steel',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Masonry Works with Reinforcement',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Cement Plaster Finish (Smooth Finish)',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'DryWall Partition (2 face)',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Door and Windows',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Ceiling Works',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Painting Works (2 coats)',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Metal Structures (Roof Framing)',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Pre-Painted Metal Sheets & Accessories',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Tiling Works',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Plumbing & Plumbing Fixture',
+          'constructiontype_id' => 1,
+        ]);
+        \App\Models\Construction::factory()->create([
+          'construction_name' => 'Electrical Works',
+          'constructiontype_id' => 1,
+        ]);
     }
 }

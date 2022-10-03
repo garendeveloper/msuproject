@@ -17,8 +17,8 @@ class ConstructionTypesFactory extends Factory
     public function definition()
     {
         return [
-            'construction_type' => Str::random(10),
-            'user_id' => 2,
+            'construction_type' => 'Repair & Improvement of Campus Infirmary Phase - 2',
+            'user_id' => 9,
         ];
     }
 }

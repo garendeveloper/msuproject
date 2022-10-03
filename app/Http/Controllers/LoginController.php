@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Departments;
 use Illuminate\Support\Facades\Hash;
+use App\Rules\FullnameRule;
+use App\Rules\PasswordRule;
 use App\Models\DesignatedOffice;
 class LoginController extends Controller
 {
@@ -22,17 +24,27 @@ class LoginController extends Controller
     public function register_jobrequestor(Request $request)
     {
         $request->validate([
-            'name' => 'bail|required|min:5|unique:users',
-            'email' => 'email|min:5|unique:users',
-            'phone_num' => 'required|min:13',
+            'name' => ['required', new FullnameRule(), 'unique:users'],
+            'email' => 'unique:users',
+            'phone_num' => 'required|numeric|min:11',
             'designation' => 'required',
-            'username' => 'required|min:5',
-            'password' => 'required|min:5',
-            'confirm_password' => 'required|min:5'
+            'username' => 'required|min:5|unique:users',
+            'password' => ['required', 'between:8,255', 'confirmed'],
         ]);
 
-        if($request->password == $request->confirm_password)
+        
+        $userInfo  = User::where('username', '=', $request->username)->first();
+
+        if($userInfo != "")
         {
+            if(Hash::check($request->password, $userInfo->password))
+            {
+                return redirect()->back()->withInput($request->all())->with('fail', 'Password already exists!');
+            }
+        }
+        else 
+        {
+            
             $designation = DesignatedOffice::where('designation', '=', $request->designation)->first();
 
             if($designation == "")
@@ -43,7 +55,7 @@ class LoginController extends Controller
                 $designation = $designation->id;
             }
             else $designation = $designation->id;
-
+    
             $department = Departments::where('departmentname', '=', "JOB REQUESTOR")->first();
             $user = new User();
             $user->name = $request->name;
@@ -56,10 +68,6 @@ class LoginController extends Controller
             $user->save();
             $request->session()->put('LoggedUser', $user->id);
             return redirect('/jobrequest_form');
-        }
-        else 
-        {
-            return back()->with('fail', 'Password does not match!');
         }
     }
     public function loginuser(Request $request)

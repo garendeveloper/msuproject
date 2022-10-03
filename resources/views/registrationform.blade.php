@@ -79,7 +79,7 @@
             <span style = "color: red">{{$errors->first('name')}}</span>
         @endif
         <div class="input-group mb-3">
-          <input autocomplete = "off" type="email" class="form-control" id = "email" value = "{{ old('email') }}" name = "email" placeholder="Email" required>
+          <input autocomplete = "off" type="email" class="form-control" id = "email" value = "{{ old('email') }}" name = "email" placeholder="Email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -90,7 +90,7 @@
             <span style = "color: red">{{$errors->first('email')}}</span>
         @endif
         <div class="input-group mb-3">
-          <input  type="text" class="form-control" id = "phone_num"  name = "phone_num" value = "{{ old('phone_num') }}" data-inputmask='"mask": "9999-999-9999"' data-mask required autocomplete ="off">
+          <input  type="text" class="form-control" id = "phone_num"  name = "phone_num" value = "{{ old('phone_num') }}" data-inputmask='"mask": "99999999999"' data-mask required autocomplete ="off">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-phone"></span>
@@ -139,7 +139,7 @@
             <span style = "color: red">{{$errors->first('password')}}</span>
         @endif
         <div class="input-group mb-3">
-          <input  type="password" class="form-control" name = "confirm_password"  placeholder="Confirm password" required autocomplete ="off">
+        <input  type="password" class="form-control" name = "password_confirmation"  value = "{{ old('password_confirmation')}}" placeholder="Confirm password" required autocomplete ="off">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>

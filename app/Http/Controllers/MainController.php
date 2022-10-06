@@ -247,10 +247,10 @@ class MainController extends Controller
     public function get_allconstructiontypes_unapproved()
     {
         $data = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name, designated_offices.designation
-        FROM CONSTRUCTION_TYPES, users, designated_offices
-        WHERE users.id = construction_types.user_id 
-        and designated_offices.id = users.designated_id
-        ORDER BY construction_types.created_at ASC");
+                            FROM CONSTRUCTION_TYPES, users, designated_offices
+                            WHERE users.id = construction_types.user_id 
+                            and designated_offices.id = users.designated_id
+                            ORDER BY construction_types.urgentstatus = 1 DESC");
         echo json_encode($data);
     }
     public function delete_constructiontype($id)

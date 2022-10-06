@@ -44,12 +44,12 @@
                 <p>Projects</p>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a href="{{ url('/constructions') }}" class="nav-link">
                 <i class="nav-icon fas fa-building"></i>
                 <p>Scope Of Works</p>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a href="{{ url('/users') }}" class="nav-link">
                 <i class="nav-icon fa fa-street-view"></i>

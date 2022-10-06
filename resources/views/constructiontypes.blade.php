@@ -156,6 +156,7 @@
                   <thead>
                     <tr>
                       <th>Job Request</th>
+                      <th>Urgency</th>
                       <th>Status</th>
                       <th>Requested By: </th>
                       <th>Date Requested</th>
@@ -409,17 +410,22 @@
           var html = "";
           for(var i = 0; i<data.length; i++)
           {
+            var urgentstatus = "<span class = 'badge badge-primary'>No</span>";
+            if(data[i].urgentstatus == 1) urgentstatus = "<span class = 'badge badge-danger'>Urgent</span>";
+
             var status = "<span class = 'badge badge-warning'>Still process</span>";
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
             
             html += "<tr style = 'text-align:center'>";
             html += "<td class='mailbox-name'><b>"+toTitleCase(data[i].construction_type.toLowerCase())+"</b></td>";
+            html += "<td>"+urgentstatus+"</td>";
             html += "<td>"+status+"</td>";
             html += "<td style = 'color: blue'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
             html += "<td >"+jQuery.timeago(data[i].created_at)+"</td>";
             html += '<td align = "center" > '+
                         '<a class = " info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
-                        '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-link"></i> Report</a>'+ 
+                        '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-link"></i> Report</a> '+ 
+                        '<a style  ="color:red"  href = "/constructionsbyID/'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Estimation</a>'+ 
                         // '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
                         // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
                      '</td>';

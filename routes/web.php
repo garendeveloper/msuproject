@@ -31,6 +31,7 @@ Route::get('get_allmaterials', [MaterialController::class, 'get_allmaterials']);
 Route::post('material_action', [MaterialController::class, 'action']);
 
 Route::get('get_allconstructions', [MainController::class, 'get_allconstructions']);
+Route::get('get_allconstructionsbyID/{id}', [MainController::class, 'get_allconstructionsbyID']);
 Route::get('get_allconstructions_approved', [MainController::class, 'get_allconstructions_approved']);
 Route::get('get_allnoturgentconstructions_approved_forscheduling', [MainController::class, 'get_allnoturgentconstructions_approved_forscheduling']);
 

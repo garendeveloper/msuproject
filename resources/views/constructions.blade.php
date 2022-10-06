@@ -33,13 +33,14 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+      <img class="animation__shake" src="{{ url('adminlte3/dist/img/AdminLTELogo.png')}}" alt="MSUN Logo" height="120" width="120">
     </div>
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Constructions (Scope of Work) && (Estimation of Cost)</h1>
+            <h6>Constructions (Scope of Work) && (Estimation of Cost)</h6>
+            <input type="text" style = "display: none" id = "url_id" value = "{{ $url_id }}">
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -71,11 +72,12 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="data-table" class="table table-bordered table-striped data-table" style = "table-layout: absolute; ">
+                <table id="data-table" class="table table-bordered table-striped data-table" style = "table-layout: absolute; font-size: 12px">
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
-                    <th>Constructions/Repair/Improvements</th>
+                    <!-- <th>Constructions/Repair/Improvements</th> -->
                     <th>Scope of work</th>
+                    <th>Date Created</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -971,31 +973,41 @@
     }
     function show_allData()
     {
+      var constructiontypeid = $("#url_id").val();
       $.ajax({
         type: 'GET',
-        url: '/get_allconstructions',
+        url: '/get_allconstructionsbyID/'+constructiontypeid,
         dataType: 'json',
         success:  function (data)
         {
           var row = "";
-          for(var i = 0; i<data.length; i++)
+          if(data.length > 0)
           {
-            var status = "<span class = 'badge badge-warning'>Pending</span>";
-            if(data[i].status == 1) status = '<a class = "btn btn-outline-dark  btn-sm btn_emc" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype = '+data[i].construction_type+'><i class = "fa fa-eye"></i> Estimate Cost</a>';
-            row += '<tr>';
-            // row += '<td>'+data[i].construction_id+'</td>';
-            row += '<td>'+toTitleCase(data[i].construction_type.toLowerCase())+'</td>';
-            row += '<td>'+toTitleCase(data[i].construction_name.toLowerCase())+'</td>';
-            // row += '<td>'+data[i].created_at+'</td>';
-            // row += '<td>'+data[i].updated_at+'</td>';
-            var id = data[i].construction_id;
-            row += '<td style = "text-align:center">';
-            row += status;
-            row += '<a class = "btn btn-outline-primary btn-sm edit" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype_name = '+data[i].construction_type+'><i class = "fa fa-edit"></i> </a>';
-            row += '<a class = "btn btn-outline-danger btn-sm remove" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype_name = '+data[i].construction_type+'><i class = "fa fa-trash"></i> </a>';
-            row += '<a class = "btn btn-outline-primary btn-sm href" data-id = '+id+'><i class = "fa fa-eye"></i> </a>';
-            row += '</td>';
-            row += '</tr>';
+            for(var i = 0; i<data.length; i++)
+            {
+              var status = "<span class = 'badge badge-warning'>Pending</span>";
+              if(data[i].status == 1) status = '<a class = "btn btn-outline-dark  btn-sm btn_emc" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype = '+data[i].construction_type+'><i class = "fa fa-eye"></i> Estimate Cost</a>';
+              row += '<tr>';
+              // row += '<td>'+data[i].construction_id+'</td>';
+              // row += '<td>'+toTitleCase(data[i].construction_type.toLowerCase())+'</td>';
+              row += '<td>'+toTitleCase(data[i].construction_name.toLowerCase())+'</td>';
+              row += '<td>'+jQuery.timeago(data[i].created_at)+'</td>';
+              // row += '<td>'+data[i].updated_at+'</td>';
+              var id = data[i].construction_id;
+              row += '<td style = "text-align:center">';
+              row += status;
+              row += '<a class = "btn btn-outline-primary btn-sm edit" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype_name = '+data[i].construction_type+'><i class = "fa fa-edit"></i> </a>';
+              row += '<a class = "btn btn-outline-danger btn-sm remove" data-id = '+data[i].construction_id+' data-construction_name = '+data[i].construction_name+' data-constructiontype_id = '+data[i].constructiontype_id+' data-constructiontype_name = '+data[i].construction_type+'><i class = "fa fa-trash"></i> </a>';
+              // row += '<a class = "btn btn-outline-primary btn-sm href" data-id = '+id+'><i class = "fa fa-eye"></i> </a>';
+              row += '</td>';
+              row += '</tr>';
+            }
+          }
+          else 
+          {
+            row = "<tr>"+
+                      "<td> No avalaible data to show</td>"+
+                    "</tr>";
           }
           $("#data-table tbody").html(row);
         },

@@ -76,8 +76,9 @@ class MainController extends Controller
             $data = [
                 'userinfo' => $userinfo,
                 'constructions' => $constructions,
+                'url_id' => $id
             ];
-            return view('constructionsByID', $data);
+            return view('constructions', $data);
         }
         else{
             return redirect('/')->with('fail', 'You must be logged in!');
@@ -121,7 +122,15 @@ class MainController extends Controller
         order by construction_types.construction_type asc');
         echo json_encode($data);
     }
-   
+    public function get_allconstructionsbyID($id)
+    {
+        $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
+        from construction_types, constructions
+        where construction_types.id = constructions.constructiontype_id
+        and construction_types.id = "'.$id.'"
+        order by construction_types.created_at desc');
+        echo json_encode($data);
+    }
     public function get_allconstructions_approved()
     {
         $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
@@ -220,7 +229,7 @@ class MainController extends Controller
         $data = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name  
                             FROM CONSTRUCTION_TYPES, users 
                             WHERE users.id = construction_types.user_id 
-                            ORDER BY construction_types.created_at ASC");
+                            ORDER BY construction_types.urgentstatus = 1 DESC");
         echo json_encode($data);
     }
     public function get_allconstructiontypesById()

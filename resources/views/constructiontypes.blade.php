@@ -39,7 +39,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1>Constructions/Repair/Improvements (JOB REQUESTS) Ordered By Date  </h1>
+            <h5>Constructions/Repair/Improvements (JOB REQUESTS) Ordered By Date  </h5>
           </div>
           <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -56,16 +56,16 @@
     <section class="content">
       <div class="row">
         <div class="col-md-3">
-          <a href="{{ url('/jobrequest_form') }}" class="btn btn-primary btn-block mb-3">Compose</a>
+          <a href="{{ url('/jobrequest_form') }}" class="btn btn-sm btn-primary btn-block mb-3">Compose</a>
 
           <div class="card" >
             <div class="card-header">
               <h3 class="card-title" align = "center">Information </h3>
               <br><br>
-              <h4 class="card-title" id = "title" style = "font-weight: bold"></h4>
+              <h4 class="card-title" id = "title" style = "font-weight: bold" ></h4>
             
             </div>
-            <table id = "information" class = "table table-stripped table-bordered">
+            <table id = "information" class = "table table-stripped table-bordered" style = "font-size: 12px">
 
             </table>
             <div class="card-body p-0">
@@ -152,7 +152,7 @@
                 <!-- /.float-right -->
               </div>
               <div class="table-responsive mailbox-messages">
-                <table id = "tbl_constructiontypes" class="table table-hover table-striped">
+                <table id = "tbl_constructiontypes" style = "font-size: 12px" class="table table-hover table-striped">
                   <thead>
                     <tr>
                       <th>Job Request</th>
@@ -418,8 +418,8 @@
             html += "<td style = 'color: blue'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
             html += "<td >"+jQuery.timeago(data[i].created_at)+"</td>";
             html += '<td align = "center" > '+
-                        '<a class = "btn btn-sm btn-default info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i> View Info</a>'+ 
-                        // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
+                        '<a class = " info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
+                        '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-link"></i> Report</a>'+ 
                         // '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
                         // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
                      '</td>';

@@ -16,7 +16,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('constructionsbyID/{id1}', 'App\Http\Controllers\MainController@constructionsbyID');
+Route::get('constructionsbyID/{id}', [MainController::class, 'constructionsbyID'])->name('constructionsbyid');
 
 Route::get('/logout', [LoginController::class, 'logout']);
 Route::post('/loginuser', [LoginController::class, 'loginuser'])->name('/loginuser');
@@ -32,7 +32,10 @@ Route::post('material_action', [MaterialController::class, 'action']);
 
 Route::get('get_allconstructions', [MainController::class, 'get_allconstructions']);
 Route::get('get_allconstructions_approved', [MainController::class, 'get_allconstructions_approved']);
-Route::get('get_allconstructions_approved_forscheduling', [MainController::class, 'get_allconstructions_approved_forscheduling']);
+Route::get('get_allnoturgentconstructions_approved_forscheduling', [MainController::class, 'get_allnoturgentconstructions_approved_forscheduling']);
+
+Route::get('get_allurgentconstructions_approved_forscheduling', [MainController::class, 'get_allurgentconstructions_approved_forscheduling']);
+
 Route::post('construction_actions', [MainController::class, 'construction_actions']);
 Route::get('show_construction/{id}', [MainController::class, 'show_construction']);
 
@@ -87,9 +90,8 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/jobrequests', [MainController::class, 'jobrequests']);
     Route::get('/jobrequests_report', [MainController::class, 'jobrequests_report']);
     Route::get('/manpowers', [MainController::class, 'manpowers']);
-
-   
     Route::get('/jobrequest_form', [MainController::class, 'jobrequest_form']); 
+    Route::get('/jobrequest_formById/{id}', [MainController::class, 'jobrequest_formById']); 
     Route::get('/alljobrequests', [MainController::class, 'alljobrequests']);
 });
 

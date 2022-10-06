@@ -22,7 +22,7 @@
 <div class="wrapper">
     <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+    <img class="animation__shake" src="{{ url ('adminlte3/dist/img/AdminLTELogo.png')}}" alt="AdminLTELogo" height="500" width="500">
   </div>
 
   <!-- Navbar -->

@@ -82,7 +82,7 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\User::factory(10)->create();
         
-        ConstructionTypes::factory(1)->create();
+        ConstructionTypes::factory(10)->create();
 
         \App\Models\Construction::factory()->create([
           'construction_name' => 'Demolition/Removal of Selected Structure',

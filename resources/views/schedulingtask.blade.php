@@ -18,6 +18,9 @@
   <link rel="stylesheet" href="adminlte3/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
   <!-- Toastr -->
   <link rel="stylesheet" href="adminlte3/plugins/toastr/toastr.min.css">
+  <style>
+ 
+  </style>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -40,12 +43,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Scheduling of Job Request and Laborers</h1>
+            <h1>Scheduling of Job Requests and Manpowers</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Scheduling of Job Request and Laborers</li>
+              <li class="breadcrumb-item active">Scheduling </li>
             </ol>
           </div>
         </div>
@@ -56,61 +59,9 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-1" style = "display: none">
-            <div class="sticky-top mb-3">
-              <div class="card">
-                <div class="card-header">
-                  <h4 class="card-title">Dragg the job request</h4>
-                </div>
-                <div class="card-body">
-                  <!-- the events -->
-                  <div id="external-events">
-                    <!-- <div class="external-event bg-success">Lunch</div>
-                    <div class="external-event bg-warning">Go home</div>
-                    <div class="external-event bg-info">Do homework</div>
-                    <div class="external-event bg-primary">Work on UI design</div>
-                    <div class="external-event bg-danger">Sleep tight</div> -->
-                    <div class="checkbox">
-                      <label for="drop-remove">
-                        <input type="checkbox" id="drop-remove">
-                        remove after drop
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <!-- /.card-body -->
-              </div>
-              <!-- /.card -->
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">Create Event</h3>
-                </div>
-                <div class="card-body">
-                  <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                    <ul class="fc-color-picker" id="color-chooser">
-                      <li><a class="text-primary" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                      <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
-                    </ul>
-                  </div>
-                  <!-- /btn-group -->
-                  <div class="input-group">
-                    <input id="new-event" type="text" class="form-control" placeholder="Event Title">
-
-                    <div class="input-group-append">
-                      <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
-                    </div>
-                    <!-- /btn-group -->
-                  </div>
-                  <!-- /input-group -->
-                </div>
-              </div>
-            </div>
-          </div>
+         
           <!-- /.col -->
-          <div class="col-md-12">
+          <div class="col-md-8">
             <div class="card card-primary">
               <div class="card-body p-0">
                 <!-- THE CALENDAR -->
@@ -121,6 +72,29 @@
             <!-- /.card -->
           </div>
           <!-- /.col -->
+          <div class="col-md-4" >
+          
+          <div class="card" >
+            <div class="card-header" style = "text-align: center;">
+              <h6 class="card-title" style = " font-weight: bold; align: center" >Details of a complete job request</h6>
+            </div>
+            <div class="card-body">
+              <table style = "border-line: 1px solid black; font-size: 12px" id = "schedule_details"  class = "table table-bordered table-stripped table-hovered">
+                  <tbody >
+                  </tbody>
+              </table>
+              <br>
+              <table style = "border-line: 1px solid black; font-size: 12px" id = "manpower_details"  class = "table table-bordered">
+                
+              <tbody >
+                  </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+
+      </div>
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -139,11 +113,11 @@
 <!-- ./wrapper -->
 
  <!-- modal -->
- <div class="modal fade open_modal" id="modal-info">
+ <div class="modal fade open_modal" id="modal-info" style = "font-size: 12px">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header" style = "background-color: #1C518A; color: white;">
-            <h4 class="modal-title" ></h4>
+            <h6 class="modal-title" ></h6>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -159,8 +133,8 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label for="construction">Approved; Constructions/Job Requests</label>
-                      <select class = "form-control" name="construction" id="construction">
+                      <label for="construction">Job Request Prioritize Urgent</label>
+                      <select style = "font-size: 12px" class = "form-control" name="construction" id="urgentconstructions">
 
                       </select>
                     </div>
@@ -169,7 +143,7 @@
                     <div class="form-group">
                       <label>Color picker with addon:</label>
                       <div class="input-group my-colorpicker2">
-                        <input type="text" name = "color" class="form-control" readonly>
+                        <input type="text" name = "color" class="form-control" style = "font-size: 12px" readonly>
                         <div class="input-group-append">
                           <span class="input-group-text"><i class="fas fa-square"></i></span>
                         </div>
@@ -198,13 +172,13 @@
       <!-- /.modal-dialog -->
     </div>
       <!-- /.modal -->
-      <div class="modal fade  selection_modal" id="modal-lg">
-        <div class="modal-dialog modal-xl">
+      <div class="modal fade  selection_modal" id="modal" style = "font-size: 12px">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header" style = "background-color: #1C518A; color: white;">
               <div class = "row">
                 <div class="col-md-12">
-                    <h4 class="modal-title" id = "sm_modaltitle" > SELECT ON THE ITEMS</h4>
+                    <h6 class="modal-title" id = "sm_modaltitle" > SELECT ON THE ITEMS</h6>
                 </div>
                 <div class="col-md-12">
                     <h9 class="modal-title" id = "sm_descriptiontitle" > SELECT ON THE ITEMS</h9>
@@ -224,19 +198,19 @@
                     <div class="form-group">
                       <label>Select Head of Constructions (Foreman/s)</label>
                       <div class="select2-blue">
-                        <select class="select2" name = "foremans[]" id = "foremans" multiple="multiple" data-placeholder="Select the company of ..." data-dropdown-css-class="select2-blue" style="width: 100%;" required>
+                        <select style = "font-size: 12px" class="select2" name = "foremans[]" id = "foremans" multiple="multiple" data-placeholder="Select the company of ..." data-dropdown-css-class="select2-blue" style="width: 100%;" required>
     
                         </select>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-12">
-                    <button class = "btn btn-outline-primary btn-block" type = "submit" ><i class = "fa fa-save"></i> Submit</button>
+                    <button style = "font-size: 12px" class = "btn btn-outline-primary btn-block" type = "submit" ><i class = "fa fa-save"></i> Submit</button>
                   </div>
                   <br><br>
 
                   <div class="col-md-12">
-                   <table class = "table table-stripped table-bordered table-hovered">
+                   <table style = "font-size: 12px" class = "table table-stripped table-bordered table-hovered">
                     <thead>
                       <tr>
                         <th>Selected Worker Head/s (Foreman)</th>
@@ -254,7 +228,7 @@
               </form>
               <div class="row">
                     <div class="col-md-6">
-                      <button class = "btn btn-outline-success btn-block" id = "btn_complete"><i class = "fa fa-check"></i> Complete</button>
+                      <button class = "btn btn-outline-success btn-sm btn-block" id = "btn_complete"><i class = "fa fa-check"></i> Complete</button>
                     </div>
                     <div class="col-md-6">
                       <div class="input-group my-colorpicker2">
@@ -326,40 +300,18 @@ $(document).ready(function() {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   })
+
+  show_allLaborers();
+  show_allForemans();
   var Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
       timer: 3000
     });
-    function show_allForemans()
-  {
-    $.ajax({
-      type: 'get',
-      url: '/get_allScheduledWorkers',
-      dataType: 'json',
-      success: function(data)
-      {
-        var row = "";
-        for(var i = 0; i<data.length; i++)
-        {
-          if(data[i].departmentname == "FOREMAN")
-          {
-            row += "<option value = "+data[i].id+" >"+data[i].name+"</option>";
-          }
-        }
-        $("#foremans").html(row);
-      }
-    })
-  }
-    $('.swalDefaultSuccess').click(function() {
-    
-    });
-  show_allJobRequests();
-  show_allLaborers();
-  show_allForemans();
- 
-  var calendarE1 = document.getElementById('calendar');
+  
+    var calendarE1 = document.getElementById('calendar');
+
   var calendar = new FullCalendar.Calendar(calendarE1, {
     defaultView: 'dayGridMonth',
     // plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
@@ -477,7 +429,7 @@ $(document).ready(function() {
         dataType: 'json',
         success: function(data)
         {
-          if(data.status == 0)
+          if(data.scheduleinfo[0].status == 0)
           {
             show_allworkers(id);
           
@@ -492,20 +444,101 @@ $(document).ready(function() {
           }
           else
           {
-            $(document).Toasts('create', {
-              class: 'bg-danger',
-              title: title,
-              body: 'On '+ new Date(data.updated_at),
-              autohide: true,
-              delay: 3000,
-              icon: 'danger',
-            })
+            var details = "<tr>";
+                details += "<td style = 'background-color: #1C518A; color: white'>Job Request</td>";
+                details += "<td style = 'background-color: #1C518A; color: white;'>"+data.scheduleinfo[0].title+"</td>";
+                details += "</tr>";
+
+                details += "<tr>";
+                details += "<td>Status</td>";
+                details += "<td><span class = 'badge badge-success'> Completed </span></td>";
+                details += "</tr>";
+
+                details += "<tr>";
+                details += "<td >Date Started</td>";
+                details += "<td>"+data.scheduleinfo[0].start+"</td>";
+                details += "</tr>";
+
+                details += "<tr>";
+                details += "<td >Date Ended</td>";
+                details += "<td> "+data.scheduleinfo[0].end+"</td>";
+                details += "</tr>";
+
+                var startDay = new Date(data.scheduleinfo[0].start);
+                var endDay = new Date(data.scheduleinfo[0].end);
+
+                var millisBetween = startDay.getTime() - endDay.getTime();
+                var days = millisBetween / (1000 * 3600 * 24);
+   
+                var numberofdays = Math.round(Math.abs(days));
+
+                details += "<tr>";
+                details += "<td >Total Days</td>";
+                details += "<td> "+numberofdays+"</td>";
+                details += "</tr>";
+
+                details += "<tr>";
+                details += "<td >Requested By: </td>";
+                details += "<td> "+data.scheduleinfo[0].name+"</td>";
+                details += "</tr>";
+
+                details += "<tr>";
+                details += "<td >Designation </td>";
+                details += "<td> "+data.scheduleinfo[0].designation+"</td>";
+                details += "</tr>";
+
+                details += "<tr>";
+                details += "<td> Type: </td>";
+                details += "<td> "+toTitleCase(data.scheduleinfo[0].departmentname.toLowerCase())+"</td>";
+                details += "</tr>";
+
+            $("#schedule_details tbody").html(details)
+
+            var manpowers = ""; 
+            manpowers += '<tr style = "background-color: #1C518A; color: white">'+
+                            '<th>Head Of Construction</th>'+
+                          '</tr>';
+            for(var i = 0; i<data.manpowers.length; i++)
+            {
+              manpowers += "<tr >";
+              manpowers += "<td> FOREMAN: "+data.manpowers[i].name.toUpperCase()+"</td>";
+              manpowers += "</tr";
+            }
+            $("#manpower_details").html(manpowers)
           }
         }
       })
-    }
+    },
   })
   calendar.render();
+  function toTitleCase(str) {
+        return str.replace(/(?:^|\s)\w/g, function(match) {
+            return match.toUpperCase();
+        });
+    }
+  function show_allForemans()
+    {
+    $.ajax({
+      type: 'get',
+      url: '/get_allScheduledWorkers',
+      dataType: 'json',
+      success: function(data)
+      {
+        var row = "";
+        for(var i = 0; i<data.length; i++)
+        {
+          if(data[i].departmentname == "FOREMAN")
+          {
+            row += "<option value = "+data[i].id+" >"+data[i].name+"</option>";
+          }
+        }
+        $("#foremans").html(row);
+      }
+    })
+  }
+    $('.swalDefaultSuccess').click(function() {
+    
+    });
   $("#btn_remove").on('click', function(e){
     e.preventDefault();
     var id = $("#jobrequest_id").val();
@@ -592,7 +625,7 @@ $(document).ready(function() {
   $("#btn_complete").on('click', function(e){
     e.preventDefault();
     var jobrequest_id = $("#jobrequest_id").val();
-    
+
     if(confirm("Do you want to complete the construction on this schedule?\nThis action cannot be undone\n\nPress Ok otherwise Cancel"))
     {
       $.ajax({  
@@ -611,6 +644,10 @@ $(document).ready(function() {
               $("#manpower_form").trigger('reset');
               $(".selection_modal").modal('hide');
               show_allForemans();
+          }
+          else if(data.status == 201) 
+          {
+            alert(data.message)
           }
           else
           {
@@ -667,7 +704,8 @@ $(document).ready(function() {
             }
           }
           show_allForemans();
-          show_allJobRequests();
+          show_allJobRequestsNotUrgent();
+          show_allJobRequestsUrgent()
         }
       })
     }
@@ -688,11 +726,12 @@ $(document).ready(function() {
       }
     })
   }
-  function show_allJobRequests()
+  show_allJobRequestsUrgent()
+  function show_allJobRequestsUrgent()
   {
     $.ajax({
       type: 'get',
-      url: '/get_allconstructions_approved_forscheduling',
+      url: '/get_allurgentconstructions_approved_forscheduling',
       dataType: 'json',
       success: function(data)
       {
@@ -701,13 +740,21 @@ $(document).ready(function() {
         var jobrequests = data;
         for(var i = 0; i<jobrequests.length; i++)
         {
-            option += '<option value = '+jobrequests[i].construction_id+' >'+jobrequests[i].construction_type+': '+jobrequests[i].construction_name+'</option>';
+          var urgent = jobrequests[i].urgentstatus;
+          if(urgent == 1) 
+          {
+            option += '<option  style = "color: green" value = '+jobrequests[i].construction_id+' >'+jobrequests[i].construction_type+':  <b> URGENT </b> </option>';
+          }
+          else{
+            option += '<option style = "color: blue" value = '+jobrequests[i].construction_id+' >'+jobrequests[i].construction_type+'</option>';
+          }
+           
         }
-        $("#construction").html(option);
+        $("#urgentconstructions").html(option);
       }
     })
   }
-
+ 
   function show_allLaborers()
   {
     $.ajax({
@@ -816,7 +863,7 @@ $(document).ready(function() {
         //       "Total_added_foremans: "+response.total_added_foremans+"\n"+
         //       "Foremans not saved: "+response.foremans_notsaved+"\n"+
         //       "Laborers not saved: "+response.laborers_notsaved);
-        show_allJobRequests();
+       show_allJobRequestsUrgent();
         
       },
       error: function(response){

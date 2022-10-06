@@ -134,12 +134,22 @@ class MainController extends Controller
         order by constructions.id desc ');
         echo json_encode($data);
     }
-    public function get_allconstructions_approved_forscheduling()
+    public function get_allurgentconstructions_approved_forscheduling()
     {
-        $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
-                            from construction_types, constructions
-                            where construction_types.id = constructions.constructiontype_id
-                            and construction_types.status = 1');
+        $data = DB::select('SELECT id as construction_id, construction_types.*
+                            from construction_types
+                            where status = 1
+                            and construction_types.id not in (select jobrequest_id from jobrequestschedules)
+                            order by urgentstatus = 1 desc');
+
+        echo json_encode($data);
+    }
+    public function get_allnoturgentconstructions_approved_forscheduling()
+    {
+        $data = DB::select('select construction_types.*, construction_types.id as construction_id
+                            from construction_types
+                            where construction_types.status = 1
+                            and urgentstatus = 0');
 
         echo json_encode($data);
     }
@@ -153,8 +163,10 @@ class MainController extends Controller
                 'success' => 'Data successfully deleted!',
              ]);
         }
-        else{
-            if(!empty($request->id)){
+        else
+        {
+            if(!empty($request->id))
+            {
                 $construction = Construction::findOrFail($request->id);
                 $construction->constructiontype_id = $request->constructiontype_id;
                 $construction->construction_name = $request->construction_name;
@@ -164,18 +176,21 @@ class MainController extends Controller
                     'success' => 'Data successfully updated!',
                  ]);
             }
-            else{
+            else
+            {
                 $validator = Validator::make($request->all(), [
                     'constructiontype_id' => 'required|integer',
                     'construction_name' => 'bail|required|min:5|unique:constructions',
                 ]);
-                if($validator->fails()){
+                if($validator->fails())
+                {
                     return response()->json([
                         'status' => 400,
                         'errors' => $validator->messages(),
                      ]);
                 }
-                else{
+                else
+                {
                     $check_details = Construction::where('construction_name', '=', $request->construction)
                                                 ->where('constructiontype_id', '=', $request->construction_type)
                                                 ->first();
@@ -296,9 +311,12 @@ class MainController extends Controller
     }
     public function addconstructiontype(Request $request)
     {
-       if(!empty($request->id)){
+        // $urgentstatus = 0;
+        // if($request->urgent) $urgentstatus = 1;
+       if(!empty($request->id))
+       {
             $construction_type = ConstructionTypes::findOrFail($request->id);
-            $construction_type->user_id = session('LoggedUser');
+            $construction_type->urgentstatus = $request->urgent;
             $construction_type->construction_type = $request->construction_type;
             $construction_type->update();
             return response()->json([
@@ -306,11 +324,12 @@ class MainController extends Controller
                 'success' => 'Job Request Updated successfully!',
             ]);
        }
-       else{
+       else
+       {
             $validate = Validator::make($request->all(), [
-            'construction_type' => 'bail|required|min:5|max:191|unique:construction_types',
+                'construction_type' => 'bail|required|min:5|max:191|unique:construction_types',
             ]);
-
+      
 
             if($validate->fails()){
                 return response()->json([
@@ -322,6 +341,7 @@ class MainController extends Controller
                 $construction_type = new ConstructionTypes;
                 $construction_type->user_id = session('LoggedUser');
                 $construction_type->construction_type = $request->construction_type;
+                $construction_type->urgentstatus = $request->urgent;
                 $construction_type->save();
                 return response()->json([
                     'status' => 200,
@@ -632,16 +652,32 @@ class MainController extends Controller
     //SCHEDULING 
     public function get_eventInfo($id)
     {
-        $event = JobRequestSchedule::find($id);
-        echo json_encode($event);
+        $scheduleinfo = DB::select('select users.name, designated_offices.designation, departments.departmentname, construction_types.construction_type as title, schedules.*, jobrequestschedules.*
+        from users, designated_offices, departments, construction_types, schedules, jobrequestschedules
+        where construction_types.id = jobrequestschedules.jobrequest_id
+        and schedules.id = jobrequestschedules.schedule_id
+        and designated_offices.id = users.designated_id
+        and departments.id = users.department_id
+        and users.id = construction_types.user_id
+        and jobrequestschedules.id = "'.$id.'"');
+        $manpower = DB::select('select users.*
+        from users, userjobrequestschedules, jobrequestschedules
+        where users.id = userjobrequestschedules.user_id
+        and jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id
+        and jobrequestschedules.id = "'.$id.'"');
+        $data = [
+            'scheduleinfo' => $scheduleinfo,
+            'manpowers' => $manpower
+        ];
+        echo json_encode($data);
     }  
     public function get_schedules()
     {
-        $data = DB::select('select construction_types.construction_type, constructions.construction_name as title, jobrequestschedules.id, schedules.start, schedules.end, jobrequestschedules.color, jobrequestschedules.status
-        from  construction_types, constructions, schedules, jobrequestschedules
-        where construction_types.id = constructions.constructiontype_id
-        and schedules.id = jobrequestschedules.schedule_id
-        and constructions.id = jobrequestschedules.jobrequest_id');
+        $data = DB::select('select construction_types.construction_type as title, jobrequestschedules.id, schedules.start, schedules.end, jobrequestschedules.color, jobrequestschedules.status
+        from  construction_types,  schedules, jobrequestschedules
+        where schedules.id = jobrequestschedules.schedule_id
+        and construction_types.id = jobrequestschedules.jobrequest_id
+        ');
 
         $events = array();
         foreach($data as $d)
@@ -745,7 +781,32 @@ class MainController extends Controller
             and designated_offices.id = users.designated_id
             and users.id = "'.session('LoggedUser').'"');
             $data = [
+                'jr_info' => '',
                 'userinfo' => $userInfo
+            ];
+            return view('jobrequest_form', $data);
+        }
+        else   return redirect('/')->with('fail', 'You must be logged in!');
+    }
+    public function jobrequest_formById($jobrequest_id)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+            from users, departments, designated_offices
+            where departments.id = users.department_id
+            and designated_offices.id = users.designated_id
+            and users.id = "'.session('LoggedUser').'"');
+            $constructiondata = DB::select('select construction_types.*, users.name,users.email, users.phone_num, departments.departmentname, designated_offices.designation
+                                            from designated_offices, departments, construction_types, users
+                                            where designated_offices.id = users.designated_id
+                                            and departments.id = users.department_id
+                                            and users.id = construction_types.user_id
+                                            and construction_types.id = "'.$jobrequest_id.'"');
+
+            $data = [
+                'userinfo' => $userInfo,
+                'jr_info' => $constructiondata,
             ];
             return view('jobrequest_form', $data);
         }
@@ -1056,12 +1117,24 @@ class MainController extends Controller
     }
     public function complete_schedule($jobrequest_id)
     {
-        $jobrequest = JobRequestSchedule::findOrFail($jobrequest_id);
-        $jobrequest->status = 1;
-        $jobrequest->update();
-        return response()->json([
-            'status' => 200,
-            'success' => 'Construction has been successfully completed!'
-        ]);
+        $userjobrequest = UserJobRequestSchedule::where('jobrequestsched_id', '=', $jobrequest_id)->first();
+        if($userjobrequest == "")
+        {
+            return response()->json([
+                'status' => 201,
+                'message' => 'Please select a foreman to complete the process!'
+            ]);
+        }
+        else    
+        {
+            $jobrequest = JobRequestSchedule::findOrFail($jobrequest_id);
+            $jobrequest->status = 1;
+            $jobrequest->color = "green";
+            $jobrequest->update();
+            return response()->json([
+                'status' => 200,
+                'success' => 'Construction has been successfully completed!'
+            ]);
+        }
     }
 }

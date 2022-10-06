@@ -78,7 +78,8 @@
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>Constructions/Repair/Improvement</th>
-                    <th>Status</th>
+                    <th>Approval Status</th>
+                    <th>Urgent ?</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
                     <th style = "text-align: center">Actions</th>
@@ -292,14 +293,16 @@
           var html = "";
           for(var i = 0; i<data.length; i++)
           {
+            var urgentstatus = "<span class = 'badge badge-primary'>No</span>";
             var status = "<span class = 'badge badge-warning'>Still process</span>";
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
-            
+            if(data[i].urgentstatus == 1) urgentstatus = "<span class = 'badge badge-danger'>Urgent</span>";
             html += "<tr>";
             html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+"</td>";
             html += "<td>"+status+"</td>";
-            html += "<td >"+data[i].created_at+"</td>";
-            html += "<td>"+data[i].updated_at+"</td>";
+            html += "<td>"+urgentstatus+"</td>";
+            html += "<td >"+jQuery.timeago(data[i].created_at)+"</td>";
+            html += "<td>"+jQuery.timeago(data[i].updated_at)+"</td>";
             html += '<td align = "center"> '+
                         // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
                         '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 

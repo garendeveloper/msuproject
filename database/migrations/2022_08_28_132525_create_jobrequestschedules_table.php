@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedBigInteger('jobrequest_id');
             $table->foreign('jobrequest_id')
                     ->references('id')
-                    ->on('constructions')
+                    ->on('construction_types')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->integer('status')->default(0);

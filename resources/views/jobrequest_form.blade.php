@@ -16,7 +16,7 @@
 <div class="wrapper">
    <!-- Preloader -->
    <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__wobble" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="100" width="100">
+    <img class="animation__wobble" src="{{url('adminlte3/dist/img/AdminLTELogo.png')}}" alt="AdminLTELogo" height="100" width="100">
   </div>
   <!-- Navbar -->
   @include('templates/navbar')
@@ -67,7 +67,7 @@
               <div class="row invoice-info">
                 <div class="col-sm-4 invoice-col">
                   <address>
-                  <img src="adminlte3/dist/img/AdminLTELogo.png" style = "width: 120px; height: 120px;" class="brand-image img-circle elevation-2" alt="User Image">
+                  <img src="{{ url ('adminlte3/dist/img/AdminLTELogo.png') }}" style = "width: 120px; height: 120px;" class="brand-image img-circle elevation-2" alt="User Image">
                   </address>
                 </div>
                 <!-- /.col -->
@@ -130,8 +130,15 @@
 
                 </div>
                 <div class="col-sm-12 invoice-col" >
-                   
+                    @if($jr_info != "")
+                    <input type="text" style = "display: none" id = "constructiontype_id" value = "{{ $jr_info[0]->id }}">
+                    <textarea name="constructiontype" value = "{{ $jr_info[0]->construction_type }}" id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required> {{ $jr_info[0]->construction_type }}
+                    </textarea>
+                    @endif
+                    @if($jr_info == "")
+                    <input type="text" style = "display: none" id = "constructiontype_id" value = "">
                     <textarea name="constructiontype" id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required></textarea>
+                    @endif
                     <br>
                 </div>
               </div>
@@ -143,13 +150,53 @@
                   <br><br><br><br>
 
                 </div>
+                @if($jr_info != "")
+                
+                <div class="col-sm-7 invoice-col" style = " text-align: center">
+                  Contact No: <u> {{ $jr_info[0]->name}} </u> <br>
+                  Email: <u> {{ $jr_info[0]->email }} </u> <br>
+                  <br><br><br>
+                </div>
+                @endif
+
+                @if($jr_info == "")
+                
                 <div class="col-sm-7 invoice-col" style = " text-align: center">
                   Contact No: <u> {{ $userinfo[0]->phone_num}} </u> <br>
                   Email: <u> {{ $userinfo[0]->email}} </u> <br>
                   <br><br><br>
                 </div>
+                @endif
+
               </div>
               <!-- /.row -->
+              @if($jr_info != "")
+              <div class="row invoice-info" >
+                <div class="col-sm-5 invoice-col" style = "text-align:center">
+                 <ul style = "border-bottom: 1px solid black"><b> {{ $jr_info[0]->name}} </b></ul> 
+                  Name and Signature
+
+                </div>
+                <div class="col-sm-7 invoice-col" style = "text-align: center">
+                  Fund Source
+                </div>
+              </div>
+              <!-- /.row -->
+              <br><br>
+              <div class="row invoice-info" >
+                <div class="col-sm-5 invoice-col" style = "text-align:center">
+                 <ul style = "border-bottom: 1px solid black"><b> {{ $jr_info[0]->designation }} </b></ul> 
+                  Designation
+
+                </div>
+                <div class="col-sm-7 invoice-col" style = "text-align: center">
+                 
+                </div>
+              </div>
+              <br>
+              @endif
+
+              @if($jr_info == "")
               <div class="row invoice-info" >
                 <div class="col-sm-5 invoice-col" style = "text-align:center">
                  <ul style = "border-bottom: 1px solid black"><b> {{ $userinfo[0]->name}} </b></ul> 
@@ -173,6 +220,7 @@
                 </div>
               </div>
               <br>
+              @endif
 
               <div class="row invoice-info" >
                 <div class="col-sm-5 invoice-col">
@@ -247,13 +295,76 @@
              
               <!-- /.row -->
               <!-- this row will not appear when printing -->
+            
               <div class="row no-print">
+                  <div class="col-4" style = "text-align:center">
+
+                  @if($jr_info != "")
+                    @if($jr_info[0]->urgentstatus == 0)
+
+                     <div class="form-group clearfix">
+                      <b>Is this urgent?</b>
+                        <div class="icheck-primary d-inline">
+                          <input type="radio"  id="urgent1" name="urgent" >
+      
+                          <label for="urgent1">
+                            Yes
+                          </label>
+                        </div>
+                        <div class="icheck-primary d-inline">
+                          <input type="radio" id="urgent2" name="urgent" checked> 
+                          <label for="urgent2">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                    @endif
+                    @if($jr_info[0]->urgentstatus == 1)
+                      <div class="form-group clearfix">
+                        <b>Is this urgent?</b>
+                        <div class="icheck-primary d-inline">
+                          <input type="radio"  id="urgent1" name="urgent" checked>
+
+                          <label for="urgent1">
+                            Yes
+                          </label>
+                        </div>
+                        <div class="icheck-primary d-inline">
+                          <input type="radio" id="urgent2" name="urgent" > 
+                          <label for="urgent2">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                      @endif
+                  @endif
+                  @if($jr_info == "")
+                  <div class="form-group clearfix">
+                      <b>Is this urgent?</b>
+                        <div class="icheck-primary d-inline">
+                          <input type="radio"  id="urgent1" name="urgent" >
+      
+                          <label for="urgent1">
+                            Yes
+                          </label>
+                        </div>
+                        <div class="icheck-primary d-inline">
+                          <input type="radio" id="urgent2" name="urgent"> 
+                          <label for="urgent2">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                  @endif
+                  </div>
+                   
                 <!-- <div class="col-6">
                   <a href="{{url('/jobrequests_report')}}" rel="noopener" target="_blank" class="btn btn-block btn-flat  btn-outline-primary"><i class="fas fa-print"></i> Print</a>
                 </div> -->
-                <div class="col-12">
-                  <a rel="noopener" id = "btn_add" class="btn btn-block btn-flat  btn-outline-primary"><i class="fas fa-save"></i> Submit Request</a>
+                <div class="col-8">
+                  <a rel="noopener" id = "btn_add"  class="btn btn-block btn-flat  btn-outline-primary"><i class="fas fa-save"></i> Submit Request</a>
                 </div>
+               
               </div>
             </div>
             <!-- /.invoice -->
@@ -290,41 +401,66 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+    $("input[data-bootstrap-switch]").each(function(){
+      $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    })
+
+
     $("#tbl_jobrequests").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#tbl_jobrequests_wrapper .col-md-6:eq(0)');
     $("#btn_add").on('click', function(e) {
       e.preventDefault();
+  
+    
+      if (!$("[name='urgent']:checked").val()) 
+      { 
+        alert("Please select an option if this job request is an urgent or not!"); 
+        return false;
+      }
+      else
+      {
+        var urgent = $("[name='urgent']").prop('checked');
+     
+        if(urgent == false) urgent = 0;
+        else urgent = 1;
 
-      var constructiontype = $("#constructiontype").val();
-
-      $.ajax({
-        type: "POST",
-        url: "/addconstructiontype",
-        data: {
-          construction_type: constructiontype,
-        },
-        dataType: "json",
-        success:  function(response){
-          if(response.status == 400){
-            $.each(response.errors, function (key, err_values){
-              alert(err_values)
-            });
+        var constructiontype = $("#constructiontype").val();  
+        var id = $("#constructiontype_id").val();
+        $.ajax({
+          type: "POST",
+          url: "/addconstructiontype",
+          data: {
+            construction_type: constructiontype,
+            urgent: urgent,
+            id: id,
+          },
+          dataType: "json",
+          success:  function(response){
+            if(response.status == 400){
+              $.each(response.errors, function (key, err_values){
+                alert(err_values)
+              });
+            }
+            if(response.status == 200){
+              alert(response.success);
+              if(id == "")
+              {
+                window.location.href = "/alljobrequests";
+              }
+              else window.location.href = "/constructiontypes";
+              // $(".modal_addconstructiontype").modal('hide');
+              $("#constructiontype").val(""); 
+            }
+          },
+          error:  function(response, error){
+            alert("Something went wrong\nPlease contact your administrator for immediate actions!");
           }
-          if(response.status == 200){
-            alert(response.success);
-            window.location.href = "/alljobrequests";
-            // $(".modal_addconstructiontype").modal('hide');
-            $("#constructiontype").val(""); 
-          }
-        },
-        error:  function(response, error){
-          alert("Something went wrong\nPlease contact your administrator for immediate actions!");
-        }
-      });
+        });
+      }
     });
-    $('.select2').select2();
+    // $('.select2').select2();
     function show_allJobRequests()
     {
         $.ajax({
@@ -333,13 +469,13 @@
             dataType: 'json',
             success: function(data)
             {
-                var option = "";
-                option += '<option> -- Select Here --</option>'
-                for(var i = 0; i<data.length; i++)
-                {
-                option += '<option value = '+data[i].id+'>'+data[i].construction_type+'</option>';
-                }
-                $("#construction_types").html(option);
+              var option = "";
+              option += '<option> -- Select Here --</option>'
+              for(var i = 0; i<data.length; i++)
+              {
+              option += '<option value = '+data[i].id+'>'+data[i].construction_type+'</option>';
+              }
+              $("#construction_types").html(option);
             }
         })
     }

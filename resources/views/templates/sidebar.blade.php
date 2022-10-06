@@ -5,8 +5,8 @@
         </div> -->
 
     <div class="brand-link" style="float: middle">
-      <img src="adminlte3/dist/img/AdminLTELogo.png" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <img class="brand-text"src="adminlte3/dist/img/sidebarManajr.png" style="height: 30px"> 
+      <img src="{{url('adminlte3/dist/img/AdminLTELogo.png')}}" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img class="brand-text"src="{{url('adminlte3/dist/img/sidebarManajr.png')}}" style="height: 30px"> 
     </div>
     <!-- Sidebar -->
     <div class="sidebar ">
@@ -14,7 +14,7 @@
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
   
           <div class="image">
-            <img src="adminlte3/dist/img/avatar.png" class=" img-circle elevation-2" alt="User Image" style="opacity: .8">
+            <img src="{{ url('adminlte3/dist/img/avatar.png')}}" class=" img-circle elevation-2" alt="User Image" style="opacity: .8">
           </div>
      
         <div class="info">

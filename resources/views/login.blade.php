@@ -69,7 +69,7 @@
           </div>
         </div>
         @if($errors->has('username'))
-            <span style = "color: black">{{$errors->first('username')}}</span>
+            <span style = "color: red">{{$errors->first('username')}}</span>
           @endif
         @if($errors->has('usertype'))
             <span class = "text-danger" style = "color: white">{{$errors->first('usertype')}}</span>
@@ -83,7 +83,7 @@
           </div>
         </div>
         @if($errors->has('password'))
-            <span style = "color: black">{{$errors->first('password')}}</span>
+            <span style = "color: red">{{$errors->first('password')}}</span>
           @endif
         <div class="row">
           <div class="col-6">

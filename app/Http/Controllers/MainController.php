@@ -918,7 +918,7 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
                                     from users, departments, designated_offices
                                     where departments.id = users.department_id
                                     and designated_offices.id = users.designated_id
@@ -1092,7 +1092,7 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
                                     from users, departments, designated_offices
                                     where departments.id = users.department_id
                                     and designated_offices.id = users.designated_id
@@ -1170,7 +1170,7 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
             from users, departments, designated_offices
             where departments.id = users.department_id
             and designated_offices.id = users.designated_id

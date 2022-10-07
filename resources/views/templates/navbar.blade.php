@@ -7,6 +7,7 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{url('/dashboard')}}" class="nav-link">Home</a>
       </li>
+      @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{ url('/approvedjobrequests')}}" class="nav-link">Approved Job Requests
             <span class="float-right text-muted text-sm" style = "color: green">
@@ -19,6 +20,7 @@
             <span class = "badge badge-warning"> {{ $no_ofunapproved[0]->total_unapproved}}</span></span>
         </a>
       </li>
+      @endif
     </ul>
 
     <!-- Right navbar links -->

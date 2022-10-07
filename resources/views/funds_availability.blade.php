@@ -23,7 +23,7 @@
 <div class="wrapper">
    <!-- Preloader -->
    <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+    <img class="animation__shake" src="{{url('adminlte3/dist/img/AdminLTELogo.png')}}" alt="AdminLTELogo" height="120" width="120">
   </div>
   <!-- Navbar -->
   @include('templates/navbar')
@@ -58,19 +58,23 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">
+              <div class="card-header" style = "background-color: #1C518A; color: white;">
                 <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <h6>Job Requests For Funds Approval</h6> 
                   </div>
-                  <div class="col-md-6">
-                    <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search">
-                  </div>
+                
                 </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="tbl_constructiontypes" class="table table-bordered table-striped data-table" style = "table-layout: absolute; ">
+                <div class="row">
+                    <div class="col-md-4" style = "text-align: right">
+                      <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search" style = "font-size:12px; ">
+                    </div>
+                </div>
+                <br>
+                <table id="tbl_constructiontypes" class="table table-bordered table-striped data-table" style = "table-layout: responsive ">
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>Job Request</th>
@@ -185,14 +189,14 @@
           for(var i = 0; i<data.length; i++)
           {
             var urgentstatus = "";
-            var status = '<a style = "font-size: 12px" class = "btn btn-sm btn-warning approveRequest" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-check"></i> Approve</a>';
+            var status = '<a style = "font-size: 10px" class = "btn btn-sm btn-warning approveRequest" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-check"></i> Approve</a>';
             if(data[i].status == 1)  status = "<span class = 'badge badge-success'>Approved</span>";
             if(data[i].urgentstatus == 1) urgentstatus = "<span class = 'badge badge-danger'>Urgent</span>";
             var date = moment(data[i].created_at).format('MM-DD-yyyy');
             html += "<tr style = 'text-align:left'>";
             html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+" "+urgentstatus+"</td>";
             html += "<td align = 'right'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
-            html += "<td>"+data[i].designation.toUpperCase()+"</td>";
+            html += "<td>"+toTitleCase(data[i].designation.toLowerCase())+"</td>";
             html += "<td>"+jQuery.timeago(data[i].created_at)+"</td>";
             html += '<td align = "center"> '+
                         status +

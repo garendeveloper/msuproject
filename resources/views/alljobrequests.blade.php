@@ -39,13 +39,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>My Job Requests</h1>
+            <h5>My Job Requests</h5>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ url('/constructions') }}">Constructions</a> </li>
-              <li class="breadcrumb-item active">Constructions/Repair/Improvements</li>
+              <li class="breadcrumb-item">My Job Requests</a> </li>
             </ol>
           </div>
         </div>
@@ -58,16 +57,16 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">
+              <div class="card-header" style = "background-color: #1C518A; color: white;">
                 <div class="row">
-                  <div class="col md-6">
-                  <label for="" style = "text-align: right">Search Item Here</label>
+                  <div class="col md-9">
+                  <h6>My Job Requests</h6>
                   <!-- <button class = "btn btn-outline-primary btn-sm" id = "btn_addconstructiontype" type = "button" align = "left"><i class = "fa fa-plus"></i> Add Construction Type</button> -->
                   <!-- <a  href="{{ url('/constructions') }}" class = "btn btn-outline-primary btn-sm"  align = "right"><i class = "fa fa-arrow-right"></i> View Scope of Works</a> -->
                   </div>
-                  <div class="col-md-6">    
+                  <div class="col-md-3">    
                    
-                    <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search">
+                    <input class="form-control" style = "height:30px; font-size: 12px" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search">
                   </div>
                 </div>
               </div>
@@ -286,9 +285,6 @@
         type: 'GET',
         url: '/get_allconstructiontypesById',
         dataType: 'json',
-        contentType: false,
-        cache: false,
-        async: false,
         success: function(data){
           var html = "";
           for(var i = 0; i<data.length; i++)
@@ -306,8 +302,8 @@
             html += '<td align = "center"> '+
                         // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
                         // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
-                        '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
-                        '<a class = " remove" style = "color: red" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> Remove </a>'+ 
+                        '<a class = "btn btn-primary btn-sm" href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
+                        '<a class = "btn btn-danger btn-sm remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> Remove </a>'+ 
                         // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
                      '</td>';
             html += "</tr>";

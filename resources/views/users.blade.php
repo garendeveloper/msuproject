@@ -123,18 +123,24 @@
           <form id = "userform" action="" method = "post">
             <div class="modal-body">
               @csrf
-              <input type="text" style = "display: none" name = "id" id = "id" value = "">
+              <input type="text" style = "display: none" name = "id" id = "id" value = "" >
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="construction">Fullname</label>
-                        <input type="text" name = "name" id= "name" class = "form-control" autofocus>
+                        <input type="text" name = "name" id= "name" class = "form-control" autofocus autocomplete = "off">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="construction">Email</label>
-                        <input type="email" name = "email" id= "email" class = "form-control">
+                        <input type="email" name = "email" id= "email" class = "form-control" autocomplete = "off">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="construction">Phone Number</label>
+                        <input type="number" name = "phone_num" id= "phone_num" class = "form-control" autocomplete = "off">
                     </div>
                 </div>
               </div>
@@ -142,7 +148,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="Type">Type</label>
-                        <select name="departmentname" id="departments" class = "form-control">
+                        <select name="departmentname" id="departments" class = "form-control" >
                         
                         </select>
                         <!-- <input autocomplete = "off" type="deparment" list = "departments" name = "department" id= "department" class = "form-control" autofocus>
@@ -159,7 +165,7 @@
                         </select>
                     </div>
                 </div>
-                <span style = "color: blue"><i> Note: Upon adding of user. His default password will be his username.</i></span>
+                <span style = "color: blue"><i> Note: Upon adding of a job requestor. His default password will be his username which have no spaces.</i></span>
               </div>
             </div>
             <div class="modal-footer">
@@ -195,12 +201,16 @@
     const formatToCurrency = amount => {
 		return "" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
 	};
+
     $("#search").on('keyup', function(){
       var value = $(this).val().toLowerCase();
       $("#tbl_Users tbody tr").filter(function(){
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
     });
+    // $('#tbl_Users').DataTable({
+    //     pagingType: 'full_numbers',
+    // });
     $("#userform").on('submit', function(e){
       e.preventDefault();
       var data = $(this).serialize();
@@ -257,6 +267,7 @@
           $("#designated_offices option:selected").text(data[0].designation);
           $("#departments option:selected").val(data[0].department_id);
           $("#departments option:selected").text(data[0].departmentname);
+          $("#phone_num").val(data[0].phone_num);
         },
       })
       $("#modal-title").text("Edit User Details")
@@ -318,7 +329,6 @@
               }
               else
               {
-                
                   for(var i = 0; i<data.length; i++)
                   {
                     var optionRetirement = "";
@@ -341,7 +351,7 @@
                     }
                     row += "<tr>";
                     row += "<td>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
-                    row += "<td>"+data[i].username+"</td>";
+                    row += "<td>"+data[i].username.toLowerCase()+"</td>";
                     row += "<td>"+data[i].departmentname+"</td>";
                     row += "<td>"+data[i].designation+"</td>";
                     row += "<td>"+data[i].email+"</td>";
@@ -353,12 +363,14 @@
                     row += "</tr>";
                   }
               }
-              $("table tbody").html(row);
+              $("#tbl_Users tbody").html(row);
           },
       })
     }
     $("#btn_modal").on('click', function(e){
         e.preventDefault();
+        $("#ajaxresponse").html("");
+        $("#ajaxresponse").removeClass('alert alert-danger');
         $("#userform").trigger('reset');
         $("#designated_offices").val("");
         $("#designated_offices option:selected").text(" -- Please select designation here --");

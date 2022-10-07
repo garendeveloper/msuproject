@@ -31,7 +31,13 @@ class MainController extends Controller
                                     from departments, users 
                                     where departments.id = users.department_id
                                     and users.id = "'.session('LoggedUser').'"');
-            $userinfo = ['userinfo' => $userinfo];
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                        from construction_types
+                                        where status = 0');
+            $userinfo = ['userinfo' => $userinfo, 'no_ofapproved'=>$no_ofapproved, 'no_ofunapproved'=>$no_ofunapproved];
             return view('dashboard', $userinfo);
         }
         else
@@ -99,9 +105,8 @@ class MainController extends Controller
         and construction_types.id = "'.$id.'"');
         
         $scheduling_info = DB::select('select jobrequestschedules.status
-        from construction_types, jobrequestschedules, constructions
-        where constructions.id = jobrequestschedules.jobrequest_id
-        and construction_types.id = constructions.constructiontype_id
+        from construction_types, jobrequestschedules
+        where construction_types.id = jobrequestschedules.jobrequest_id
         and construction_types.id = "'.$id.'"');
         
         if(empty($scheduling_info)) $scheduling_info[] = [

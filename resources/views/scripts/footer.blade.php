@@ -44,6 +44,7 @@
 <!-- AdminLTE -->
 <script src="{{ url('adminlte3/dist/js/adminlte.js')}}"></script>
 <script src="{{ url('timeago.js')}}"></script>
+
 <script>
     $(function(){
         $("#dashboard").on('click', function(e){

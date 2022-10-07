@@ -57,8 +57,13 @@
     body{
       min-height: 100%;
     }
+    #content-wrapper{
+        background-image: url('adminlte3/dist/img/calendar.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
     .nav-sidebar .nav-item>.nav-link {
-    /* margin-bottom: -0.5rem; */
+    margin-bottom: -0.5rem;
 }
 .button {
   background-color: #4CAF50;

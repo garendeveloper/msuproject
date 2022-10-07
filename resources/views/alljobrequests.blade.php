@@ -22,7 +22,7 @@
 <div class="wrapper">
    <!-- Preloader -->
    <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+    <img class="animation__shake" src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" alt="AdminLTELogo" height="100" width="100">
   </div>
   <!-- Navbar -->
   @include('templates/navbar')
@@ -74,12 +74,12 @@
               <!-- /.card-header -->
 
               <div class="card-body">
-                <table id="tbl_constructiontypes" class="table table-bordered table-striped" style = "table-layout: absolute">
+                <table id="tbl_constructiontypes" style = "font-size: 12px" class="table table-bordered table-striped" style = "table-layout: absolute">
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>Constructions/Repair/Improvement</th>
                     <th>Approval Status</th>
-                    <th>Urgent ?</th>
+                    <th>Urgency Status</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
                     <th style = "text-align: center">Actions</th>
@@ -305,8 +305,9 @@
             html += "<td>"+jQuery.timeago(data[i].updated_at)+"</td>";
             html += '<td align = "center"> '+
                         // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
-                        '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
-                        '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
+                        // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
+                        '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
+                        '<a class = " remove" style = "color: red" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> Remove </a>'+ 
                         // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
                      '</td>';
             html += "</tr>";

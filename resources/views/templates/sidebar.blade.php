@@ -77,12 +77,12 @@
                   <p>Job Requests</p>
                 </a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="{{ url('/manpowers')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Manpowers</p>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
           @endif
@@ -104,7 +104,7 @@
             <li class="nav-item">
               <a href="{{ url('/jobrequest_form') }}" class="nav-link">
                 <i class="nav-icon fa fa-square"></i>
-                <p>Request Job</p>
+                <p>Request A Job</p>
               </a>
             </li>
           @endif

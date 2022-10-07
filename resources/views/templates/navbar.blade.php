@@ -8,7 +8,16 @@
         <a href="{{url('/dashboard')}}" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="{{ url('/approvedjobrequests')}}" class="nav-link">Approved Job Requests
+            <span class="float-right text-muted text-sm" style = "color: green">
+            <span class = "badge badge-success"> {{ $no_ofapproved[0]->total_approved}}</span></span>
+        </a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{ url('/approvedjobrequests')}}" class="nav-link">Job Requests Under Funds Availability
+        <span class="float-right text-muted text-sm" style = "color: yellow">
+            <span class = "badge badge-warning"> {{ $no_ofunapproved[0]->total_unapproved}}</span></span>
+        </a>
       </li>
     </ul>
 

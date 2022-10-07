@@ -33,7 +33,7 @@
   <!-- /.control-sidebar -->
 
     <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" >
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -475,6 +475,13 @@
             user += '<tr>'+
                     '<th>Status</th>'+
                     '<td> <span class = "badge badge-success">Approved</span></td>'+
+                  '</tr>';
+          }
+          if(data.user[0].urgentstatus == 1)
+          {
+            user += '<tr>'+
+                    '<th>Urgency</th>'+
+                    '<td> <span class = "badge badge-danger">Urgent</span></td>'+
                   '</tr>';
           }
           if(data.user[0].status == 0)

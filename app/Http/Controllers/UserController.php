@@ -8,6 +8,7 @@ use DB;
 use App\Models\Departments;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Rules\FullnameRule;
 class UserController extends Controller
 {
     /**
@@ -89,8 +90,9 @@ class UserController extends Controller
         if($request->id != "" || !empty($request->id))
         {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|min:5',
-                'email' => 'email|min:5',
+                'name' => ['required', new FullnameRule(), 'unique:users,name,'.$request->id.',id'],
+                'email' => 'unique:users,email,'.$request->id.',id',
+                'phone_num' => 'required|numeric|min:11',
                 'departmentname' => 'required',
                 'designation' => 'required',
             ]);
@@ -104,13 +106,12 @@ class UserController extends Controller
             }
             else
             {
-                $type = Departments::find($request->departmentname);
-                if($type->departmentname == "JOB REQUESTOR") $type = "jobrequestor";
-                $username = $request->name;
-                $password = Hash::make($type);
+                $username = str_replace(' ', '', strtolower($request->name));
+                $password = Hash::make($username);
                 $user = User::find($request->id);
                 $user->name = $request->name;
                 $user->email = $request->email;
+                $user->phone_num = $request->phone_num;
                 $user->department_id = $request->departmentname;
                 $user->designated_id = $request->designation;
                 $user->username = $username;
@@ -126,8 +127,9 @@ class UserController extends Controller
         else
         {
             $validator = Validator::make($request->all(), [
-                'name' => 'required|min:5|unique:users',
-                'email' => 'email|min:5|unique:users',
+                'name' => ['required', new FullnameRule(), 'unique:users'],
+                'email' => 'unique:users',
+                'phone_num' => 'required|numeric|min:11',
                 'departmentname' => 'required',
                 'designation' => 'required',
             ]);
@@ -148,13 +150,12 @@ class UserController extends Controller
 
                 if(empty($check_user) || $check_user == "")
                 {
-                    $type = Departments::find($request->departmentname);
-                    if($type == "JOB REQUESTOR") $type = "jobrequestor";
-                    $username = $request->name;
-                    $password = Hash::make($type);
+                    $username = str_replace(' ', '', strtolower($request->name));
+                    $password = Hash::make($username);
                     $user = new User();
                     $user->name = $request->name;
                     $user->email = $request->email;
+                    $user->phone_num = $request->phone_num;
                     $user->department_id = $request->departmentname;
                     $user->designated_id = $request->designation;
                     $user->username = $username;

@@ -129,15 +129,16 @@
                 Description of Construciton/Repair/Improvement to be taken:
 
                 </div>
+                <input type="text" style = "display: none" id = "department" value = "{{ $userinfo[0]->departmentname }}">
                 <div class="col-sm-12 invoice-col" >
                     @if($jr_info != "")
+
                     <input type="text" style = "display: none" id = "constructiontype_id" value = "{{ $jr_info[0]->id }}">
-                    <textarea name="constructiontype" value = "{{ $jr_info[0]->construction_type }}" id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required> {{ $jr_info[0]->construction_type }}
-                    </textarea>
+                    <textarea name="constructiontype" value = "{{ $jr_info[0]->construction_type }}" id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required> {{ $jr_info[0]->construction_type }}</textarea>
                     @endif
                     @if($jr_info == "")
                     <input type="text" style = "display: none" id = "constructiontype_id" value = "">
-                    <textarea name="constructiontype" id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required></textarea>
+                    <textarea name="constructiontype"  id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required></textarea>
                     @endif
                     <br>
                 </div>
@@ -428,6 +429,7 @@
 
         var constructiontype = $("#constructiontype").val();  
         var id = $("#constructiontype_id").val();
+        var department = $("#department").val();
         $.ajax({
           type: "POST",
           url: "/addconstructiontype",
@@ -445,7 +447,7 @@
             }
             if(response.status == 200){
               alert(response.success);
-              if(id == "")
+              if(department == "JOB REQUESTOR")
               {
                 window.location.href = "/alljobrequests";
               }

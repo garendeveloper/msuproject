@@ -49,32 +49,39 @@
 
     [class*=sidebar-dark-] {
         background-color: #0e1822;
+     
     }
     .navbar-white {
         background-color: #1C518A;
         color: #1f2d3d;
     }
+    .nav-item{
+      border-bottom: 1px solid white
+    }
     body{
       min-height: 100%;
+      font-size: 12px;
     }
+
     #content-wrapper{
         background-image: url('adminlte3/dist/img/calendar.jpg');
         background-repeat: no-repeat;
         background-size: cover;
     }
     .nav-sidebar .nav-item>.nav-link {
-    margin-bottom: -0.5rem;
+    margin-bottom: 0.2rem;
 }
-.button {
-  background-color: #4CAF50;
+.btn
+{
+  background-color: #1C518A;
   border: none;
   color: white;
-  padding: 8px 20px;
+  padding: 8px 8px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 12px;
-  margin: 4px 2px;
+  font-size: 10px;
+  margin: 2px 2px;
   cursor: pointer;
 }
 </style>

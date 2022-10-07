@@ -15,6 +15,7 @@ use App\Models\EstimatedLaborCost;
 use App\Models\Schedules;
 use App\Models\UserJobRequestSchedule;
 use App\Models\JobRequestSchedule;
+use Illuminate\Support\Str;
 
 class MainController extends Controller
 {
@@ -37,7 +38,10 @@ class MainController extends Controller
             $no_ofunapproved = DB::select('select count(*) as total_unapproved
                                         from construction_types
                                         where status = 0');
-            $userinfo = ['userinfo' => $userinfo, 'no_ofapproved'=>$no_ofapproved, 'no_ofunapproved'=>$no_ofunapproved];
+            $userinfo = ['userinfo' => $userinfo, 
+                        'no_ofapproved'=> $no_ofapproved, 
+                        'no_ofunapproved'=>$no_ofunapproved
+                    ];
             return view('dashboard', $userinfo);
         }
         else
@@ -53,13 +57,22 @@ class MainController extends Controller
                                     from departments, users 
                                     where departments.id = users.department_id
                                     and users.id = "'.session('LoggedUser').'"');
-
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                        from construction_types
+                                        where status = 0');
+          
             $constructions = DB::select('select construction_types.*, constructions.* 
                                 from construction_types, constructions
                                 where construction_types.id = constructions.constructiontype_id');
+
             $data = [
-                'userinfo' => $userinfo,
-                'constructions' => $constructions,
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved,
+                'constructions'=>$constructions,
             ];
             return view('constructions', $data);
         }
@@ -71,17 +84,25 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser'))){
             $userinfo = DB::select('select users.*, users.id as user_id, departments.*
-                                    from departments, users 
-                                    where departments.id = users.department_id
-                                    and users.id = "'.session('LoggedUser').'"');
+                        from departments, users 
+                        where departments.id = users.department_id
+                        and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                            from construction_types
+                            where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                            from construction_types
+                            where status = 0');
 
             $constructions = DB::select('select construction_types.*, constructions.* 
-                                from construction_types, constructions
-                                where construction_types.id = constructions.constructiontype_id
-                                and construction_types.id = "'.$id.'"');
+                    from construction_types, constructions
+                    where construction_types.id = constructions.constructiontype_id');
+
             $data = [
-                'userinfo' => $userinfo,
-                'constructions' => $constructions,
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved,
+                'constructions'=>$constructions,
                 'url_id' => $id
             ];
             return view('constructions', $data);
@@ -135,6 +156,75 @@ class MainController extends Controller
         and construction_types.id = "'.$id.'"
         order by construction_types.created_at desc');
         echo json_encode($data);
+    }
+    public function approvedjobrequests()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                        from construction_types
+                                        where status = 0');
+            $jobrequests = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name, designated_offices.designation, departments.departmentname
+                                FROM CONSTRUCTION_TYPES, users, designated_offices, departments
+                                WHERE users.id = construction_types.user_id 
+                                and designated_offices.id = users.designated_id
+                                and construction_types.status = 1
+                                and departments.id = users.department_id
+                                ORDER BY construction_types.created_at ASC");
+            $userinfo = [
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=>$no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved,
+                'jobrequests' => $jobrequests,
+            ];
+            return view('approvedjobrequests', $userinfo);
+        }
+        else
+        {
+            return redirect('/')->with('fail', 'You must be logged in!');
+        }
+    }
+  
+    public function unapprovedjobrequests()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                        from construction_types
+                                        where status = 0');
+            $jobrequests = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name, designated_offices.designation, departments.departmentname
+                                FROM CONSTRUCTION_TYPES, users, designated_offices, departments
+                                WHERE users.id = construction_types.user_id 
+                                and designated_offices.id = users.designated_id
+                                and construction_types.status = 0
+                                and departments.id = users.department_id
+                                ORDER BY construction_types.created_at ASC");
+            $userinfo = [
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=>$no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved,
+                'jobrequests' => $jobrequests,
+            ];
+            return view('unapprovedjobrequests', $userinfo);
+        }
+        else
+        {
+            return redirect('/')->with('fail', 'You must be logged in!');
+        }
     }
     public function get_allconstructions_approved()
     {
@@ -290,14 +380,22 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser'))){
             $userinfo = DB::select('select users.*, users.id as user_id, departments.*
-            from departments, users 
-            where departments.id = users.department_id
-            and users.id = "'.session('LoggedUser').'"');
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                        from construction_types
+                                        where status = 0');
             $constructiontypes = ConstructionTypes::select('*')->orderby('id', 'desc')->get();
             $data = [
-                'userinfo' => $userinfo,
-                'constructiontypes' => $constructiontypes,
-            ];
+                        'userinfo' => $userinfo, 
+                        'no_ofapproved'=> $no_ofapproved, 
+                        'no_ofunapproved'=>$no_ofunapproved,
+                        'constructiontypes' => $constructiontypes,
+                ];
             return view('constructiontypes', $data);
         }
         else{
@@ -729,25 +827,40 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-                                    from departments, users 
-                                    where departments.id = users.department_id
-                                    and users.id = "'.session('LoggedUser').'"');
+            // $userInfo = DB::select('select users.*, users.id as user_id, departments.*
+            //                         from departments, users 
+            //                         where departments.id = users.department_id
+            //                         and users.id = "'.session('LoggedUser').'"');
 
+            // $data = [
+            //     'userinfo' => $userInfo
+            // ];
+            // if($request->ajax())
+            // {
+            //     $data = DB::select('select construction_types.*, constructions.*, schedules.*, jobrequestschedules.*, constructions.construction_name as title
+            //     from  construction_types, constructions, schedules, jobrequestschedules
+            //     where construction_types.id = constructions.constructiontype_id
+            //     and schedules.id = jobrequestschedules.schedule_id
+            //     and constructions.id = jobrequestschedules.jobrequest_id
+            //     and date(schedules.start) >= "'.date($request->start).'"
+            //     and date(schedules.end) <= "'.date($request->end).'"');
+            //     return response()->json($data);
+            // }
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                from departments, users 
+                                where departments.id = users.department_id
+                                and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                            from construction_types
+                            where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                            from construction_types
+                            where status = 0');
             $data = [
-                'userinfo' => $userInfo
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved
             ];
-            if($request->ajax())
-            {
-                $data = DB::select('select construction_types.*, constructions.*, schedules.*, jobrequestschedules.*, constructions.construction_name as title
-                from  construction_types, constructions, schedules, jobrequestschedules
-                where construction_types.id = constructions.constructiontype_id
-                and schedules.id = jobrequestschedules.schedule_id
-                and constructions.id = jobrequestschedules.jobrequest_id
-                and date(schedules.start) >= "'.date($request->start).'"
-                and date(schedules.end) <= "'.date($request->end).'"');
-                return response()->json($data);
-            }
             return view('schedulingtask', $data);
         }
         else
@@ -759,12 +872,20 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-                            from departments, users 
-                            where departments.id = users.department_id
-                            and users.id = "'.session('LoggedUser').'"');
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                from departments, users 
+                                where departments.id = users.department_id
+                                and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                            from construction_types
+                            where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                            from construction_types
+                            where status = 0');
             $data = [
-                'userinfo' => $userInfo
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved
             ];
             return view('jobrequests_reports', $data);
         }
@@ -774,12 +895,20 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-            from departments, users 
-            where departments.id = users.department_id
-            and users.id = "'.session('LoggedUser').'"');
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                from departments, users 
+                                where departments.id = users.department_id
+                                and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                            from construction_types
+                            where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                            from construction_types
+                            where status = 0');
             $data = [
-                'userinfo' => $userInfo
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved
             ];
             return view('manpowers', $data);
         }
@@ -790,14 +919,23 @@ class MainController extends Controller
         if(!empty(session('LoggedUser')))
         {
             $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
-            from users, departments, designated_offices
-            where departments.id = users.department_id
-            and designated_offices.id = users.designated_id
-            and users.id = "'.session('LoggedUser').'"');
+                                    from users, departments, designated_offices
+                                    where departments.id = users.department_id
+                                    and designated_offices.id = users.designated_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                    from construction_types
+                    where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                    from construction_types
+                    where status = 0');
             $data = [
-                'jr_info' => '',
-                'userinfo' => $userInfo
+                'jr_info'=> '',
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved
             ];
+            
             return view('jobrequest_form', $data);
         }
         else   return redirect('/')->with('fail', 'You must be logged in!');
@@ -806,11 +944,11 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
-            from users, departments, designated_offices
-            where departments.id = users.department_id
-            and designated_offices.id = users.designated_id
-            and users.id = "'.session('LoggedUser').'"');
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                                    from users, departments, designated_offices
+                                    where departments.id = users.department_id
+                                    and designated_offices.id = users.designated_id
+                                    and users.id = "'.session('LoggedUser').'"');
             $constructiondata = DB::select('select construction_types.*, users.name,users.email, users.phone_num, departments.departmentname, designated_offices.designation
                                             from designated_offices, departments, construction_types, users
                                             where designated_offices.id = users.designated_id
@@ -818,9 +956,17 @@ class MainController extends Controller
                                             and users.id = construction_types.user_id
                                             and construction_types.id = "'.$jobrequest_id.'"');
 
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                    from construction_types
+                    where status = 0');
             $data = [
-                'userinfo' => $userInfo,
-                'jr_info' => $constructiondata,
+                'jr_info'=>$constructiondata,
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved
             ];
             return view('jobrequest_form', $data);
         }
@@ -946,14 +1092,22 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-                                from departments, users 
-                                where departments.id = users.department_id
-                                and users.id = "'.session('LoggedUser').'"');
-
+            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                                    from users, departments, designated_offices
+                                    where departments.id = users.department_id
+                                    and designated_offices.id = users.designated_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                            from construction_types
+                                            where status = 0');
             $data = [
-                'userinfo' => $userInfo
-            ];
+                    'userinfo' => $userinfo, 
+                    'no_ofapproved'=> $no_ofapproved, 
+                    'no_ofunapproved'=>$no_ofunapproved
+                    ];
             return view('funds_availability', $data);
         }
        return redirect('/')->with('fail', 'You must be logged in!');
@@ -992,14 +1146,22 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-                                from departments, users 
-                                where departments.id = users.department_id
-                                and users.id = "'.session('LoggedUser').'"');
-
+            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                                    from users, departments, designated_offices
+                                    where departments.id = users.department_id
+                                    and designated_offices.id = users.designated_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                            from construction_types
+                                            where status = 0');
             $data = [
-                'userinfo' => $userInfo
-            ];
+                    'userinfo' => $userinfo, 
+                    'no_ofapproved'=> $no_ofapproved, 
+                    'no_ofunapproved'=>$no_ofunapproved
+                    ];
             return view('jobrequests_reportprint', $data);
         }
        return redirect('/')->with('fail', 'You must be logged in!');
@@ -1008,13 +1170,21 @@ class MainController extends Controller
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-                                from departments, users 
-                                where departments.id = users.department_id
-                                and users.id = "'.session('LoggedUser').'"');
-
+            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+            from users, departments, designated_offices
+            where departments.id = users.department_id
+            and designated_offices.id = users.designated_id
+            and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                            from construction_types
+                            where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                from construction_types
+                                where status = 0');
             $data = [
-                'userinfo' => $userInfo
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved
             ];
             return view('alljobrequests', $data);
         }
@@ -1125,7 +1295,7 @@ class MainController extends Controller
         $userjobrequest->delete();
         return response()->json([
             'status' => 200,
-            'success' => 'Selected Person successfully removed!'
+            'success' => 'Selected Person Successfully Removed!'
         ]);
 
     }

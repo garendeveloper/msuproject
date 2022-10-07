@@ -25,9 +25,9 @@
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
    <!-- Preloader -->
-   <!-- <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
-  </div> -->
+   <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" alt="AdminLTELogo" height="120" width="120">
+  </div>
     <!-- Navbar -->
     @include('templates/navbar')
   <!-- /.navbar -->
@@ -43,7 +43,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Scheduling of Job Requests and Manpowers</h1>
+            <h5>Scheduling of Job Requests and Manpowers</h5>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -75,8 +75,8 @@
           <div class="col-md-4" >
           
           <div class="card" >
-            <div class="card-header" style = "text-align: center;">
-              <h6 class="card-title" style = " font-weight: bold; align: center" >Details of a complete job request</h6>
+            <div class="card-header" style = "background-color: #1C518A; color: white;">
+              <h6 class="card-title" style = " font-weight: bold; align: center"  >Details of a complete job request</h6>
             </div>
             <div class="card-body">
               <table style = "border-line: 1px solid black; font-size: 12px" id = "schedule_details"  class = "table table-bordered table-stripped table-hovered">
@@ -133,7 +133,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label for="construction">Job Request Prioritize Urgent</label>
+                      <label for="construction">Job Prioritize Urgent Request</label>
                       <select style = "font-size: 12px" class = "form-control" name="construction" id="urgentconstructions">
 
                       </select>

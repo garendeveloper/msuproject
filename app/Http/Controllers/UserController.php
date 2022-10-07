@@ -18,12 +18,21 @@ class UserController extends Controller
      */
     public function index()
     {
-        $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-                            from departments, users 
-                            where departments.id = users.department_id
-                            and users.id = "'.session('LoggedUser').'"');
+        $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                                from users, departments, designated_offices
+                                where departments.id = users.department_id
+                                and designated_offices.id = users.designated_id
+                                and users.id = "'.session('LoggedUser').'"');
+        $no_ofapproved = DB::select('select count(*) as total_approved
+                    from construction_types
+                    where status = 1');
+        $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                        from construction_types
+                        where status = 0');
         $data = [
-            'userinfo' => $userInfo
+            'userinfo' => $userinfo, 
+            'no_ofapproved'=> $no_ofapproved, 
+            'no_ofunapproved'=>$no_ofunapproved
         ];
         return view('users', $data);
     }

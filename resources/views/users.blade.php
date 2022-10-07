@@ -32,14 +32,14 @@
   <div class="content-wrapper">
      <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="500" width="500">
+    <img class="animation__shake" src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" alt="AdminLTELogo" height="120" width="120">
   </div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Employees & Workers</h1>
+            <h6>Employees & Workers</h6>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -61,16 +61,25 @@
               
                 <div class="row">
                   <div class="col md-6">
-                    <button class = "btn btn-outline-primary" id = "btn_modal" type = "button" align = "left"><i class = "fa fa-user-plus"></i> Add User</button>
+                    <button class = "btn btn-sm btn-outline-primary" id = "btn_modal" type = "button" align = "left"><i class = "fa fa-user-plus"></i> Add User</button>
                   </div>
-                  <div class="col-md-6">
-                  <input class="form-control" id = "search" type="search" placeholder="Search Item" aria-label="Search">
+                  <div class="col-md-3">
+                    <div class="card-tools">
+                      <div class="input-group input-group-sm">
+                        <input type="text" id = "search" class="form-control" placeholder="Search a Job Request">
+                        <div class="input-group-append">
+                          <div class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>  
                   </div>
                 </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="tbl_Users" style = "table-layout: absolute;   border: 1px solid black;" class="table table-bordered table-striped">
+                <table id="tbl_Users" style = "table-layout: absolute; font-size: 12px;   border: 1px solid black;" class="table table-bordered table-striped">
                   <thead style = "background-color: #1C518A;color: white; ">
                   <tr>
                     <th>Name</th>

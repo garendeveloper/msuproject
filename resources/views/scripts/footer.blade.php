@@ -43,7 +43,7 @@
 <script src="{{ url('adminlte3/plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}"></script>
 <!-- AdminLTE -->
 <script src="{{ url('adminlte3/dist/js/adminlte.js')}}"></script>
-<script src="{{ url('timeago.js')}}"></script>
+<script src="{{ url('jquery.timeago.js')}}"></script>
 
 <script>
     $(function(){

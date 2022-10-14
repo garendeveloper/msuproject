@@ -80,6 +80,7 @@ Route::post('useractions', [UserController::class, 'useractions']);
 Route::get('get_userinfo/{id}', [UserController::class, 'get_userinfo']);
 Route::get('get_allconstructiontypesById', [MainController::class,'get_allconstructiontypesById']);
 Route::post('/register_jobrequestor', [LoginController::class, 'register_jobrequestor']);
+
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');
     Route::get('/dashboard', [MainController::class, 'index'])->name('/dashboard');
@@ -96,5 +97,10 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/alljobrequests', [MainController::class, 'alljobrequests']);
     Route::get('/approvedjobrequests', [MainController::class, 'approvedjobrequests']);
     Route::get('/unapprovedjobrequests', [MainController::class, 'unapprovedjobrequests']);
+    Route::get('/estimatedscopeofworks/{id}', [MainController::class, 'estimatedscopeofworks']);
+
+    Route::get('/materialreport/{id}', [MainController::class, 'materialreport']);
+    Route::get('/equipmentreport/{id}', [MainController::class, 'equipmentreport']);
+    Route::get('/laborreport/{id}', [MainController::class, 'laborreport']);
 });
 

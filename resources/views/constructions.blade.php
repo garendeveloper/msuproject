@@ -9,17 +9,8 @@
 <head>
   @include('scripts/header')
 </head>
-<!--
-`body` tag options:
-
-  Apply one or more of the following classes to to the body tag
-  to get the desired effect
-
-  * sidebar-collapse
-  * sidebar-mini
--->
 <body class="hold-transition sidebar-mini">
-<div class="wrapper">
+  <div class="wrapper">
 
   <!-- Navbar -->
   @include('templates/navbar')
@@ -61,11 +52,15 @@
             <div class="card">
               <div class="card-header">
                 <div class="row">
-                  <div class="col-md-6">
-                    <button class = "btn btn-outline-primary btn-sm" id = "btn_openmodal" type = "button"><i class = "fa fa-plus"></i> Add Construction (SOW )</button>
-                    <a  href="{{ url('/constructiontypes') }}" class = "btn btn-outline-primary btn-sm"  align = "right"><i class = "fa fa-arrow-left"></i> Back</a>
+                  <div class="col-md-8">
+                    <button class = "btn btn-outline-primary btn-sm" id = "btn_openmodal" type = "button"><i class = "fa fa-plus"></i>&nbsp; Add Construction (SOW )</button>
+                    <a  href="{{ url('/estimatedscopeofworks/'.$url_id) }}" class = "btn btn-outline-success btn-sm"  align = "right"><i class = "fa fa-file"></i>&nbsp; Generate Report</a>
+                    <a  href="{{ url('/materialreport/'.$url_id) }}" class = "btn btn-outline-success btn-sm"  align = "right"><i class = "fa fa-file"></i>&nbsp; Generate Material Report</a>
+                    <a  href="{{ url('/equipmentreport/'.$url_id) }}" class = "btn btn-outline-success btn-sm"  align = "right"><i class = "fa fa-building"></i>&nbsp; Generate Equipment Report</a>
+                    <a  href="{{ url('/laborreport/'.$url_id) }}" class = "btn btn-outline-success btn-sm"  align = "right"><i class = "fa fa-user"></i>&nbsp; Generate Labor Report</a>
+                    <a  href="{{ url('/constructiontypes') }}" class = "btn btn-outline-primary btn-sm"  align = "right"><i class = "fa fa-arrow-left"></i>&nbsp; Back</a>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search">
                   </div>
                 </div>

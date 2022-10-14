@@ -322,7 +322,6 @@
 </script>
 <script type = "text/javascript">
 
- $(document).ready(function(){
     show_allData();
     $.ajaxSetup({
       headers: {
@@ -415,26 +414,18 @@
 
             var status = "<span class = 'badge badge-warning'>Still process</span>";
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
-            
+            var date = new Date(data[i].created_at);
             html += "<tr style = 'text-align:center'>";
             html += "<td class='mailbox-name'><b>"+toTitleCase(data[i].construction_type.toLowerCase())+"</b></td>";
             html += "<td>"+urgentstatus+"</td>";
             html += "<td>"+status+"</td>";
             html += "<td style = 'color: blue'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
-            html += "<td >"+jQuery.timeago(data[i].created_at)+"</td>";
+            html += "<td >"+jQuery.timeago(date)+"</td>";
             html += '<td align = "center" > '+
                         '<a class = " info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
                         '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-link"></i> Report</a> '+ 
                         '<a style  ="color:red"  href = "/constructionsbyID/'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Estimation</a>'+ 
-                        // '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
-                        // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
                      '</td>';
-            // html += '<td align = "center"> '+
-            //             // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
-            //             // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
-            //             // '<a class = "btn btn-sm btn-outline-danger remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> </a>'+ 
-            //             // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
-            //          '</td>';
             html += "</tr>";
           }
           $("#tbody_constructiontypes").html(html);
@@ -594,7 +585,6 @@
         }
       });
     });
-  })
 </script>
 </body>
 </html>

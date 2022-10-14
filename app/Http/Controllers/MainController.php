@@ -1142,11 +1142,132 @@ class MainController extends Controller
         dd($data);
         // return redirect()->back()->with('constructions', $data);
     }
+    public function estimatedscopeofworks($jobrequest_id)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                                    from users, departments, designated_offices
+                                    where departments.id = users.department_id
+                                    and designated_offices.id = users.designated_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                            from construction_types
+                                            where status = 0');
+            $data = [
+                    'userinfo' => $userinfo, 
+                    'no_ofapproved'=> $no_ofapproved, 
+                    'no_ofunapproved'=>$no_ofunapproved
+                    ];
+            return view('estimatedscopeofworks', $data);
+        }
+       return redirect('/')->with('fail', 'You must be logged in!');
+    }
+    public function materialreport($jobrequest_id)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                                    from users, departments, designated_offices
+                                    where departments.id = users.department_id
+                                    and designated_offices.id = users.designated_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                            from construction_types
+                                            where status = 0');
+            
+            $total_emc = DB::select('SELECT sum(estimated_material_costs.amount) as emc_total
+                                    FROM estimated_material_costs, constructions
+                                    WHERE constructions.id = estimated_material_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+            $total_eer = DB::select('SELECT sum(estimated_equipment_rental_costs.amount) as eer_total
+                                    FROM estimated_equipment_rental_costs, constructions
+                                    WHERE constructions.id = estimated_equipment_rental_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+            
+            $total_elc = DB::select('SELECT sum(estimated_labor_costs.amount) as elc_total
+                                    FROM estimated_labor_costs, constructions
+                                    WHERE constructions.id = estimated_labor_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+
+            $scopeofworks = Construction::where('constructiontype_id', '=', $jobrequest_id)->get();
+            
+            $total_projectcost = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
+            
+            $data = [
+                    'userinfo' => $userinfo, 
+                    'no_ofapproved'=> $no_ofapproved, 
+                    'no_ofunapproved'=>$no_ofunapproved,
+                    'total_emc'=>$total_emc,
+                    'total_eer'=>$total_eer,
+                    'total_elc'=>$total_elc,
+                    'total_projectcost'=>$total_projectcost,
+                    'scopeofworks' => $scopeofworks,
+                    'jobrequestdetails' => ConstructionTypes::find($jobrequest_id) 
+                    ];
+            return view('materialreport', $data);
+        }
+       return redirect('/')->with('fail', 'You must be logged in!');
+    }
+    public function equipmentreport($jobrequest_id)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                                    from users, departments, designated_offices
+                                    where departments.id = users.department_id
+                                    and designated_offices.id = users.designated_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                            from construction_types
+                                            where status = 0');
+            $data = [
+                    'userinfo' => $userinfo, 
+                    'no_ofapproved'=> $no_ofapproved, 
+                    'no_ofunapproved'=>$no_ofunapproved
+                    ];
+            return view('equipmentreport', $data);
+        }
+       return redirect('/')->with('fail', 'You must be logged in!');
+    }
+    public function laborreport($jobrequest_id)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+                                    from users, departments, designated_offices
+                                    where departments.id = users.department_id
+                                    and designated_offices.id = users.designated_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                            from construction_types
+                                            where status = 0');
+            $data = [
+                    'userinfo' => $userinfo, 
+                    'no_ofapproved'=> $no_ofapproved, 
+                    'no_ofunapproved'=>$no_ofunapproved
+                    ];
+            return view('laborreport', $data);
+        }
+       return redirect('/')->with('fail', 'You must be logged in!');
+    }
     public function jobrequests_report()
     {
         if(!empty(session('LoggedUser')))
         {
-            $userInfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
+            $userinfo = DB::select('select users.id as user_id, users.*, departments.*, designated_offices.*
                                     from users, departments, designated_offices
                                     where departments.id = users.department_id
                                     and designated_offices.id = users.designated_id

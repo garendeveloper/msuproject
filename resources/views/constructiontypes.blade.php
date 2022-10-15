@@ -414,13 +414,14 @@
 
             var status = "<span class = 'badge badge-warning'>Still process</span>";
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
-            var date = new Date(data[i].created_at);
+            // var date = new Date(data[i].created_at);
             html += "<tr style = 'text-align:center'>";
             html += "<td class='mailbox-name'><b>"+toTitleCase(data[i].construction_type.toLowerCase())+"</b></td>";
             html += "<td>"+urgentstatus+"</td>";
             html += "<td>"+status+"</td>";
             html += "<td style = 'color: blue'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
-            html += "<td >"+jQuery.timeago(date)+"</td>";
+            // html += "<td >"+jQuery.timeago(date)+"</td>";
+            html += "<td >"+data[i].dateRequested+"</td>";
             html += '<td align = "center" > '+
                         '<a class = " info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
                         '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-link"></i> Report</a> '+ 
@@ -459,7 +460,7 @@
                   '</tr>';
            user += '<tr>'+
                     '<th>Date Requested</th>'+
-                    '<td>'+jQuery.timeago(data.user[0].dateRequested)+'</td>'+
+                    '<td>'+data.user[0].dateRequested+'</td>'+
                   '</tr>';
           if(data.user[0].status == 1)
           {

@@ -43,6 +43,7 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h4>Job Request Estimated Summary</h4>
+            <a href="{{ url('/constructionsbyID/'.$jobrequestdetails->id) }}" class = "btn btn-primary"><i class = "fa fa-arrow-left"></i></a>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -62,7 +63,6 @@
               <h5><i class="fas fa-info"></i> Note:</h5>
               This page has been enhanced for printing. Press Control + P to print the job request report.
             </div>
-
 
             <!-- Main content -->
             <div class="invoice p-3 mb-3">
@@ -115,7 +115,7 @@
                 <!-- /.col -->
                 <div class="col-sm-8 invoice-col">
                     : <b>{{ $jobrequestdetails->construction_type}} </b> <br> <br>
-                    : {{ $jobrequestdetails->created_at }} <br> 
+                    : {{ date('dS F Y', strtotime($jobrequestdetails->created_at)) }} <br> 
                 </div>
                 <!-- /.col -->
               </div>

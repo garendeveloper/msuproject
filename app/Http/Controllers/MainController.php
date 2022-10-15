@@ -134,8 +134,65 @@ class MainController extends Controller
             'status' => 0
         ];
 
+        $jobrequests = array();
+ 
+        foreach($user as $d)
+        {
+            $date = $d->dateRequested;
+            $is_valid = FALSE;
+
+            if (date('Y-m-d H:i:s', strtotime($date)) == $date) 
+            {
+                $is_valid = TRUE;
+            } 
+            else 
+            {
+                $is_valid =  FALSE;
+            }
+            if ($is_valid) 
+            {
+                $timestamp = strtotime($date);
+                $difference = time() - $timestamp;
+                $periods = array("sec", "min", "hour", "day", "week", "month", "year", "decade");
+                $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
+        
+                if ($difference > 0) { // this was in the past time
+                    $ending = "ago";
+                } else { // this was in the future time
+                    $difference = -$difference;
+                    $ending = "to go";
+                }
+                
+                for ($j = 0; $difference >= $lengths[$j]; $j++)
+                    $difference /= $lengths[$j];
+                
+                $difference = round($difference);
+                
+                if ($difference > 1)
+                    $periods[$j].= "s";
+                
+                $text = "$difference $periods[$j] $ending";
+
+                $date = $text;
+            } 
+            else 
+            {
+                $date = 'Date Time must be in "yyyy-mm-dd hh:mm:ss" format';
+            }
+
+            $jobrequests[] = [
+                'designation' => $d->designation,
+                'urgentstatus' => $d->urgentstatus,
+                'status' => $d->status,
+                'departmentname' => $d->departmentname,
+                'construction_type' => $d->construction_type,
+                'name' => $d->name,
+                'dateRequested' => $date
+            ];
+        }
+
         $data = [
-            'user' => $user,
+            'user' => $jobrequests,
             'scheduling_info' => $scheduling_info
         ];
         echo json_encode($data);
@@ -318,15 +375,67 @@ class MainController extends Controller
             }
         }
     }
-    //THIS IS THE ALGORITHM FOR FIFO
-    public function get_allconstructiontypes()
-    {
-        $data = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name  
-                            FROM CONSTRUCTION_TYPES, users 
-                            WHERE users.id = construction_types.user_id 
-                            ORDER BY construction_types.urgentstatus = 1 DESC");
-        echo json_encode($data);
-    }
+   
+
+     //THIS IS THE ALGORITHM FOR FIFO
+     public function get_allconstructiontypes()
+     {
+         $data = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name  
+                             FROM CONSTRUCTION_TYPES, users 
+                             WHERE users.id = construction_types.user_id 
+                             ORDER BY construction_types.urgentstatus = 1 DESC");
+         
+         $jobrequests = array();
+ 
+         foreach($data as $d)
+         {
+            $date = $d->created_at;
+            $is_valid = FALSE;
+            if (date('Y-m-d H:i:s', strtotime($date)) == $date) {
+                $is_valid = TRUE;
+            } else {
+                $is_valid =  FALSE;
+            }
+            if ($is_valid) {
+                $timestamp = strtotime($date);
+                $difference = time() - $timestamp;
+                $periods = array("sec", "min", "hour", "day", "week", "month", "year", "decade");
+                $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
+        
+                if ($difference > 0) { // this was in the past time
+                    $ending = "ago";
+                } else { // this was in the future time
+                    $difference = -$difference;
+                    $ending = "to go";
+                }
+                
+                for ($j = 0; $difference >= $lengths[$j]; $j++)
+                    $difference /= $lengths[$j];
+                
+                $difference = round($difference);
+                
+                if ($difference > 1)
+                    $periods[$j].= "s";
+                
+                $text = "$difference $periods[$j] $ending";
+                
+                $date = $text;
+            } else {
+                $date = 'Date Time must be in "yyyy-mm-dd hh:mm:ss" format';
+            }
+
+             $jobrequests[] = [
+                 'id' => $d->id,
+                 'urgentstatus' => $d->urgentstatus,
+                 'status' => $d->status,
+                 'construction_type' => $d->construction_type,
+                 'name' => $d->name,
+                 'dateRequested' => $date
+             ];
+         }
+         echo json_encode($jobrequests);
+     }
+
     public function get_allconstructiontypesById()
     {
         $user_id = session('LoggedUser');
@@ -1230,11 +1339,34 @@ class MainController extends Controller
             $no_ofunapproved = DB::select('select count(*) as total_unapproved
                                             from construction_types
                                             where status = 0');
+            $total_emc = DB::select('SELECT sum(estimated_material_costs.amount) as emc_total
+                                    FROM estimated_material_costs, constructions
+                                    WHERE constructions.id = estimated_material_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+            $total_eer = DB::select('SELECT sum(estimated_equipment_rental_costs.amount) as eer_total
+                                    FROM estimated_equipment_rental_costs, constructions
+                                    WHERE constructions.id = estimated_equipment_rental_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+            
+            $total_elc = DB::select('SELECT sum(estimated_labor_costs.amount) as elc_total
+                                    FROM estimated_labor_costs, constructions
+                                    WHERE constructions.id = estimated_labor_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+
+            $scopeofworks = Construction::where('constructiontype_id', '=', $jobrequest_id)->get();
+            
+            $total_projectcost = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
             $data = [
                     'userinfo' => $userinfo, 
                     'no_ofapproved'=> $no_ofapproved, 
-                    'no_ofunapproved'=>$no_ofunapproved
-                    ];
+                    'no_ofunapproved'=>$no_ofunapproved,
+                    'total_emc'=>$total_emc,
+                    'total_eer'=>$total_eer,
+                    'total_elc'=>$total_elc,
+                    'total_projectcost'=>$total_projectcost,
+                    'scopeofworks' => $scopeofworks,
+                    'jobrequestdetails' => ConstructionTypes::find($jobrequest_id) 
+                ];
             return view('equipmentreport', $data);
         }
        return redirect('/')->with('fail', 'You must be logged in!');
@@ -1254,11 +1386,34 @@ class MainController extends Controller
             $no_ofunapproved = DB::select('select count(*) as total_unapproved
                                             from construction_types
                                             where status = 0');
+                                            $total_emc = DB::select('SELECT sum(estimated_material_costs.amount) as emc_total
+                                            FROM estimated_material_costs, constructions
+                                            WHERE constructions.id = estimated_material_costs.construction_id
+                                            AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+            $total_eer = DB::select('SELECT sum(estimated_equipment_rental_costs.amount) as eer_total
+                                    FROM estimated_equipment_rental_costs, constructions
+                                    WHERE constructions.id = estimated_equipment_rental_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+            
+            $total_elc = DB::select('SELECT sum(estimated_labor_costs.amount) as elc_total
+                                    FROM estimated_labor_costs, constructions
+                                    WHERE constructions.id = estimated_labor_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+
+            $scopeofworks = Construction::where('constructiontype_id', '=', $jobrequest_id)->get();
+            
+            $total_projectcost = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
             $data = [
                     'userinfo' => $userinfo, 
                     'no_ofapproved'=> $no_ofapproved, 
-                    'no_ofunapproved'=>$no_ofunapproved
-                    ];
+                    'no_ofunapproved'=>$no_ofunapproved,
+                    'total_emc'=>$total_emc,
+                    'total_eer'=>$total_eer,
+                    'total_elc'=>$total_elc,
+                    'total_projectcost'=>$total_projectcost,
+                    'scopeofworks' => $scopeofworks,
+                    'jobrequestdetails' => ConstructionTypes::find($jobrequest_id) 
+                ];
             return view('laborreport', $data);
         }
        return redirect('/')->with('fail', 'You must be logged in!');

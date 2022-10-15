@@ -2,16 +2,24 @@
 <html lang="en">
 <head>
   @include('scripts/header')
+  <style>
+    table, th, td{
+      border: 1px solid black;
+      border-collapse: collapse;
+      
+    }
+    table{
+      width: 100%;
+    }
+    th, td {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+  </style>
 </head>
-<!--
-`body` tag options:
 
-  Apply one or more of the following classes to to the body tag
-  to get the desired effect
-
-  * sidebar-collapse
-  * sidebar-mini
--->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
    <!-- Preloader -->
@@ -33,13 +41,14 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Job Request Form</h1>
+          <div class="col-sm-8">
+            <h4>Job Request Estimated Equipment Rental Cost Summary</h4>
+            <a href="{{ url('/constructionsbyID/'.$jobrequestdetails->id) }}" class = "btn btn-primary"><i class = "fa fa-arrow-left"></i></a>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Invoice</li>
+              <li class="breadcrumb-item active">Report</li>
             </ol>
           </div>
         </div>
@@ -66,19 +75,21 @@
               </div>
               <!-- info row -->
               <div class="row invoice-info">
-                <div class="col-sm-4 invoice-col">
+                <div class="col-sm-1 invoice-col">
+                
+                </div>
+                <div class="col-sm-3 invoice-col">
                   <address>
-                  <img src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" style = "width: 120px; height: 120px;" class="brand-image img-circle elevation-2" alt="User Image">
+                    <img src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" style = "width: 100px; height: 100px;" class="brand-image img-circle elevation-2" alt="User Image">
                   </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
                   <center>
                     Republic of the Philippines <br>
-                    <strong>Mindanao Sate University at Naawan</strong><br>
+                    <strong style = "font-size: 16px">Mindanao Sate University</strong><br>
+                    <strong style = "font-size: 13px">NAAWAN CAMPUS</strong><br>
                     9023 Naawan, Misamis Oriental<br><br>
-
-                    <p>JOB REQUEST</p>
 
                   </center>
                 </div>
@@ -90,245 +101,121 @@
               </div>
               <!-- /.row -->
               <div class="row invoice-info">
-                <div class="col-sm-10 invoice-col">
-                    <address>
-                        Note: Every request for construction, repair, or improvement of building to be undertaken 
-                        must be accomplished by this JOB REQUEST to be accomplished in triplicate <br>
-                    </address>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-2 invoice-col">
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-2 invoice-col">
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-              <div class="row invoice-info" style = "border-top: 2px solid black">
-                <div class="col-sm-12 invoice-col">
-                    <address>
-                        Description of Construction/Repair/Improvement to be undertaken:
-                    </address>
-                </div>
-                <!-- /.col -->
                 <div class="col-sm-1 invoice-col">
+                   
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-11 invoice-col">
-                <b>Repair & Improvement of Campus Infirmary Phase -2 </b> 
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
+                <div class="col-sm-3 invoice-col">
+                    <address>
+                       Project <br> <br>
+                       Date <br> <br> <br> 
 
-              <div class="row invoice-info">
-                <div class="col-sm-1 invoice-col">
-                    <address>
-                        I. <br>
-                    </address>
+                       <strong>PROJECT COST SUMMARY</strong> <br> 
+                    </address>  
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-8 invoice-col">
-                    Requested by: <br>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 invoice-col" >
-                    <center>
-                        <b>ENGR. WENNIE P. ASEQUIA</b><br>
-                        Chief, Physical Plant
-                    </center>
+                    : <b>{{ $jobrequestdetails->construction_type}} </b> <br> <br>
+                    : {{ date('dS F Y', strtotime($jobrequestdetails->created_at)) }} <br> 
                 </div>
                 <!-- /.col -->
               </div>
               <!-- /.row -->
-              <div class="row invoice-info" style = "border-top: 2px solid black">
+              <div class="row invoice-info" >
                 <div class="col-sm-1 invoice-col">
-                    <address>
-                        II. <br>
-                    </address>
+              
                 </div>
-                <!-- /.col -->
-                <div class="col-sm-4 invoice-col" >
-                    Noted and referred by: <br>
+                <div class="col-sm-10 invoice-col">
+                  <table class = "" >
+                      <thead>
+                        <tr >
+                          <th style = "text-align: center">Description</th>
+                          <th style = "text-align: center">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>I: Estimated Material Cost</td>
+                          <td align = "right">{{ number_format($total_emc[0]->emc_total,2) }}</td>
+                        </tr>
+                        <tr>
+                          <td>II: Estimated Labor Cost</td>
+                          <td align = "right">{{ number_format($total_eer[0]->eer_total,2) }}</td>
+                        </tr>
+                        <tr>
+                          <td>III: Estimated Rental</td>
+                          <td align = "right">{{ number_format($total_elc[0]->elc_total,2) }}</td>
+                        </tr>
+                        <tr>
+                          <td align = "center"><b>Total Project Cost</b></td>
+                          <td align = "right"><b>{{ number_format($total_projectcost,2) }}</b></td>
+                        </tr>
+                      </tbody>
+                  </table>
                 </div>
-                <!-- /.col -->
-                <div class="col-sm-4 invoice-col" >
-                    <address>
-                        Referred to:  <br>
-                        <input type="checkbox"><br>
-                        <input type="checkbox"> <br>
-                        <input type="checkbox"><br>
-
-                    </address>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 invoice-col" >
-                    <center>
-                        The University Engineer <br>
-                        Project Engineer <br>
-                        Project Consultant <br>
-                    </center>
-                </div>
-                <!-- /.col -->
-             
-              </div>
-              <!-- /.row -->
-
-              <div class="row invoice-info" style = "border-top: 2px solid black"> 
-                <div class="col-sm-4 invoice-col">
-                    <address>
-                        FOR. <br>
-                        <input type="checkbox"> Comments <br>
-                    </address>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
-                    <address>
-                        <br>
-                        <input type="checkbox"> Recommendations<br>
-                    </address>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
-                    <address>
-                        <br>
-                        <input type="checkbox"> Preparation of Cost Estimates<br>
-                    </address>
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-
-              <div class="row invoice-info" style = "border-top: 2px solid black">
-                <div class="col-sm-12 invoice-col">
-                    <center>
-                        COST ESTIMATES OF REQUEST <br>
-                    </center>
-                </div>
-              </div>
-              <!-- /.row -->
-              <div class="row">
-                <div class="col-12 table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ITEM</th>
-                                <th>SCOPE OF WORK</th>
-                                <th>%</th>
-                                <th>LABOR</th>
-                                <th>EQUIPMENT</th>
-                                <th>MATERIAL</th>
-                                <th>TOTAL</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div class="col-sm-12 invoice-col">
-                   <address>Remarks:</address>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
-                   <address>III. </address>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
-                   <address>ESTIMATES JOINTLY CHECKS AND SUBMITTED BY: </address>
-                </div>
-                <!-- /.col -->
-               </div>
-
-               
-              <div class="row invoice-info"> 
+              </div> <br>
+              <div class="row invoice-info">
                 <div class="col-sm-1 invoice-col">
-                    <address>
-                        
-                    </address>
+
                 </div>
-                <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
-                    <address>
-                        <br>
-                        <B>MC KENNETH P. TANECA</B><BR>
-                        Const. & Maintainance Foreman <br>
-                        Date: October 21, 2021 <br>
-                    </address>
+                <div class="col-sm-11 invoice-col">
+                  <b>Estimated Equipment Rental Cost</b> <br>
                 </div>
-                <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
-                    <address>
-                        <br>
-                        <B>ENGR. JOSE VINCENT T. PADIN</B><BR>
-                        Engineer I <br>
-                        Date: October 21, 2021 <br>
-                    </address>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 invoice-col" >
-                    <address>
-                        <br>
-                        <B>ENGR. WENNIE P. ASEQUIA</B><BR>
-                        Chief, Physical Plant <br>
-                        Date: October 21, 2021 <br>
-                    </address>
-                </div>
-                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
-                    <address>
-                        IV. 
-                    </address>
-                </div>
-                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
-                    <address>
-                        Cost Chargeable Against Item No. <br>
-                    </address>
-                </div>
-                <div class="col-sm-12 invoice-col">
-                   <address>
-                    Remarks:
-                </address>
-                </div>
+              </div> 
+              <br>
+              @foreach($scopeofworks as $sow)
+              <?php
+                $sow_id = $sow->id;
+                $jobrequest_id = $sow->constructiontype_id;
+
+                $items = DB::select('select estimated_equipment_rental_costs.*
+                                    from constructions, estimated_equipment_rental_costs
+                                    where constructions.id = estimated_equipment_rental_costs.construction_id
+                                    and constructions.id = "'.$sow_id.'"');
                 
-                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
-                    <address>
-                        V. 
-                    </address>
+              ?>
+              <div class="row invoice-info">
+                <div class="col-sm-1 invoice-col">
+                  
                 </div>
-                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
-                    <address>
-                       Recommending Approval: <br>
-                    </address>
+                <div class="col-sm-10 invoice-col">
+                  B: {{ $sow->construction_name }} <br>
+                  <table>
+                    <thead>
+                      <tr style = "text-align: center">
+                        <th>Equipments</th>
+                        <th>No.</th>
+                        <th>No. of Days</th>
+                        <th>Total Days</th>
+                        <th>Rate/Day</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php $total = 0;?>
+                      @foreach($items as $item)
+                        <tr>
+                          <td>{{ $item->equipment }}</td>
+                          <td align = "center">{{ $item->no_ofpersons }}</td>
+                          <td align = "center">{{ $item->no_ofheaddays }}</td>
+                          <td align = "center">{{ $item->no_mandays }}</td>
+                          <td align = "center">{{ number_format($item->daily_rate, 2) }}</td>
+                          <td align = "right">{{ number_format($item->amount, 2) }}</td>
+                        </tr>
+                        <?php $total += $item->amount ?>
+                        @endforeach
+                          <tr>
+                            <td><b>Rental:</b></td>
+                            <td colspan = "4"></td>
+                            <td  align = "right"><b> {{ number_format($total,2) }} </b> </td>
+                          </tr>
+                    </tbody>
+                  </table>
                 </div>
-
-                <div class="col-sm-2 invoice-col" >
-                    <address>
-                    </address>
-                </div>
-                <div class="col-sm-5 invoice-col">
-                    <address>
-                        <br>
-                        <B>RHODA P. ABARY, CPA</B><BR>
-                        Vice Chancellor for Administration & Finance<br>
-                        Date: October 21, 2021 <br>
-                    </address>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-5 invoice-col" >
-                    <address>
-                        <br>
-                        <B>ELNOR C. ROA, PH.D.</B><BR>
-                        Chancellor<br>
-                        Date: October 21, 2021 <br>
-                    </address>
-                </div>
-              </div>
-               
-              <!-- /.row -->
-
+              </div> <br>
+              @endforeach
               <!-- this row will not appear when printing -->
               <div class="row no-print">
-                <!-- <div class="col-12">
-                  <a href="{{url('/jobrequests_report')}}" rel="noopener" target="_blank" class="btn btn-block btn-flat  btn-outline-primary"><i class="fas fa-print"></i> Print</a>
-                </div> -->
               </div>
             </div>
             <!-- /.invoice -->
@@ -340,7 +227,7 @@
   </div>
   <!-- /.content-wrapper -->
     <!-- Main Footer -->
-    @include('templates/footer')
+
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
@@ -357,42 +244,4 @@
 @include('scripts/footer')
 
 </body>
-<script>
-  $(function () {
-    show_allJobRequests();
-
-    $("#tbl_jobrequests").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#tbl_jobrequests_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-    $('.select2').select2();
-    function show_allJobRequests()
-    {
-        $.ajax({
-            type: 'get',
-            url: '/get_allconstructiontypes',
-            dataType: 'json',
-            success: function(data)
-            {
-                var option = "";
-                option += '<option> -- Select Here --</option>'
-                for(var i = 0; i<data.length; i++)
-                {
-                option += '<option value = '+data[i].id+'>'+data[i].construction_type+'</option>';
-                }
-                $("#construction_types").html(option);
-            }
-        })
-    }
-  });
-</script>
 </html>

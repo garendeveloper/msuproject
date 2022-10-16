@@ -67,7 +67,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id = "tbl_approvedjr" class="table table-bordered table-striped data-table" style = "font-size: 12px ">
+                <table id = "tbl_approvedjr" class="table  data-table" style = "font-size: 12px; ">
                   <thead style = "background-color: #1C518A; color: white;">
                     <tr>
                         <th>Job Request</th>

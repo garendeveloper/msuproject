@@ -1266,10 +1266,39 @@ class MainController extends Controller
             $no_ofunapproved = DB::select('select count(*) as total_unapproved
                                             from construction_types
                                             where status = 0');
+            $total_emc = DB::select('SELECT sum(estimated_material_costs.amount) as emc_total
+                                    FROM estimated_material_costs, constructions
+                                    WHERE constructions.id = estimated_material_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+            $total_eer = DB::select('SELECT sum(estimated_equipment_rental_costs.amount) as eer_total
+                                    FROM estimated_equipment_rental_costs, constructions
+                                    WHERE constructions.id = estimated_equipment_rental_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+            
+            $total_elc = DB::select('SELECT sum(estimated_labor_costs.amount) as elc_total
+                                    FROM estimated_labor_costs, constructions
+                                    WHERE constructions.id = estimated_labor_costs.construction_id
+                                    AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
+
+            $scopeofworks = Construction::where('constructiontype_id', '=', $jobrequest_id)->get();
+           
+            $total_projectcost = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
+            $scopeofworksEstimated = DB::select('SELECT constructions.*
+                                                FROM constructions
+                                                WHERE constructions.id 
+                                                IN (SELECT estimated_labor_costs.construction_id FROM estimated_labor_costs)
+                                                AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
             $data = [
                     'userinfo' => $userinfo, 
                     'no_ofapproved'=> $no_ofapproved, 
-                    'no_ofunapproved'=>$no_ofunapproved
+                    'no_ofunapproved'=>$no_ofunapproved,
+                    'total_emc'=>$total_emc,
+                    'total_eer'=>$total_eer,
+                    'total_elc'=>$total_elc,
+                    'total_projectcost'=>$total_projectcost,
+                    'scopeofworks' => $scopeofworks,
+                    'scopeofworksEstimated' => $scopeofworksEstimated,
+                    'jobrequestdetails' => ConstructionTypes::find($jobrequest_id) 
                     ];
             return view('estimatedscopeofworks', $data);
         }
@@ -1308,7 +1337,11 @@ class MainController extends Controller
             $scopeofworks = Construction::where('constructiontype_id', '=', $jobrequest_id)->get();
             
             $total_projectcost = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
-            
+            $scopeofworksEstimated = DB::select('SELECT constructions.*
+                                                FROM constructions
+                                                WHERE constructions.id 
+                                                IN (SELECT estimated_material_costs.construction_id FROM estimated_material_costs)
+                                                AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
             $data = [
                     'userinfo' => $userinfo, 
                     'no_ofapproved'=> $no_ofapproved, 
@@ -1318,6 +1351,7 @@ class MainController extends Controller
                     'total_elc'=>$total_elc,
                     'total_projectcost'=>$total_projectcost,
                     'scopeofworks' => $scopeofworks,
+                    'scopeofworksEstimated' => $scopeofworksEstimated,
                     'jobrequestdetails' => ConstructionTypes::find($jobrequest_id) 
                     ];
             return view('materialreport', $data);
@@ -1354,7 +1388,11 @@ class MainController extends Controller
                                     AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
 
             $scopeofworks = Construction::where('constructiontype_id', '=', $jobrequest_id)->get();
-            
+            $scopeofworksEstimated = DB::select('SELECT constructions.*
+                                                FROM constructions
+                                                WHERE constructions.id 
+                                                IN (SELECT estimated_equipment_rental_costs.construction_id FROM estimated_equipment_rental_costs)
+                                                AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
             $total_projectcost = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
             $data = [
                     'userinfo' => $userinfo, 
@@ -1365,6 +1403,7 @@ class MainController extends Controller
                     'total_elc'=>$total_elc,
                     'total_projectcost'=>$total_projectcost,
                     'scopeofworks' => $scopeofworks,
+                    'scopeofworksEstimated' => $scopeofworksEstimated,
                     'jobrequestdetails' => ConstructionTypes::find($jobrequest_id) 
                 ];
             return view('equipmentreport', $data);
@@ -1401,7 +1440,11 @@ class MainController extends Controller
                                     AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
 
             $scopeofworks = Construction::where('constructiontype_id', '=', $jobrequest_id)->get();
-            
+            $scopeofworksEstimated = DB::select('SELECT constructions.*
+                                                FROM constructions
+                                                WHERE constructions.id 
+                                                IN (SELECT estimated_labor_costs.construction_id FROM estimated_labor_costs)
+                                                AND constructions.constructiontype_id = "'.$jobrequest_id.'"');
             $total_projectcost = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
             $data = [
                     'userinfo' => $userinfo, 
@@ -1412,6 +1455,7 @@ class MainController extends Controller
                     'total_elc'=>$total_elc,
                     'total_projectcost'=>$total_projectcost,
                     'scopeofworks' => $scopeofworks,
+                    'scopeofworksEstimated' => $scopeofworksEstimated,
                     'jobrequestdetails' => ConstructionTypes::find($jobrequest_id) 
                 ];
             return view('laborreport', $data);

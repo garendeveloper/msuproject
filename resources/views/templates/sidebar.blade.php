@@ -62,7 +62,7 @@
               <p>Scheduling</p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>
@@ -77,14 +77,8 @@
                   <p>Job Requests</p>
                 </a>
               </li>
-              <!-- <li class="nav-item">
-                <a href="{{ url('/manpowers')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Manpowers</p>
-                </a>
-              </li> -->
             </ul>
-          </li>
+          </li> -->
           @endif
           @if($userinfo[0]->departmentname == "FINANCIAL DIVISION")
             <li class="nav-item">
@@ -110,7 +104,7 @@
           @endif
          
           <li class="nav-item">
-            <a href="{{ url('/logout') }}" class="nav-link">
+            <a  href="{{ url('/logout') }}" class="nav-link">
               <i class="nav-icon fas fa-arrow-right"></i>
               <p>Logout</p>
             </a>
@@ -126,4 +120,3 @@
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
   </aside>
-

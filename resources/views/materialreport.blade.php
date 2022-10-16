@@ -162,7 +162,11 @@
                 </div>
               </div> 
               <br>
-              @foreach($scopeofworks as $sow)
+              <?php 
+              $i = 0;
+              $char = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+              ?>
+              @foreach($scopeofworksEstimated as $sow)
               <?php
                 $sow_id = $sow->id;
                 $jobrequest_id = $sow->constructiontype_id;
@@ -171,14 +175,14 @@
                                     from constructions, estimated_material_costs
                                     where constructions.id = estimated_material_costs.construction_id
                                     and constructions.id = "'.$sow_id.'"');
-                
+               
               ?>
               <div class="row invoice-info">
                 <div class="col-sm-1 invoice-col">
                   
                 </div>
                 <div class="col-sm-10 invoice-col">
-                  B: {{ $sow->construction_name }} <br>
+                 {{$char[$i].". ". strtoupper($sow->construction_name) }} <br>
 
                   <table>
                     <thead>
@@ -211,6 +215,7 @@
                   </table>
                 </div>
               </div> <br>
+              <?php $i++;?>
               @endforeach
               <!-- this row will not appear when printing -->
               <div class="row no-print">

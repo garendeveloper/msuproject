@@ -56,7 +56,7 @@
     @endif
     <div class="card-body">
       <!--<h5 style = "text-align: center">ScheManajr System</h5>-->
-      <img src="adminlte3/dist/img/manajr.png" style="display:block; margin: 10px; margin-left: auto; margin-right: auto; height: 40px">
+      <img src="adminlte3/dist/img/manajr.png" style="display:block; margin: 10px; margin-left: auto; margin-right: auto; height: 30px">
       <p class="login-box-msg">Sign in to start your session</p>
       <form action="{{ url('/loginuser') }}" method="post">
         @csrf
@@ -86,12 +86,12 @@
             <span style = "color: red">{{$errors->first('password')}}</span>
           @endif
         <div class="row">
-          <div class="col-6">
+          <div class="col-12">
             <button type="submit" class="btn btn-sm btn-outline-primary btn-block"><i class = "fas fa-sign-up"></i> Sign In</button>
           </div>
-          <div class="col-6">
+          <!-- <div class="col-6">
             <a href="{{ url('/registration') }}"  class = "btn btn-sm btn-outline-success btn-block"><i class = "fas fa-register"></i> Sign Up</a>
-          </div>
+          </div> -->
           <!-- /.col -->
         </div>
       </form>

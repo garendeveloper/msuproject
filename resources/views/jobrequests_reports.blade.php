@@ -2,16 +2,24 @@
 <html lang="en">
 <head>
   @include('scripts/header')
+  <style>
+    table, th, td{
+      border: 1px solid black;
+      border-collapse: collapse;
+      
+    }
+    table{
+      width: 100%;
+    }
+    th, td {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+  </style>
 </head>
-<!--
-`body` tag options:
 
-  Apply one or more of the following classes to to the body tag
-  to get the desired effect
-
-  * sidebar-collapse
-  * sidebar-mini
--->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
    <!-- Preloader -->
@@ -210,9 +218,9 @@
               <!-- /.row -->
               <div class="row">
                 <div class="col-12 table-responsive">
-                    <table class="table table-striped">
+                    <table class="">
                         <thead>
-                            <tr>
+                            <tr style = "text-align: center">
                                 <th>ITEM</th>
                                 <th>SCOPE OF WORK</th>
                                 <th>%</th>
@@ -238,7 +246,6 @@
                 <!-- /.col -->
                </div>
 
-               
               <div class="row invoice-info"> 
                 <div class="col-sm-1 invoice-col">
                     <address>

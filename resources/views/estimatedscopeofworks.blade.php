@@ -2,16 +2,24 @@
 <html lang="en">
 <head>
   @include('scripts/header')
+  <style>
+    table, th, td{
+      border: 1px solid black;
+      border-collapse: collapse;
+      
+    }
+    table{
+      width: 100%;
+    }
+    th, td {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+  </style>
 </head>
-<!--
-`body` tag options:
 
-  Apply one or more of the following classes to to the body tag
-  to get the desired effect
-
-  * sidebar-collapse
-  * sidebar-mini
--->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
    <!-- Preloader -->
@@ -34,7 +42,8 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Job Request Form</h1>
+            <h4>Job Request Full Summary</h4>
+            <a href="{{ url('/constructionsbyID/'.$jobrequestdetails->id) }}" class = "btn btn-primary"><i class = "fa fa-arrow-left"></i></a>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -68,7 +77,7 @@
               <div class="row invoice-info">
                 <div class="col-sm-4 invoice-col">
                   <address>
-                  <img src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" style = "width: 120px; height: 120px;" class="brand-image img-circle elevation-2" alt="User Image">
+                  <img src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" style = "width: 100px; height: 100px;" class="brand-image img-circle elevation-2" alt="MSUN Logo">
                   </address>
                 </div>
                 <!-- /.col -->
@@ -105,7 +114,7 @@
                 <!-- /.col -->
               </div>
               <!-- /.row -->
-              <div class="row invoice-info" style = "border-top: 2px solid black">
+              <div class="row invoice-info" style = "border-top: 1px solid black">
                 <div class="col-sm-12 invoice-col">
                     <address>
                         Description of Construction/Repair/Improvement to be undertaken:
@@ -135,14 +144,20 @@
                 <!-- /.col -->
                 <div class="col-sm-3 invoice-col" >
                     <center>
-                        <b>ENGR. WENNIE P. ASEQUIA</b><br>
+                        <?php 
+                          $ppuhead = DB::select('select users.name
+                                              from users, departments
+                                              where departments.id = users.department_id
+                                              and departments.departmentname = "PPU HEAD"')
+                        ?>
+                        <B>{{ strtoupper($ppuhead[0]->name) }}</B><BR>
                         Chief, Physical Plant
                     </center>
                 </div>
                 <!-- /.col -->
               </div>
               <!-- /.row -->
-              <div class="row invoice-info" style = "border-top: 2px solid black">
+              <div class="row invoice-info" style = "border-top: 1px solid black">
                 <div class="col-sm-1 invoice-col">
                     <address>
                         II. <br>
@@ -175,7 +190,7 @@
               </div>
               <!-- /.row -->
 
-              <div class="row invoice-info" style = "border-top: 2px solid black"> 
+              <div class="row invoice-info" style = "border-top: 1px solid black"> 
                 <div class="col-sm-4 invoice-col">
                     <address>
                         FOR. <br>
@@ -200,7 +215,7 @@
               </div>
               <!-- /.row -->
 
-              <div class="row invoice-info" style = "border-top: 2px solid black">
+              <div class="row invoice-info" style = "border-top: 1px solid black">
                 <div class="col-sm-12 invoice-col">
                     <center>
                         COST ESTIMATES OF REQUEST <br>
@@ -210,9 +225,9 @@
               <!-- /.row -->
               <div class="row">
                 <div class="col-12 table-responsive">
-                    <table class="table table-striped">
+                    <table class="">
                         <thead>
-                            <tr>
+                            <tr style = "text-align: center">
                                 <th>ITEM</th>
                                 <th>SCOPE OF WORK</th>
                                 <th>%</th>
@@ -222,23 +237,81 @@
                                 <th>TOTAL</th>
                             </tr>
                         </thead>
+                        <tbody>
+                          <?php 
+                            $totaleer_amount = 0;
+                            $totalelc_amount = 0;
+                            $totalemc_amount = 0;
+                            $overalltotal = 0;
+                           $i  = 0;
+                            $char = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+                          ?>
+                          @foreach($scopeofworks as $sow)
+                            <?php
+                              $sow_id = $sow->id;
+                              $jobrequest_id = $sow->constructiontype_id;
+
+                              $total_emc = DB::select('SELECT sum(estimated_material_costs.amount) as emc_total
+                                                      FROM estimated_material_costs, constructions
+                                                      WHERE constructions.id = estimated_material_costs.construction_id
+                                                      AND constructions.id = "'.$sow_id.'"');
+
+                              $total_eer = DB::select('SELECT sum(estimated_equipment_rental_costs.amount) as eer_total
+                                                      FROM estimated_equipment_rental_costs, constructions
+                                                      WHERE constructions.id = estimated_equipment_rental_costs.construction_id
+                                                      AND constructions.id = "'.$sow_id.'"'); 
+                              
+                              $total_elc = DB::select('SELECT sum(estimated_labor_costs.amount) as elc_total
+                                                      FROM estimated_labor_costs, constructions
+                                                      WHERE constructions.id = estimated_labor_costs.construction_id
+                                                      AND constructions.id = "'.$sow_id.'"');
+                              
+                              $total = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
+                              
+                              $totaleer_amount += $total_eer[0]->eer_total;
+                              $totalelc_amount += $total_elc[0]->elc_total;
+                              $totalemc_amount += $total_emc[0]->emc_total;
+                              $overalltotal += $totaleer_amount + $totalelc_amount + $totalemc_amount;
+                            ?>
+                            <tr>
+                              <td align = "center">{{ $char[$i] }} </td>
+                              <td>{{ ucwords(strtolower($sow->construction_name)) }}</td>
+                              <td></td>
+                              <td align = "right">{{ number_format($total_elc[0]->elc_total, 2) > 0 ? number_format($total_elc[0]->elc_total, 2) : " " }}</td>
+                              <td align = "right">{{ number_format($total_eer[0]->eer_total, 2) > 0 ? number_format($total_eer[0]->eer_total, 2) : " " }}</td>
+                              <td align = "right">{{ number_format($total_emc[0]->emc_total, 2) > 0 ? number_format($total_emc[0]->emc_total, 2) : " " }}</td>
+                              <td align = "right">{{ number_format($total, 2) > 0 ? number_format($total, 2) : " "}}</td>
+                            </tr>
+                          <?php $i++?>
+                          @endforeach
+                        </tbody>
+                        <tfoot>
+                          <tr >
+                            <td></td>
+                            <td style = "text-align: center"><b>TOTAL AMOUNT</b></td>
+                            <td></td>
+                            <td align = "right"><b>{{ number_format($totalelc_amount,2) }}</b></td>
+                            <td align = "right"><b>{{ number_format($totaleer_amount,2) }}</b></td>
+                            <td align = "right"><b>{{ number_format($totalemc_amount,2) }}</b></td>
+                            <td align = "right"><b>{{ number_format($overalltotal,2) }}</b></td>
+                          </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="col-sm-12 invoice-col">
                    <address>Remarks:</address>
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
+                <div class="col-sm-1 invoice-col" style = "border-top: 1px solid black">
                    <address>III. </address>
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
+                <div class="col-sm-11 invoice-col" style = "border-top: 1px solid black">
                    <address>ESTIMATES JOINTLY CHECKS AND SUBMITTED BY: </address>
                 </div>
                 <!-- /.col -->
                </div>
 
-               
               <div class="row invoice-info"> 
                 <div class="col-sm-1 invoice-col">
                     <address>
@@ -249,7 +322,13 @@
                 <div class="col-sm-4 invoice-col">
                     <address>
                         <br>
-                        <B>MC KENNETH P. TANECA</B><BR>
+                        <?php 
+                          $foreman = DB::select('select users.name
+                                              from users, construction_types
+                                              where construction_types.user_id = users.id
+                                              and construction_types.id = "'.$jobrequestdetails->id.'"')
+                        ?>
+                        <B>{{ strtoupper($foreman[0]->name)}}</B><BR>
                         Const. & Maintainance Foreman <br>
                         Date: October 21, 2021 <br>
                     </address>
@@ -267,17 +346,23 @@
                 <div class="col-sm-3 invoice-col" >
                     <address>
                         <br>
-                        <B>ENGR. WENNIE P. ASEQUIA</B><BR>
+                        <?php 
+                          $ppuhead = DB::select('select users.name
+                                              from users, departments
+                                              where departments.id = users.department_id
+                                              and departments.departmentname = "PPU HEAD"')
+                        ?>
+                        <B>{{ strtoupper($ppuhead[0]->name) }}</B><BR>
                         Chief, Physical Plant <br>
                         Date: October 21, 2021 <br>
                     </address>
                 </div>
-                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
+                <div class="col-sm-1 invoice-col" style = "border-top: 1px solid black">
                     <address>
                         IV. 
                     </address>
                 </div>
-                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
+                <div class="col-sm-11 invoice-col" style = "border-top: 1px solid black">
                     <address>
                         Cost Chargeable Against Item No. <br>
                     </address>
@@ -288,12 +373,12 @@
                 </address>
                 </div>
                 
-                <div class="col-sm-1 invoice-col" style = "border-top: 2px solid black">
+                <div class="col-sm-1 invoice-col" style = "border-top: 1px solid black">
                     <address>
                         V. 
                     </address>
                 </div>
-                <div class="col-sm-11 invoice-col" style = "border-top: 2px solid black">
+                <div class="col-sm-11 invoice-col" style = "border-top: 1px solid black">
                     <address>
                        Recommending Approval: <br>
                     </address>
@@ -357,42 +442,5 @@
 @include('scripts/footer')
 
 </body>
-<script>
-  $(function () {
-    show_allJobRequests();
 
-    $("#tbl_jobrequests").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#tbl_jobrequests_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-    $('.select2').select2();
-    function show_allJobRequests()
-    {
-        $.ajax({
-            type: 'get',
-            url: '/get_allconstructiontypes',
-            dataType: 'json',
-            success: function(data)
-            {
-                var option = "";
-                option += '<option> -- Select Here --</option>'
-                for(var i = 0; i<data.length; i++)
-                {
-                option += '<option value = '+data[i].id+'>'+data[i].construction_type+'</option>';
-                }
-                $("#construction_types").html(option);
-            }
-        })
-    }
-  });
-</script>
 </html>

@@ -102,9 +102,8 @@
               </a>
             </li>
           @endif
-         
           <li class="nav-item">
-            <a  href="{{ url('/logout') }}" class="nav-link">
+            <a id = "logout" type = "button" class="nav-link">
               <i class="nav-icon fas fa-arrow-right"></i>
               <p>Logout</p>
             </a>

@@ -32,18 +32,22 @@
   @include('templates/sidebar')
   <!-- /.control-sidebar -->
 
-   <!-- Content Wrapper. Contains page content -->
-   <div class="content-wrapper" id = "content-wrapper">
+  <div class="content-wrapper" style="min-height: 387.5px;">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h6 class="m-0">WELCOME TO!</h6>
+            
+            <div class="Schemosys" >
+             <h1>Dashboard</h> 
+              <!--<img src="adminlte3/dist/img/schemanajr.png" style="height: 50px"> -->
+            </div>
           </div><!-- /.col -->
+          <hr />
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Home</a></li> 
               <li class="breadcrumb-item active">Dashboard</li>
             </ol>
           </div><!-- /.col -->
@@ -51,33 +55,96 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
+    <div class="container-fluid">
+    <div class="row">
 
+        <!-- BOX 1-->
+         <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="card card-primary card-outline">
+              <div class="card-body">
+                
+                  @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
+                  <h1>{{ $no_ofapproved[0]->total_approved}}</h1>
+                  @endif
+
+                <p>Awaiting for Scheduling.</p>
+
+                <a href="{{ url('/scheduling') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+          </div>
+          
+        <!-- BOX 2-->
+         <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="card card-primary card-outline">
+              <div class="card-body">
+                
+                  @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
+                  <h1>{{ $no_ofapproved[0]->total_approved}}</h1>
+                  @endif
+
+                <p>With available funds.</p>
+
+                <a href="{{ url('/approvedjobrequests')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+        <!-- BOX 3-->
+         <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="card card-primary card-outline">
+              <div class="card-body">
+                
+                  @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
+                  <h1>{{ $no_ofunapproved[0]->total_unapproved}}</h1>
+                  @endif
+
+                <p>Pending for Fund Validation.</p>
+
+                <a href="{{ url('/unapprovedjobrequests')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+        <!-- BOX 4-->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="card card-primary card-outline">
+              <div class="card-body">
+                
+                  @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
+                  <h1>0</h1>
+                  @endif
+
+                <p>Accomplished Job Requests</p>
+
+                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-12" style = "text-align: center; font-family: Arial Black" >
-          <img class="animation__shake" src="adminlte3/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="120" width="120">
-            <h6 style = "">MINDANAO STATE UNIVERSITY AT NAAWAN </h6>
-            <h6>CAPSTONE PROJECT</h6> 
-            <h6>FOR SCHOOL YEAR (2022 - 2023)</h6> 
-            <br><br><br><br>
-            <h6>JOB REQUEST MONITORING & SCHEDULING SYSTEM </h6>
-            <h6><b><i>(MSUNJRSCHED SYSTEM)</i> </b> </h6> <br><br><br><br>
-
-            <address>
-              <i>PROPONENTS</i>  <b></b>
-            </address>
+          <div class="card">
+            <div class="card-body">
+            <img src="adminlte3/dist/img/image.jpg" style="float: left; margin: 15px; border-right: 2px solid #ddd" height="350" width="350"> 
+            <h5 style="margin-top: 10px">ScheManajr: A Job Request Management and Scheduling System</h5>
+            <i style="color: #767676">A Captsone Project (2022-2023)</i>
+            <p style="color: #767676">Proponents: Asok, Cañete, Bagaslao</p>
+            </div>
           </div>
-          <!-- /.col-md-6 -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
+
+      </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
+
   
   <!-- Main Footer -->
   @include('templates/footer')
@@ -86,5 +153,7 @@
 
 <!-- REQUIRED SCRIPTS -->
 @include('scripts/footer')
+
 </body>
 </html>
+

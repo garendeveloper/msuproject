@@ -29,7 +29,7 @@
                with font-awesome or any other icon font library -->
           @if($userinfo[0]->departmentname == "PPU HEAD")
           
-            <li class="nav-item" style = "border-bottom: 1px solid white" id = "dashboard" id = "dashboard">
+            <li class="nav-item"  id = "dashboard" id = "dashboard">
               <a href="{{ url('/dashboard') }}" class="nav-link" >
                 <i class="nav-icon fas fa-list-alt"></i>
                 <!-- <ion-icon name="icons/aperture-outline"></ion-icon> -->

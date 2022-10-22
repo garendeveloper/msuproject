@@ -55,10 +55,7 @@
         background-color: #1C518A;
         color: #1f2d3d;
     }
-    .nav-item{
-      border-bottom: 1px solid white
-    }
-    body{
+     body{
       min-height: 100%;
       font-size: 12px;
     }

@@ -552,6 +552,7 @@ class MainController extends Controller
             }
 
             $jobrequests[] = [
+                'id' => $d->id,
                 'construction_type' => $d->construction_type,
                 'urgentstatus' => $d->urgentstatus,
                 'status' => $d->status,

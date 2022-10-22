@@ -39,7 +39,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h5>My Job Requests</h5>
+            <h5>My Job Requestss</h5>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -299,13 +299,32 @@
             html += "<td>"+urgentstatus+"</td>";
             html += "<td >"+data[i].created_at+"</td>";
             // html += "<td>"+data[i].updated_at+"</td>";
-            html += '<td align = "center"> '+
+            if(data[i].status == 0)
+            {
+              html += '<td align = "center"> '+
                         // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
                         // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
                         '<a class = "btn btn-primary btn-sm" href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
+                  
                         '<a class = "btn btn-danger btn-sm remove" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> Remove </a>'+ 
+                        
+                        '</td>';
+          
                         // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
-                     '</td>';
+            }
+            if(data[i].status == 1)
+            {
+              html += '<td align = "center"> '+
+                        // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
+                        // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 
+                        '<a class = "btn btn-primary btn-sm" href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
+                  
+                        '<a class = "btn btn-danger btn-sm disabled" data-id = "'+data[i].id+'" ><i class = "fa fa-trash"></i> Remove </a>'+ 
+                        
+                        '</td>';
+          
+                        // '<a class = "btn btn-sm btn-outline-warning show_allconstructions" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Show Constructions</a>'+ 
+            }
             html += "</tr>";
           }
           $("#tbody_constructiontypes").html(html);

@@ -30,7 +30,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h6>Constructions (Scope of Work) && (Estimation of Cost)</h6>
+            <h6>Constructions (Scope of Work) && (Estimation of Costss)</h6>
             <input type="text" style = "display: none" id = "url_id" value = "{{ $url_id }}">
           </div>
           <div class="col-sm-6">
@@ -281,7 +281,10 @@
                   <div class="row">
                     <div class="col-md-12">
                       <label for="manpower">Equipment</label>
-                      <input type="text" id = "equipment" name = "equipment" class = "form-control" style = "text-align: right" autocomplete = "off" required>
+                      <input type="text" id = "equipment" name = "equipment" list = "opt_equipments" class = "form-control" style = "text-align: right" autocomplete = "off" required>
+                    
+                      <datalist id = "opt_equipments">
+                      </datalist>
                     </div>
 
                     <div class="col-md-2">
@@ -877,16 +880,34 @@
     {
       $.ajax({
         type: 'get',
-        url: '/get_allDepartments',
+        url: '/get_allManpowers',
         dataType: 'json',
         success: function(data)
         {
           var option = "";
           for(var i = 0; i<data.length; i++)
           {
-            option += "<option>"+data[i].departmentname+"<option>";
+            option += "<option>"+data[i].manpower+"<option>";
           }
           $("#manpowers").html(option);
+        }
+      })
+    }
+    show_allEquipment()
+    function show_allEquipment()
+    {
+      $.ajax({
+        type: 'get',
+        url: '/get_allEquipment',
+        dataType: 'json',
+        success: function(data)
+        {
+          var option = "";
+          for(var i = 0; i<data.length; i++)
+          {
+            option += "<option>"+data[i].equipment+"<option>";
+          }
+          $("#opt_equipments").html(option);
         }
       })
     }
@@ -986,7 +1007,7 @@
               // row += '<td>'+data[i].construction_id+'</td>';
               // row += '<td>'+toTitleCase(data[i].construction_type.toLowerCase())+'</td>';
               row += '<td>'+toTitleCase(data[i].construction_name.toLowerCase())+'</td>';
-              row += '<td>'+jQuery.timeago(data[i].created_at)+'</td>';
+              row += '<td>'+data[i].created_at+'</td>';
               // row += '<td>'+data[i].updated_at+'</td>';
               var id = data[i].construction_id;
               row += '<td style = "text-align:center">';

@@ -80,7 +80,7 @@
                     <th>Approval Status</th>
                     <th>Urgency Status</th>
                     <th>Date Created</th>
-                    <th>Date Updated</th>
+                    <!-- <th>Date Updated</th> -->
                     <th style = "text-align: center">Actions</th>
                   </tr>
                   </thead>
@@ -297,8 +297,8 @@
             html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+"</td>";
             html += "<td>"+status+"</td>";
             html += "<td>"+urgentstatus+"</td>";
-            html += "<td >"+jQuery.timeago(data[i].created_at)+"</td>";
-            html += "<td>"+jQuery.timeago(data[i].updated_at)+"</td>";
+            html += "<td >"+data[i].created_at+"</td>";
+            // html += "<td>"+data[i].updated_at+"</td>";
             html += '<td align = "center"> '+
                         // '<a class = "btn btn-sm btn-warning addconstruction" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-plus"></i> Scope Of Work</a>'+ 
                         // '<a class = "btn btn-sm btn-outline-primary edit" data-id = "'+data[i].id+'" ><i class = "fa fa-edit"></i> </a>'+ 

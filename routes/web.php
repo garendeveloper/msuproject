@@ -52,6 +52,8 @@ Route::post('eec_actions', [MainController::class, 'equipment_actions']);
 
 Route::get('count_allLaborers/{id}', [MainController::class, 'count_allLaborers']);
 Route::get('get_allDepartments', [MainController::class, 'get_allDepartments']);
+Route::get('get_allManpowers', [MainController::class, 'get_allManpowers']);
+Route::get('get_allEquipment', [MainController::class, 'get_allEquipment']);
 Route::get('get_equipmentData/{id}', [MainController::class, 'get_equipmentData']);
 Route::get('get_allusers', [UserController::class, 'get_all']);
 Route::get('get_allLaborers', [UserController::class, 'get_allLaborers']);

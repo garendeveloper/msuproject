@@ -192,12 +192,12 @@
             var status = '<a style = "font-size: 10px" class = "btn btn-sm btn-warning approveRequest" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-check"></i> Approve</a>';
             if(data[i].status == 1)  status = "<span class = 'badge badge-success'>Approved</span>";
             if(data[i].urgentstatus == 1) urgentstatus = "<span class = 'badge badge-danger'>Urgent</span>";
-            var date = moment(data[i].created_at).format('MM-DD-yyyy');
+        
             html += "<tr style = 'text-align:left'>";
             html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+" "+urgentstatus+"</td>";
             html += "<td align = 'right'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
             html += "<td>"+toTitleCase(data[i].designation.toLowerCase())+"</td>";
-            html += "<td>"+jQuery.timeago(data[i].created_at)+"</td>";
+            html += "<td>"+data[i].dateRequested+"</td>";
             html += '<td align = "center"> '+
                         status +
                      '</td>';

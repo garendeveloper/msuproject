@@ -444,7 +444,55 @@ class MainController extends Controller
                             WHERE users.id = construction_types.user_id 
                             AND users.id = "'.$user_id.'"
                             ORDER BY construction_types.created_at ASC');
-        echo json_encode($data);
+        $jobrequests = array();
+
+        foreach($data as $d)
+        {
+            $date = $d->created_at;
+            $is_valid = FALSE;
+            if (date('Y-m-d H:i:s', strtotime($date)) == $date) {
+                $is_valid = TRUE;
+            } else {
+                $is_valid =  FALSE;
+            }
+            if ($is_valid) {
+                $timestamp = strtotime($date);
+                $difference = time() - $timestamp;
+                $periods = array("sec", "min", "hour", "day", "week", "month", "year", "decade");
+                $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
+        
+                if ($difference > 0) { // this was in the past time
+                    $ending = "ago";
+                } else { // this was in the future time
+                    $difference = -$difference;
+                    $ending = "to go";
+                }
+                
+                for ($j = 0; $difference >= $lengths[$j]; $j++)
+                    $difference /= $lengths[$j];
+                
+                $difference = round($difference);
+                
+                if ($difference > 1)
+                    $periods[$j].= "s";
+                
+                $text = "$difference $periods[$j] $ending";
+                
+                $date = $text;
+            } else {
+                $date = 'Date Time must be in "yyyy-mm-dd hh:mm:ss" format';
+            }
+
+            $jobrequests[] = [
+                'id' => $d->id,
+                'urgentstatus' => $d->urgentstatus,
+                'status' => $d->status,
+                'construction_type' => $d->construction_type,
+                'name' => $d->name,
+                'created_at' => $date,
+            ];
+        }
+        echo json_encode($jobrequests);
     }
     public function get_allconstructiontypes_approved()
     {
@@ -464,7 +512,55 @@ class MainController extends Controller
                             WHERE users.id = construction_types.user_id 
                             and designated_offices.id = users.designated_id
                             ORDER BY construction_types.urgentstatus = 1 DESC");
-        echo json_encode($data);
+       $jobrequests = array();
+ 
+        foreach($data as $d)
+        {
+            $date = $d->created_at;
+            $is_valid = FALSE;
+            if (date('Y-m-d H:i:s', strtotime($date)) == $date) {
+                $is_valid = TRUE;
+            } else {
+                $is_valid =  FALSE;
+            }
+            if ($is_valid) {
+                $timestamp = strtotime($date);
+                $difference = time() - $timestamp;
+                $periods = array("sec", "min", "hour", "day", "week", "month", "year", "decade");
+                $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
+        
+                if ($difference > 0) { // this was in the past time
+                    $ending = "ago";
+                } else { // this was in the future time
+                    $difference = -$difference;
+                    $ending = "to go";
+                }
+                
+                for ($j = 0; $difference >= $lengths[$j]; $j++)
+                    $difference /= $lengths[$j];
+                
+                $difference = round($difference);
+                
+                if ($difference > 1)
+                    $periods[$j].= "s";
+                
+                $text = "$difference $periods[$j] $ending";
+                
+                $date = $text;
+            } else {
+                $date = 'Date Time must be in "yyyy-mm-dd hh:mm:ss" format';
+            }
+
+            $jobrequests[] = [
+                'construction_type' => $d->construction_type,
+                'urgentstatus' => $d->urgentstatus,
+                'status' => $d->status,
+                'name' => $d->name,
+                'designation' => $d->designation,
+                'dateRequested' => $date
+            ];
+        }
+        echo json_encode($jobrequests);
     }
     public function delete_constructiontype($id)
     {   
@@ -582,6 +678,16 @@ class MainController extends Controller
     public function get_allDepartments()
     {
         $data = DB::select('select * from departments');
+        echo json_encode($data);
+    }
+    public function get_allManpowers()
+    {
+        $data = DB::select('select distinct manpower from estimated_labor_costs');
+        echo json_encode($data);
+    }
+    public function get_allEquipment()
+    {
+        $data = DB::select('select distinct equipment from estimated_equipment_rental_costs');
         echo json_encode($data);
     }
     public function get_allDesignatedOffices()
@@ -727,7 +833,13 @@ class MainController extends Controller
                 if($request->eec_id == "")
                 {
                     $eec = EstimatedEquipmentRentalCost::where('construction_id', '=', $request->construction_id)
-                                                        ->where('equipment', '=', $request->equipment)->first();
+                                                        ->where('equipment', '=', $request->equipment)
+                                                        ->where('no_ofpersons', '=', $request->no_ofpersons)
+                                                        ->where('no_ofheaddays', '=', $request->no_ofheaddays)
+                                                        ->where('no_mandays', '=', $request->no_mandays)
+                                                        ->where('daily_rate', '=', $request->daily_rate)
+                                                        ->where('amount', '=', $request->amount)
+                                                        ->first();
                     if($eec == "" || empty($eec) || $eec == " ")
                     {
                         $eec = new EstimatedEquipmentRentalCost;
@@ -749,7 +861,7 @@ class MainController extends Controller
                     {
                         return response()->json([
                             'status' => 401,
-                            'fail' => 'Equipment rental already exists!'
+                            'fail' => 'Equipment data already exists!'
                         ]);
                     }
                 }

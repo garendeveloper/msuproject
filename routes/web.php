@@ -84,6 +84,7 @@ Route::get('get_allconstructiontypesById', [MainController::class,'get_allconstr
 Route::post('/register_jobrequestor', [LoginController::class, 'register_jobrequestor']);
 Route::get('/fundsclearance/{id}', [MainController::class, 'fundsclearance']);
 Route::get('/fundsclearedjobrequest', [MainController::class, 'fundsclearedjobrequest']);
+Route::get('/schedulejobrequests/{id}', [MainController::class, 'schedulejobrequestfundscleared_page']);
 
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');

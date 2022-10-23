@@ -8,16 +8,16 @@
 <html lang="en">
 <head>
   @include('scripts/header')
-  <link href='fullcalendar/lib/main.css' rel='stylesheet' />
+  <link href="{{ url('fullcalendar/lib/main.css') }}" rel='stylesheet' />
     <!-- Bootstrap Color Picker -->
-    <link rel="stylesheet" href="adminlte3/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" href="{{ url('adminlte3/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') }}">
   <link href='fullcalendar/lib/main.min.css' rel='stylesheet' />
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="adminlte3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="{{ url('adminlte3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
       <!-- Bootstrap4 Duallistbox -->
-  <link rel="stylesheet" href="adminlte3/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+  <link rel="stylesheet" href="{{ url('adminlte3/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css') }}">
   <!-- Toastr -->
-  <link rel="stylesheet" href="adminlte3/plugins/toastr/toastr.min.css">
+  <link rel="stylesheet" href="{{ url('adminlte3/plugins/toastr/toastr.min.css') }}">
   <style>
  
   </style>
@@ -35,7 +35,7 @@
   <!-- Main Sidebar Container -->
   @include('templates/sidebar')
   <!-- /.control-sidebar -->
-
+  <input type="text" id = "jobrequest_id">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -251,26 +251,26 @@
       <!-- /.modal -->
 <!-- jQuery -->
 
-<script src="adminlte3/plugins/jquery/jquery.min.js"></script>
+<script src="{{ url('adminlte3/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap -->
-<script src="adminlte3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url('adminlte3/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- jQuery UI -->
-<script src="adminlte3/plugins/jquery-ui/jquery-ui.min.js"></script>
-<script src="adminlte3/plugins/select2/js/select2.full.min.js"></script>
+<script src="{{ url('adminlte3/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+<script src="{{ url('adminlte3/plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- AdminLTE App -->
-<script src="adminlte3/dist/js/adminlte.min.js"></script>
+<script src="{{ url('adminlte3/dist/js/adminlte.min.js') }}"></script>
 <!-- SweetAlert2 -->
-<script src="adminlte3/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="{{ url('adminlte3/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <!-- Bootstrap4 Duallistbox -->
-<script src="adminlte3/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+<script src="{{ url('adminlte3/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
 <!-- Toastr -->
-<script src="adminlte3/plugins/toastr/toastr.min.js"></script>
+<script src="{{ url('adminlte3/plugins/toastr/toastr.min.js') }}"></script>
 <!-- fullCalendar 2.2.5 -->
-<script src="adminlte3/plugins/moment/moment.min.js"></script>
-<script src='fullcalendar/lib/main.js'></script>
-<script src='fullcalendar/lib/main.min.js'></script>
+<script src="{{ url('adminlte3/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ url('fullcalendar/lib/main.js') }}"></script>
+<script src="{{ url('fullcalendar/lib/main.min.js') }}"></script>
 <!-- bootstrap color picker -->
-<script src="adminlte3/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<script src="{{ url('adminlte3/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
 <!-- Tempusdominus Bootstrap 4 -->
 
 <!-- Page specific script -->

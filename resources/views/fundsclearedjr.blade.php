@@ -95,7 +95,7 @@
                                 <td>{{$jobrequests[$i]['designation']}}</td>
                                 <td>{{$jobrequests[$i]['dateCleared']}}</td>
                                 <td align = "center">
-                                    <a href="{{url('/schedulejobrequest/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule</a>
+                                    <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule</a>
                                 </td>
                             </tr>
                         <?php }?>

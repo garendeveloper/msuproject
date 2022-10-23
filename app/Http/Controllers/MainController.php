@@ -1151,29 +1151,37 @@ class MainController extends Controller
         }
         echo json_encode($events);
     }
+    public function schedulejobrequestfundscleared_page($jobrequest_id)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                from departments, users 
+                                where departments.id = users.department_id
+                                and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                            from construction_types
+                            where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                            from construction_types
+                            where status = 0');
+            $data = [
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=> $no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved,
+                'jobrequest_id' => $jobrequest_id
+            ];
+            return view('schedulefundscleared', $data);
+        }
+        else
+        {
+            return redirect('/')->with('fail', 'You must be logged in!');
+        }
+    }
     public function scheduling(Request $request) 
     {
         if(!empty(session('LoggedUser')))
         {
-            // $userInfo = DB::select('select users.*, users.id as user_id, departments.*
-            //                         from departments, users 
-            //                         where departments.id = users.department_id
-            //                         and users.id = "'.session('LoggedUser').'"');
-
-            // $data = [
-            //     'userinfo' => $userInfo
-            // ];
-            // if($request->ajax())
-            // {
-            //     $data = DB::select('select construction_types.*, constructions.*, schedules.*, jobrequestschedules.*, constructions.construction_name as title
-            //     from  construction_types, constructions, schedules, jobrequestschedules
-            //     where construction_types.id = constructions.constructiontype_id
-            //     and schedules.id = jobrequestschedules.schedule_id
-            //     and constructions.id = jobrequestschedules.jobrequest_id
-            //     and date(schedules.start) >= "'.date($request->start).'"
-            //     and date(schedules.end) <= "'.date($request->end).'"');
-            //     return response()->json($data);
-            // }
             $userinfo = DB::select('select users.*, users.id as user_id, departments.*
                                 from departments, users 
                                 where departments.id = users.department_id

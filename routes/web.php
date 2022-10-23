@@ -82,6 +82,8 @@ Route::post('useractions', [UserController::class, 'useractions']);
 Route::get('get_userinfo/{id}', [UserController::class, 'get_userinfo']);
 Route::get('get_allconstructiontypesById', [MainController::class,'get_allconstructiontypesById']);
 Route::post('/register_jobrequestor', [LoginController::class, 'register_jobrequestor']);
+Route::get('/fundsclearance/{id}', [MainController::class, 'fundsclearance']);
+Route::get('/fundsclearedjobrequest', [MainController::class, 'fundsclearedjobrequest']);
 
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');

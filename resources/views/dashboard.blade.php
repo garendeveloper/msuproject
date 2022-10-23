@@ -65,12 +65,12 @@
               <div class="card-body">
                 
                   @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
-                  <h1>{{ $no_ofapproved[0]->total_approved}}</h1>
+                  <h1>{{ $total}}</h1>
                   @endif
 
                 <p>Awaiting for Scheduling.</p>
 
-                <a href="{{ url('/scheduling') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ url('/fundsclearedjobrequest') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
           </div>

@@ -1,10 +1,10 @@
 
-@if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "PPU PERSONNEL")
+<!-- @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "PPU PERSONNEL")
   <SCRipt>
     alert("You do not have the authority to visit this page!")
     window.location.href = "/constructiontypes";
   </SCRipt>
-  @endif
+  @endif -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,12 +40,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1></h1>
+            <a href="{{ url('/dashboard')}}" class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i></a>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item active">Funds availability</li>
+              <li class="breadcrumb-item active">Awaiting For Funds Clearance</li>
             </ol>
           </div>
         </div>
@@ -61,7 +61,7 @@
               <div class="card-header" style = "background-color: #1C518A; color: white;">
                 <div class="row">
                 <div class="col-md-12">
-                    <h6>Job Requests For Funds Approval</h6> 
+                    <h6>Job Requests For Scheduling ({{$total}})</h6> 
                   </div>
                 
                 </div>
@@ -74,19 +74,31 @@
                     </div>
                 </div>
                 <br>
-                <table id="tbl_constructiontypes" class="table table-bordered table-striped data-table" style = "table-layout: responsive ">
+                <table id = "tbl_jobrequests" class="table table-bordered table-striped data-table" style = "table-layout: responsive ">
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>Job Request</th>
                     <th style = "text-align: right">Requested By:</th>
                     <th>Designation</th>
-                    <th>Approval Status</th>
-                    <th>Date & Time Requested</th>
-                    <th style = "text-align: center">Approval</th>
+                    <th>Date Cleared</th>
+                    <th style = "text-align: center">Actions</th>
                   </tr>
                   </thead>
                   <tbody>
-                
+                    <?php $i =0; 
+                    
+                        for($i =0; $i<count($jobrequests); $i++)
+                        { ?>
+                            <tr>
+                                <td>{{$jobrequests[$i]['construction_type']}}</td>
+                                <td align = "right">{{$jobrequests[$i]['name']}}</td>
+                                <td>{{$jobrequests[$i]['designation']}}</td>
+                                <td>{{$jobrequests[$i]['dateCleared']}}</td>
+                                <td align = "center">
+                                    <a href="{{url('/schedulejobrequest/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule</a>
+                                </td>
+                            </tr>
+                        <?php }?>
                   </tbody>
                 </table>
               </div>
@@ -155,7 +167,7 @@
   $(function () {
     $("#search").on('keyup', function(){
       var value = $(this).val().toLowerCase();
-      $("#tbl_constructiontypes tbody tr").filter(function(){
+      $("#tbl_jobrequests tbody tr").filter(function(){
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
     });

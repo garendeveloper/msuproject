@@ -104,7 +104,7 @@
           @endif
           <li class="nav-item">
             <a id = "logout" type = "button" class="nav-link">
-              <i class="nav-icon fas fa-arrow-right"></i>
+              <i class="nav-icon fa fa-power-off"></i>
               <p>Logout</p>
             </a>
           </li>

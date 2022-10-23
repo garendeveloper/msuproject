@@ -38,9 +38,16 @@ class MainController extends Controller
             $no_ofunapproved = DB::select('select count(*) as total_unapproved
                                         from construction_types
                                         where status = 0');
+            $fundscleared = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name, designated_offices.designation
+                                        FROM CONSTRUCTION_TYPES, users, designated_offices
+                                        WHERE users.id = construction_types.user_id 
+                                        and designated_offices.id = users.designated_id
+                                        and construction_types.fundstatus = 1
+                                        ORDER BY construction_types.updated_at ASC");
             $userinfo = ['userinfo' => $userinfo, 
                         'no_ofapproved'=> $no_ofapproved, 
-                        'no_ofunapproved'=>$no_ofunapproved
+                        'no_ofunapproved'=>$no_ofunapproved,
+                        'total' => count($fundscleared)
                     ];
             return view('dashboard', $userinfo);
         }
@@ -283,6 +290,92 @@ class MainController extends Controller
             return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
+    public function fundsclearedjobrequest()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                        from construction_types
+                                        where status = 0');
+
+            $fundscleared = DB::SELECT("SELECT CONSTRUCTION_TYPES.*, users.name, designated_offices.designation
+                                FROM CONSTRUCTION_TYPES, users, designated_offices
+                                WHERE users.id = construction_types.user_id 
+                                and designated_offices.id = users.designated_id
+                                and construction_types.fundstatus = 1
+                                ORDER BY construction_types.updated_at ASC");
+            $jobrequests = array();
+
+            foreach($fundscleared as $d)
+            {
+                $date = $d->updated_at;
+                $is_valid = FALSE;
+                if (date('Y-m-d H:i:s', strtotime($date)) == $date) {
+                $is_valid = TRUE;
+                } else {
+                $is_valid =  FALSE;
+                }
+                if ($is_valid) {
+                $timestamp = strtotime($date);
+                $difference = time() - $timestamp;
+                $periods = array("sec", "min", "hour", "day", "week", "month", "year", "decade");
+                $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
+
+                if ($difference > 0) { // this was in the past time
+                    $ending = "ago";
+                } else { // this was in the future time
+                    $difference = -$difference;
+                    $ending = "to go";
+                }
+
+                for ($j = 0; $difference >= $lengths[$j]; $j++)
+                    $difference /= $lengths[$j];
+
+                $difference = round($difference);
+
+                if ($difference > 1)
+                    $periods[$j].= "s";
+
+                $text = "$difference $periods[$j] $ending";
+
+                $date = $text;
+                } else {
+                $date = 'Date Time must be in "yyyy-mm-dd hh:mm:ss" format';
+            }
+
+            $jobrequests[] = [
+                    'id' => $d->id,
+                    'fundstatus' => $d->fundstatus,
+                    'construction_type' => $d->construction_type,
+                    'urgentstatus' => $d->urgentstatus,
+                    'status' => $d->status,
+                    'name' => $d->name,
+                    'designation' => $d->designation,
+                    'dateCleared' => $date
+                    ];
+            }
+            $userinfo = [
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=>$no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved,
+                'jobrequests' => $jobrequests,
+                'total' => count($fundscleared)
+            ];
+            // dd($userinfo);
+            return view('fundsclearedjr', $userinfo);
+        }
+        else
+        {
+            return redirect('/')->with('fail', 'You must be logged in!');
+        }
+    }
     public function get_allconstructions_approved()
     {
         $data = DB::select('select construction_types.*, constructions.*, constructions.id as construction_id
@@ -494,6 +587,17 @@ class MainController extends Controller
         }
         echo json_encode($jobrequests);
     }
+    public function fundsclearance($id)
+    {
+        $jobrequest = ConstructionTypes::find($id);
+        $jobrequest->fundstatus = 1;
+        $jobrequest->update();
+
+        return response()->json([
+            'status' => 200,
+            'success' => 'Job Request has successfully financially cleared!',
+        ]);
+    }
     public function get_allconstructiontypes_approved()
     {
         // $data = DB::SELECT("SELECT *  FROM CONSTRUCTION_TYPES WHERE status = 1");
@@ -553,6 +657,7 @@ class MainController extends Controller
 
             $jobrequests[] = [
                 'id' => $d->id,
+                'fundstatus' => $d->fundstatus,
                 'construction_type' => $d->construction_type,
                 'urgentstatus' => $d->urgentstatus,
                 'status' => $d->status,
@@ -563,6 +668,7 @@ class MainController extends Controller
         }
         echo json_encode($jobrequests);
     }
+ 
     public function delete_constructiontype($id)
     {   
         $checkifno_involvedinothertable = Construction::where('constructiontype_id', '=', $id)->first();

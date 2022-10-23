@@ -39,7 +39,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h5>My Job Requestss</h5>
+            <h5>My Job Requests</h5>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

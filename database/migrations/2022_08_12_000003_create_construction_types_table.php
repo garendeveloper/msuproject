@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('construction_type');
             $table->integer('urgentstatus')->default(0);
+            $table->integer('fundstatus')->default(0);
             $table->integer('status')->default(0);
             $table->timestamps();
         });

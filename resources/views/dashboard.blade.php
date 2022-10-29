@@ -116,12 +116,12 @@
               <div class="card-body">
                 
                   @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
-                  <h1>0</h1>
+                  <h1>{{ $total_accomplishedjr[0]->total }}</h1>
                   @endif
 
                 <p>Accomplished Job Requests</p>
 
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{url('/accomplishedjobrequests')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
           </div>

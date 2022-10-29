@@ -60,6 +60,7 @@ Route::get('get_allLaborers', [UserController::class, 'get_allLaborers']);
 Route::get('get_allForemans', [UserController::class, 'get_allForemans']);
 Route::post('scheduling_actions', [MainController::class, 'scheduling_actions']);
 Route::get('get_schedules', [MainController::class, 'get_schedules']);
+Route::get('get_schedule/{id}', [MainController::class, 'get_schedule']);
 Route::get('/checking_fundsAvailability', [MainController::class, 'funds_availability']);
 Route::post('approve_jobRequest/{id}', [MainController::class, 'approve_jobRequest']);
 Route::post('/search_constructiontypes', [MainController::class, 'search_constructiontypes'])->name('/search_constructiontypes');
@@ -82,9 +83,7 @@ Route::post('useractions', [UserController::class, 'useractions']);
 Route::get('get_userinfo/{id}', [UserController::class, 'get_userinfo']);
 Route::get('get_allconstructiontypesById', [MainController::class,'get_allconstructiontypesById']);
 Route::post('/register_jobrequestor', [LoginController::class, 'register_jobrequestor']);
-Route::get('/fundsclearance/{id}', [MainController::class, 'fundsclearance']);
-Route::get('/fundsclearedjobrequest', [MainController::class, 'fundsclearedjobrequest']);
-Route::get('/schedulejobrequests/{id}', [MainController::class, 'schedulejobrequestfundscleared_page']);
+
 
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');
@@ -107,5 +106,10 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/materialreport/{id}', [MainController::class, 'materialreport']);
     Route::get('/equipmentreport/{id}', [MainController::class, 'equipmentreport']);
     Route::get('/laborreport/{id}', [MainController::class, 'laborreport']);
+    Route::get('/fundsclearance/{id}', [MainController::class, 'fundsclearance']);
+    Route::get('/fundsclearedjobrequest', [MainController::class, 'fundsclearedjobrequest']);
+    Route::get('/schedulejobrequests/{id}', [MainController::class, 'schedulejobrequestfundscleared_page']);
+    Route::get('/accomplishedjobrequests', [MainController::class, 'accomplishedjobrequests']);
+    Route::get('/accomplishedreport/{id}', [MainController::class, 'accomplishedreport']);
 });
 

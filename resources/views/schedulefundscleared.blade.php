@@ -39,13 +39,18 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h5>Scheduling of Job Requests and Manpowers</h5>
+          <div class="col-sm-2">
+            <a href="{{ url('/fundsclearedjobrequest') }}" class = "btn btn-primary btn-sm"><i class=  "fa fa-arrow-left"></i></a>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-5">
+            <h5>{{ ucwords($jobrequest->construction_type) }} Scheduling </h5>
+            <input type="text" style = "display: none" id = "sc_jobrequestid" value = "{{ $jobrequest_id }}">
+          </div>
+          <div class="col-sm-5">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
               <li class="breadcrumb-item active">Scheduling </li>
@@ -117,7 +122,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header" style = "background-color: #1C518A; color: white;">
-            <h6 class="modal-title" ></h6>
+            <h6 class="modal-title" ></h6> 
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -131,17 +136,18 @@
                 <input type="date" style = "display:none" id = "start" name ="start">
                 <input type="date" style = "display: none" id = "end" name = "end">
                 <div class="row">
-                  <div class="col-md-12">
+                  <!-- <div class="col-md-12">
                     <div class="form-group">
                       <label for="construction">Job Prioritize Urgent Request</label>
                       <select style = "font-size: 12px" class = "form-control" name="construction" id="urgentconstructions">
 
                       </select>
                     </div>
-                  </div>
+                  </div> -->
+                  <input type="text" style = "display: none" name = "construction" value = "{{ $jobrequest_id }}">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Color picker with addon:</label>
+                      <label>Please pick a color:</label>
                       <div class="input-group my-colorpicker2">
                         <input type="text" name = "color" class="form-control" style = "font-size: 12px" readonly>
                         <div class="input-group-append">
@@ -150,16 +156,6 @@
                       </div>
                     </div>
                   </div>
-                  <!-- <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Select Laborers</label>
-                      <div class="select2-blue">
-                        <select class="select2" name = "laborers[]" id = "laborers" multiple="multiple" data-placeholder="Select a laborer" data-dropdown-css-class="select2-blue" style="width: 100%;" >
-    
-                        </select>
-                      </div>
-                    </div>
-                  </div> -->
                 </div>
               </div>
               <div class="modal-footer">
@@ -321,7 +317,7 @@ $(document).ready(function() {
     });
   
     var calendarE1 = document.getElementById('calendar');
-
+  var sc_jobrequestid = $("#sc_jobrequestid").val();
   var calendar = new FullCalendar.Calendar(calendarE1, {
     defaultView: 'dayGridMonth',
     // plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
@@ -334,7 +330,7 @@ $(document).ready(function() {
     eventLimit: true,
     navLinks: true,
     selectable: true,
-    events: '/get_schedules',
+    events: '/get_schedule/'+sc_jobrequestid,
     themeSystem: 'bootstrap',
     selectHelper: true,
     draggable: false,
@@ -349,7 +345,8 @@ $(document).ready(function() {
         backdrop: 'static',
         keyboard: false,
       }, 'show');
-      $(".modal-title").text('Schedule job request');
+      $(".modal-title").text('Schedule Job Request -> From: '+start+ ' To:  '+end);
+
       $("#ajaxresponse").html("");
       $("#schedule_form").trigger('reset');
       $("#start").val(start);
@@ -840,46 +837,46 @@ $(document).ready(function() {
   $("#schedule_form").on('submit', function(e){
     e.preventDefault();
     var data =$(this).serialize();
-    $.ajax({
-      type: 'post',
-      url: '/scheduling_actions',
-      data: data,
-      dataType: 'json',
-      success: function(response){
-        if(response.status == 200)
-        {
-          calendar.refetchEvents();
-          alert(response.success);
-          $(".open_modal").modal('hide');
-          $("#schedule_form").trigger('reset');
-          $("#foremans").text("");
-          $("#laborers").text("");
-          show_allForemans();
-        }
-        if(response.status == 401)
-        {
-          alert(response.fail)
-        }
-        if(response.status == 400)
-        {
-          $("#ajaxresponse").html("");
-          $("#ajaxresponse").removeClass('alert alert-danger');
-          $("#ajaxresponse").addClass('alert alert-danger');
-          $.each(response.errors, function (key, err_values){
-            $("#ajaxresponse").append('<li>'+err_values+'</li>');
-          });
-        }
-        // alert("Total added laborers: "+response.total_added_laborers+"\n"+
-        //       "Total_added_foremans: "+response.total_added_foremans+"\n"+
-        //       "Foremans not saved: "+response.foremans_notsaved+"\n"+
-        //       "Laborers not saved: "+response.laborers_notsaved);
-       show_allJobRequestsUrgent();
+    if(confirm("Are you sure do you want to proceed with the schedule you've selected?\n\nThis action cannot be undone!\nPress ok otherwise cancel."))
+    {
+      $.ajax({
+        type: 'post',
+        url: '/scheduling_actions',
+        data: data,
+        dataType: 'json',
+        success: function(response){
+          if(response.status == 200)
+          {
+            calendar.refetchEvents();
+            alert(response.success);
+            $(".open_modal").modal('hide');
+            $("#schedule_form").trigger('reset');
+            $("#foremans").text("");
+            $("#laborers").text("");
+            show_allForemans();
+          }
+          if(response.status == 401)
+          {
+            alert(response.fail)
+          }
+          if(response.status == 400)
+          {
+            $("#ajaxresponse").html("");
+            $("#ajaxresponse").removeClass('alert alert-danger');
+            $("#ajaxresponse").addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $("#ajaxresponse").append('<li>'+err_values+'</li>');
+            });
+          }
         
-      },
-      error: function(response){
-        alert("Server error: Reload your page!");
-      }
-    })
+        show_allJobRequestsUrgent();
+          
+        },
+        error: function(response){
+          alert("Server error: Reload your page!");
+        }
+      })
+    }
   })
 })
 </script>

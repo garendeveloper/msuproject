@@ -5,7 +5,7 @@
     window.location.href = "/constructiontypes";
   </SCRipt>
   @endif -->
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   @include('scripts/header')
@@ -61,7 +61,7 @@
               <div class="card-header" style = "background-color: #1C518A; color: white;">
                 <div class="row">
                 <div class="col-md-12">
-                    <h6>Job Requests For Scheduling ({{$total}})</h6> 
+                    <h6>Accomplished Job Requests ({{$total}})</h6> 
                   </div>
                 
                 </div>
@@ -78,10 +78,7 @@
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>Job Request</th>
-                    <th>Urgency Status</th>
-                    <th style = "text-align: right">Requested By:</th>
-                    <th>Designation</th>
-                    <th>Date Cleared</th>
+                    <th>Date & Time Accomplished</th>
                     <th style = "text-align: center">Actions</th>
                   </tr>
                   </thead>
@@ -91,18 +88,10 @@
                         for($i =0; $i<count($jobrequests); $i++)
                         { ?>
                             <tr>
-                                <td>{{$jobrequests[$i]['construction_type']}}</td>
-                                @if($jobrequests[$i]['urgentstatus'] == 1)
-                                <td align = "center"><span class = "badge badge-warning">Urgent</span></td>
-                                @endif
-                                @if($jobrequests[$i]['urgentstatus'] == 0)
-                                <td align = "center"><span class = "badge badge-primary">No</span></td>
-                                @endif
-                                <td align = "right">{{$jobrequests[$i]['name']}}</td>
-                                <td>{{$jobrequests[$i]['designation']}}</td>
+                                <td>{{ucwords($jobrequests[$i]['construction_type'])}}</td>
                                 <td>{{$jobrequests[$i]['dateCleared']}}</td>
                                 <td align = "center">
-                                    <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule</a>
+                                    <a href="{{url('/accomplishedreport/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-right"></i>&nbsp; Report</a>
                                 </td>
                             </tr>
                         <?php }?>
@@ -180,128 +169,6 @@
     });
   });
 </script>
-<script>
-  $(document).ready(function(e){
-    show_allData();
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    })
-    var Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000
-    });
-    function toTitleCase(str) {
-        return str.replace(/(?:^|\s)\w/g, function(match) {
-            return match.toUpperCase();
-        });
-    }
-    $("body").on('click', '.fundsCleared', function(){
-      var id = $(this).data('id');
 
-      if(confirm("Are you sure you want to proceed this Job Request for Funds Clearance?\n\nThis action cannot be undone!\nPress OK Otherwise."))
-      $.ajax({
-        type: 'get',
-        url: '/fundsclearance/'+id,
-        dataType: 'json',
-        success:function(response){
-          if(response.status == 200)
-          {
-            Toast.fire({
-              icon: 'success',
-              title: response.success
-            })
-          }
-          else{
-            alert("Something went wrong, Please reload your page!");
-          }
-        }
-       
-      })
-      show_allData();
-    })
-    function show_allData(){
-      $.ajax({
-        type: 'GET',
-        url: '/get_allconstructiontypes_unapproved',
-        dataType: 'json',
-        success: function(data){
-          var html = "";
-          for(var i = 0; i<data.length; i++)
-          {
-            var urgentstatus = "";
-            var status = "<span class = 'badge badge-warning'>Still Process</span>";
-            if(data[i].status == 1)  status = "<span class = 'badge badge-success'>Approved</span>";
-            if(data[i].urgentstatus == 1) urgentstatus = "<span class = 'badge badge-danger'>Urgent</span>";
-        
-            html += "<tr style = 'text-align:left'>";
-            html += "<td>"+toTitleCase(data[i].construction_type.toLowerCase())+" "+urgentstatus+"</td>";
-            html += "<td align = 'right'>"+toTitleCase(data[i].name.toLowerCase())+"</td>";
-            html += "<td>"+toTitleCase(data[i].designation.toLowerCase())+"</td>";
-            html += "<td>"+status+"</td>";
-            html += "<td>"+data[i].dateRequested+"</td>";
-            if(data[i].status == 1)
-            {
-              if(data[i].fundstatus == 1)
-              {
-                html += '<td align = "center"> '+
-                        '<a style = "font-size: 10px" class = "btn btn-sm btn-success fundsCleared disabled" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-certificate"></i>&nbsp; Funds Cleared</a>';
-                     '</td>';
-              }
-              else
-              {
-                html += '<td align = "center"> '+
-                        '<a style = "font-size: 10px" class = "btn btn-sm btn-success fundsCleared" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-certificate"></i>&nbsp; Funds Cleared</a>';
-                     '</td>';
-              }
-            }
-            else
-            {
-              html += '<td align = "center"> '+
-                        '<a style = "font-size: 10px" class = "btn btn-sm btn-warning approveRequest" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-check-square"></i>&nbsp; Approve</a>';
-                     '</td>';
-            }
-            html += "</tr>";
-          }
-         
-          $("#tbl_constructiontypes tbody").html(html);
-         
-        },
-        error: function(response){
-          alert("Something went wrong in fetching data in database.");
-        }
-      });
-    }
-    $("body").on('click', '.approveRequest', function(response){
-        var id = $(this).data('id');
-        if(confirm("Do you want to approve this job request?\nThis action cannot be undone!\n\n\nPress OK Otherwise Cancel"))
-        {
-          $.ajax({
-            type: 'post',
-            url: '/approve_jobRequest/'+id,
-            dataType: 'json',
-            success: function(response)
-            {
-              if(response.status == 200)
-              {
-                Toast.fire({
-                  icon: 'success',
-                  title: response.success
-                })
-              }
-              else 
-              {
-                alert(response.error_msg);
-              }
-              show_allData();
-            }
-          })
-        }
-    })
-  })
-</script>
 </body>
 </html>

@@ -44,11 +44,14 @@ class MainController extends Controller
                                         and designated_offices.id = users.designated_id
                                         and construction_types.fundstatus = 1
                                         ORDER BY construction_types.updated_at ASC");
+            $accomplishedjr = DB::select('SELECT COUNT(*) as total FROM jobrequestschedules WHERE status = 1');
             $userinfo = ['userinfo' => $userinfo, 
                         'no_ofapproved'=> $no_ofapproved, 
-                        'no_ofunapproved'=>$no_ofunapproved,
-                        'total' => count($fundscleared)
+                        'no_ofunapproved'=>$no_ofunapproved,   
+                        'total_accomplishedjr' => $accomplishedjr,
+                        'total' => count($fundscleared),
                     ];
+                    // dd($userinfo);
             return view('dashboard', $userinfo);
         }
         else
@@ -290,6 +293,187 @@ class MainController extends Controller
             return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
+    public function accomplishedjobrequests()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                        from construction_types
+                                        where status = 0');
+
+            $accomplishedjr = DB::SELECT("  SELECT 	construction_types.*, 
+                                                    schedules.start, schedules.end, 
+                                                    jobrequestschedules.status,
+                                                    users.name, jobrequestschedules.updated_at as dateAccomplished
+                                            FROM 	construction_types, schedules, 
+                                                    jobrequestschedules, users
+                                            WHERE 	construction_types.id = jobrequestschedules.jobrequest_id
+                                            AND 	schedules.id = jobrequestschedules.schedule_id
+                                            AND 	users.id = jobrequestschedules.last_actionBy
+                                            AND 	jobrequestschedules.status = 1");
+            $jobrequests = array();
+
+            foreach($accomplishedjr as $d)
+            {
+                $date = $d->dateAccomplished;
+                $is_valid = FALSE;
+                if (date('Y-m-d H:i:s', strtotime($date)) == $date) {
+                $is_valid = TRUE;
+                } else {
+                $is_valid =  FALSE;
+                }
+                if ($is_valid) {
+                $timestamp = strtotime($date);
+                $difference = time() - $timestamp;
+                $periods = array("sec", "min", "hour", "day", "week", "month", "year", "decade");
+                $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
+
+                if ($difference > 0) { // this was in the past time
+                    $ending = "ago";
+                } else { // this was in the future time
+                    $difference = -$difference;
+                    $ending = "to go";
+                }
+
+                for ($j = 0; $difference >= $lengths[$j]; $j++)
+                    $difference /= $lengths[$j];
+
+                $difference = round($difference);
+
+                if ($difference > 1)
+                    $periods[$j].= "s";
+
+                $text = "$difference $periods[$j] $ending";
+
+                $date = $text;
+                } else {
+                $date = 'Date Time must be in "yyyy-mm-dd hh:mm:ss" format';
+            }
+
+            $jobrequests[] = [
+                    'id' => $d->id,
+                    'fundstatus' => $d->fundstatus,
+                    'construction_type' => $d->construction_type,
+                    'urgentstatus' => $d->urgentstatus,
+                    'status' => $d->status,
+                    'name' => $d->name,
+                    'dateCleared' => $date
+                    ];
+            }
+            $userinfo = [
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=>$no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved,
+                'jobrequests' => $jobrequests,
+                'total' => count($accomplishedjr)
+            ];
+            // dd($userinfo);
+            return view('accomplishedjr', $userinfo);
+        }
+        else
+        {
+            return redirect('/')->with('fail', 'You must be logged in!');
+        }
+    }
+    public function accomplishedreport($jobrequest_id)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $no_ofapproved = DB::select('select count(*) as total_approved
+                                        from construction_types
+                                        where status = 1');
+            $no_ofunapproved = DB::select('select count(*) as total_unapproved
+                                        from construction_types
+                                        where status = 0');
+
+            $accomplishedjr = DB::SELECT("  SELECT 	construction_types.*, 
+                                                    schedules.start, schedules.end, 
+                                                    jobrequestschedules.status,
+                                                    users.name, jobrequestschedules.updated_at as dateAccomplished
+                                            FROM 	construction_types, schedules, 
+                                                    jobrequestschedules, users
+                                            WHERE 	construction_types.id = jobrequestschedules.jobrequest_id
+                                            AND 	schedules.id = jobrequestschedules.schedule_id
+                                            AND 	users.id = jobrequestschedules.last_actionBy
+                                            AND 	jobrequestschedules.status = 1");
+            
+            $years = DB::select('SELECT distinct year(schedules.end) as year from schedules order by year(schedules.end) desc');
+
+            $jobrequests = array();
+
+            foreach($accomplishedjr as $d)
+            {
+                $date = $d->dateAccomplished;
+                $is_valid = FALSE;
+                if (date('Y-m-d H:i:s', strtotime($date)) == $date) {
+                $is_valid = TRUE;
+                } else {
+                $is_valid =  FALSE;
+                }
+                if ($is_valid) {
+                $timestamp = strtotime($date);
+                $difference = time() - $timestamp;
+                $periods = array("sec", "min", "hour", "day", "week", "month", "year", "decade");
+                $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
+
+                if ($difference > 0) { // this was in the past time
+                    $ending = "ago";
+                } else { // this was in the future time
+                    $difference = -$difference;
+                    $ending = "to go";
+                }
+
+                for ($j = 0; $difference >= $lengths[$j]; $j++)
+                    $difference /= $lengths[$j];
+
+                $difference = round($difference);
+
+                if ($difference > 1)
+                    $periods[$j].= "s";
+
+                $text = "$difference $periods[$j] $ending";
+
+                $date = $text;
+                } else {
+                $date = 'Date Time must be in "yyyy-mm-dd hh:mm:ss" format';
+            }
+
+            $jobrequests[] = [
+                    'id' => $d->id,
+                    'fundstatus' => $d->fundstatus,
+                    'construction_type' => $d->construction_type,
+                    'urgentstatus' => $d->urgentstatus,
+                    'status' => $d->status,
+                    'name' => $d->name,
+                    'dateCleared' => $date
+                    ];
+            }
+            $userinfo = [
+                'userinfo' => $userinfo, 
+                'no_ofapproved'=>$no_ofapproved, 
+                'no_ofunapproved'=>$no_ofunapproved,
+                'jobrequests' => $jobrequests,
+                'years' => $years
+            ];
+            // dd($userinfo);
+            return view('accomplishedreport', $userinfo);
+        }
+        else
+        {
+            return redirect('/')->with('fail', 'You must be logged in!');
+        }
+    }
     public function fundsclearedjobrequest()
     {
         if(!empty(session('LoggedUser')))
@@ -310,7 +494,7 @@ class MainController extends Controller
                                 WHERE users.id = construction_types.user_id 
                                 and designated_offices.id = users.designated_id
                                 and construction_types.fundstatus = 1
-                                ORDER BY construction_types.updated_at ASC");
+                                ORDER BY construction_types.urgentstatus DESC");
             $jobrequests = array();
 
             foreach($fundscleared as $d)
@@ -1151,6 +1335,46 @@ class MainController extends Controller
         }
         echo json_encode($events);
     }
+    public function get_schedule($jobrequest_id)
+    {
+        $data = DB::select('select construction_types.construction_type as title, jobrequestschedules.id, schedules.start, schedules.end, jobrequestschedules.color, jobrequestschedules.status
+        from  construction_types,  schedules, jobrequestschedules
+        where schedules.id = jobrequestschedules.schedule_id
+        and construction_types.id = jobrequestschedules.jobrequest_id
+        and construction_types.id = "'.$jobrequest_id.'"');
+
+        $events = array();
+        foreach($data as $d)
+        {
+            if($d->status == 1)
+            {
+                $events[] = [
+                    'title' => 'THIS SCHEDULE HAS BEEN COMPLETED',
+                    'start' => $d->start,
+                    'end'   => $d->end,
+                    'id'    => $d->id,
+                    'color' => $d->color,
+                    'status' => $d->status,
+                    'editable' => false,
+                    'click' => false,
+                ];
+            }
+            else
+            {
+                $events[] = [
+                    'title' => $d->title,
+                    'start' => $d->start,
+                    'end'   => $d->end,
+                    'id'    => $d->id,
+                    'color' => $d->color,
+                    'status' => $d->status,
+                    'editable' => true,
+                    'click' => true,
+                ];
+            }
+        }
+        echo json_encode($events);
+    }
     public function schedulejobrequestfundscleared_page($jobrequest_id)
     {
         if(!empty(session('LoggedUser')))
@@ -1165,11 +1389,13 @@ class MainController extends Controller
             $no_ofunapproved = DB::select('select count(*) as total_unapproved
                             from construction_types
                             where status = 0');
+            $jobrequest = ConstructionTypes::find($jobrequest_id);
             $data = [
                 'userinfo' => $userinfo, 
                 'no_ofapproved'=> $no_ofapproved, 
                 'no_ofunapproved'=>$no_ofunapproved,
-                'jobrequest_id' => $jobrequest_id
+                'jobrequest_id' => $jobrequest_id,
+                'jobrequest' => $jobrequest
             ];
             return view('schedulefundscleared', $data);
         }

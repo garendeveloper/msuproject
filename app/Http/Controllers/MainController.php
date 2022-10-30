@@ -15,6 +15,7 @@ use App\Models\EstimatedLaborCost;
 use App\Models\Schedules;
 use App\Models\UserJobRequestSchedule;
 use App\Models\JobRequestSchedule;
+use App\Models\AccomplishmentReport;
 use Illuminate\Support\Str;
 
 class MainController extends Controller
@@ -44,7 +45,8 @@ class MainController extends Controller
                                         and designated_offices.id = users.designated_id
                                         and construction_types.fundstatus = 1
                                         ORDER BY construction_types.updated_at ASC");
-            $accomplishedjr = DB::select('SELECT COUNT(*) as total FROM jobrequestschedules WHERE status = 1');
+
+            $accomplishedjr = DB::select('SELECT COUNT(*) as total FROM jobrequestschedules');
             $userinfo = ['userinfo' => $userinfo, 
                         'no_ofapproved'=> $no_ofapproved, 
                         'no_ofunapproved'=>$no_ofunapproved,   
@@ -293,6 +295,11 @@ class MainController extends Controller
             return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
+    public function queryaccomplishmentreport(Request $request)
+    {
+        // $data = DB::select('')
+        return redirect()->back();
+    }
     public function accomplishedjobrequests()
     {
         if(!empty(session('LoggedUser')))
@@ -316,8 +323,7 @@ class MainController extends Controller
                                                     jobrequestschedules, users
                                             WHERE 	construction_types.id = jobrequestschedules.jobrequest_id
                                             AND 	schedules.id = jobrequestschedules.schedule_id
-                                            AND 	users.id = jobrequestschedules.last_actionBy
-                                            AND 	jobrequestschedules.status = 1");
+                                            AND 	users.id = jobrequestschedules.last_actionBy");
             $jobrequests = array();
 
             foreach($accomplishedjr as $d)
@@ -382,7 +388,8 @@ class MainController extends Controller
             return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
-    public function accomplishedreport($jobrequest_id)
+    
+    public function accomplishedreport()
     {
         if(!empty(session('LoggedUser')))
         {
@@ -473,6 +480,58 @@ class MainController extends Controller
         {
             return redirect('/')->with('fail', 'You must be logged in!');
         }
+    }
+    public function createaccomplishmentreport($jobrequest_id)
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            
+            $accomplishedreport = DB::select('  select accomplishment_reports.*
+                                                from accomplishment_reports, construction_types, jobrequestschedules
+                                                where construction_types.id = jobrequestschedules.jobrequest_id
+                                                and jobrequestschedules.id = accomplishment_reports.jobrequest_id
+                                                and construction_types.id = "'.$jobrequest_id.'"'); 
+                                                
+            $jobrequestschedule = DB::select('  select jobrequestschedules.*
+                                                from construction_types, jobrequestschedules
+                                                where construction_types.id = jobrequestschedules.jobrequest_id
+                                                and construction_types.id = "'.$jobrequest_id.'"');                                      
+            
+            $userinfo = [
+                'userinfo' => $userinfo, 
+                'jobrequest_id' => $jobrequest_id,
+                'accomplishedreport' => $accomplishedreport,
+                'jobrequestschedule' => $jobrequestschedule
+            ];
+           
+            return view('createaccomplishmentreport', $userinfo);
+        }
+        else
+        {
+            return redirect('/')->with('fail', 'You must be logged in!');
+        }
+    }
+    public function saveaccomplishmentreport(Request $request)
+    {
+        $request->validate([
+            'jobrequest_id' => 'required',
+            'gaa' => 'required',
+            'amount_utilized' => 'required|integer',
+            'remarks' => 'required|min:10'
+        ]);
+
+        AccomplishmentReport::updateOrCreate(['id'=>$request->id], [
+            'jobrequest_id' => $request->jobrequest_id,
+            'gaa' => $request->gaa,
+            'amount_utilized' => $request->amount_utilized,
+            'remarks' => $request->remarks
+        ]);
+
+        return redirect('/accomplishedjobrequests')->with('message', 'Accomplished Report Successfully Created!');
     }
     public function fundsclearedjobrequest()
     {

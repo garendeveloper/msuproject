@@ -83,7 +83,8 @@ Route::post('useractions', [UserController::class, 'useractions']);
 Route::get('get_userinfo/{id}', [UserController::class, 'get_userinfo']);
 Route::get('get_allconstructiontypesById', [MainController::class,'get_allconstructiontypesById']);
 Route::post('/register_jobrequestor', [LoginController::class, 'register_jobrequestor']);
-
+Route::post('/saveaccomplishmentreport', [MainController::class, 'saveaccomplishmentreport']);
+Route::post('/queryaccomplishmentreport', [MainController::class, 'queryaccomplishmentreport']);
 
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');
@@ -110,6 +111,8 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/fundsclearedjobrequest', [MainController::class, 'fundsclearedjobrequest']);
     Route::get('/schedulejobrequests/{id}', [MainController::class, 'schedulejobrequestfundscleared_page']);
     Route::get('/accomplishedjobrequests', [MainController::class, 'accomplishedjobrequests']);
-    Route::get('/accomplishedreport/{id}', [MainController::class, 'accomplishedreport']);
+    Route::get('/accomplishedreport', [MainController::class, 'accomplishedreport']);
+    Route::get('/createaccomplishmentreport/{id}', [MainController::class, 'createaccomplishmentreport']);
+    
 });
 

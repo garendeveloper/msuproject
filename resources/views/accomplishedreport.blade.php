@@ -24,7 +24,7 @@
 <div class="wrapper">
    <!-- Preloader -->
    <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" alt="MSUNLogo" height="500" width="500">
+    <img class="animation__shake" src="{{ url('adminlte3/dist/img/AdminLTELogo.png') }}" alt="MSUNLogo" height="120" width="120">
   </div>
   <!-- Navbar -->
   @include('templates/navbar')
@@ -41,13 +41,16 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
+        <div class="col-sm-1">
+            <a href="{{ url('/accomplishedjobrequests')}}" class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i></a>
+          </div>
+          <div class="col-sm-5">
             <h4>Accomplishment Report</h4>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Invoice</li>
+              <li class="breadcrumb-item active">Accomplishment Report</li>
             </ol>
           </div>
         </div>
@@ -64,7 +67,8 @@
             </div>
             <div class="row no-print">
                 <div class="col-12">
-                    <form action="" method="post">
+                    <form action="{{url('/queryaccomplishmentreport') }}" method="post" >
+                      @csrf
                         <div class="row">
                             <div class="col-md-5">
                                 <select name="year" id="year" class = "form-control">
@@ -82,7 +86,7 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                               <button class = "btn btn-sm btn-primary"><i class = "fa fa-search"></i>&nbsp; Query</button>
+                               <button class = "btn btn-sm btn-block btn-primary" class = "btn btn-submit"><i class = "fa fa-search"></i>&nbsp; Query</button>
                             </div>
                         </div>
                     </form>

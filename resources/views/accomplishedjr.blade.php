@@ -5,6 +5,12 @@
     window.location.href = "/constructiontypes";
   </SCRipt>
   @endif -->
+
+  @if(session()->has('message'))
+  <script>
+    alert("Accomplishment Report Successfully Saved")
+  </script>
+  @endif
   <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +66,7 @@
             <div class="card">
               <div class="card-header" style = "background-color: #1C518A; color: white;">
                 <div class="row">
-                <div class="col-md-12">
+                  <div class="col-md-12">
                     <h6>Accomplished Job Requests ({{$total}})</h6> 
                   </div>
                 
@@ -71,6 +77,9 @@
                 <div class="row">
                     <div class="col-md-4" style = "text-align: right">
                       <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search" style = "font-size:12px; ">
+                    </div>
+                    <div class="col-md-8">
+                      <a href="{{url('/accomplishedreport')}}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-right"></i>&nbsp; Generate Report</a>
                     </div>
                 </div>
                 <br>
@@ -91,7 +100,7 @@
                                 <td>{{ucwords($jobrequests[$i]['construction_type'])}}</td>
                                 <td>{{$jobrequests[$i]['dateCleared']}}</td>
                                 <td align = "center">
-                                    <a href="{{url('/accomplishedreport/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-arrow-right"></i>&nbsp; Report</a>
+                                    <a href="{{url('/createaccomplishmentreport/'.$jobrequests[$i]['id'])}}" class = "btn btn-primary btn-sm"><i class = "fa fa-plus"></i>&nbsp; Add Accomplishment Details</a>
                                 </td>
                             </tr>
                         <?php }?>

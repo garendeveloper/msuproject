@@ -87,7 +87,7 @@
           @endif
         <div class="row">
           <div class="col-12">
-            <button type="submit" class="btn btn-sm btn-outline-primary btn-block"><i class = "fas fa-sign-up"></i> Sign In</button>
+            <button type="submit" class="btn btn-sm btn-outline-primary btn-block"><i class = "fas fa-arrow-right"></i> Sign In</button>
           </div>
           <!-- <div class="col-6">
             <a href="{{ url('/registration') }}"  class = "btn btn-sm btn-outline-success btn-block"><i class = "fas fa-register"></i> Sign Up</a>

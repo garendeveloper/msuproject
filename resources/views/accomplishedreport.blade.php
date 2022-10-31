@@ -80,9 +80,9 @@
                                 </select>
                             </div>
                             <div class="col-md-5">
-                                <select name="year" id="year" class = "form-control">
+                                <select name="quarter" id="quarter" class = "form-control">
                                     <option value="1">January to May </option>
-                                    <option value="1">June to December</option>
+                                    <option value="2">June to December</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -138,12 +138,18 @@
 
                    </address> 
                 </div>
-               <div class="col-sm-4 invoice-col">
+                @if(session()->has('data'))
+                <div class="col-sm-4 invoice-col">
                     <center>
                        PHYSICAL PLANT UNIT <br> 
                        <strong>STATUS INFRA PROJECTS</strong><br>
+                         <?php 
+                            $data = session()->get('data');
+                            echo $data['date'];
+                         ?>
                     </center> 
-               </div>
+                </div>
+                @endif
                 <!-- /.col -->
               
                 <!-- /.col -->
@@ -157,25 +163,93 @@
                   
                 </div>
                 <div class="col-sm-10 invoice-col">
-             
-                  <table>
-                    <thead>
-                      <tr style = "text-align: center">
-                        <th>DESCRIPTION</th>
-                        <th>APPROPRIATION PROGRAM (GAA)</th>
-                        <th>AMOUNT</th>
-                        <th>AMOUNT UTILIZED</th>
-                        <th>STATUS</th>
-                        <th>ACCOMPLISHMENT %</th>
-                        <th>REMARKS</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                  </table>
+                  @if(!empty(session()->has('data')))
+                    <?php $data = session()->get('data')['jobrequests'];?>
+                    <table>
+                      <thead>
+                        <tr style = "text-align: center">
+                          <th>DESCRIPTION</th>
+                          <th>APPROPRIATION PROGRAM (GAA)</th>
+                          <th>AMOUNT</th>
+                          <th>AMOUNT UTILIZED</th>
+                          <th>STATUS</th>
+                          <th>ACCOMPLISHMENT %</th>
+                          <th>REMARKS</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <?php $accoms = [];   $gaa = " "; 
+                            $amount_utilized = " "; $remarks; $amount; $accomplishmentpercent;
+                            $elc_amount; $emc_amount; $eec_amount;
+                          ?>
+                        
+                          @foreach($data as $jr)
+
+                              <?php 
+                              $jr_id = $jr->jobreq_id;
+                              $accoms = DB::select('select accomplishment_reports.*
+                                                    from accomplishment_reports, construction_types, jobrequestschedules
+                                                    where construction_types.id = jobrequestschedules.jobrequest_id 
+                                                    and jobrequestschedules.id=  accomplishment_reports.jobrequest_id 
+                                                    and construction_types.id = "'.$jr_id.'"');
+                              
+                              $emc_amount = DB::select('select sum(estimated_material_costs.amount)  as amount
+                                                        from  estimated_material_costs, construction_types, constructions
+                                                        where construction_types.id = constructions.constructiontype_id
+                                                        and constructions.id = estimated_material_costs.construction_id
+                                                        and construction_types.id = "'.$jr_id.'";');
+                              $elc_amount = DB::select('select sum(estimated_labor_costs.amount)  as amount
+                                                        from estimated_labor_costs, construction_types, constructions
+                                                        where construction_types.id = constructions.constructiontype_id
+                                                        and constructions.id = estimated_labor_costs.construction_id
+                                                        and construction_types.id = "'.$jr_id.'"');
+                              $eec_amount = DB::select('select sum(estimated_equipment_rental_costs.amount)  as amount
+                                                        from estimated_equipment_rental_costs, construction_types, constructions
+                                                        where construction_types.id = constructions.constructiontype_id
+                                                        and constructions.id = estimated_equipment_rental_costs.construction_id
+                                                        and construction_types.id = "'.$jr_id.'"');
+                              $amount = ($emc_amount[0]->amount)+($elc_amount[0]->amount)+($eec_amount[0]->amount);
+                              if(count($accoms) > 0)
+                              {
+                                $gaa = $accoms[0]->gaa;
+                                $amount_utilized = $accoms[0]->amount_utilized;
+                                $remarks = $accoms[0]->remarks;
+                                $accomplishmentpercent = ($amount/($amount+$amount_utilized))*100;
+                              }
+                              else {
+                                $gaa = " - ";
+                                $remarks = " - ";
+                                $accomplishmentpercent = 0;
+                              }
+                             
+                              $jobreqsched_status = $jr->jobreqsched_status;
+                              
+                             
+                            ?>
+                            <tr>
+                              <td>{{ $jr->construction_type }}</td>
+                              <td>{{ $gaa }}</td>
+                              <td align="right">{{ number_format($amount, 2) }}</td>
+                              <td align = "right">{{ number_format($amount_utilized, 2) }}</td>
+                              <td> 
+                                @if($jobreqsched_status == 1)
+                                  Completed
+                                @endif
+                                @if($jobreqsched_status == 0)
+                                  On-Going
+                                @endif
+                              <td align = "center">{{ number_format($accomplishmentpercent,2) }} %</td>
+                              <td>{{ $remarks }}</td>
+                            </tr>
+                          @endforeach
+                      </tbody>
+                    </table>
+                  @endif
                 </div>
-              </div> <br>
+                <div class="col-sm-1 invoice-col">
+
+                </div>
+              </div> 
        
               <!-- this row will not appear when printing -->
               <div class="row no-print">

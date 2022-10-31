@@ -22,7 +22,7 @@ return new class extends Migration
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->string('gaa');
-            $table->double('amount_utilized')->default('0.0');
+            $table->double('amount_utilized');
             $table->string('remarks');
             $table->timestamps();
         });

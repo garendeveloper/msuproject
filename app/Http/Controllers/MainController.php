@@ -297,8 +297,31 @@ class MainController extends Controller
     }
     public function queryaccomplishmentreport(Request $request)
     {
-        // $data = DB::select('')
-        return redirect()->back();
+        $startdate = "";
+        $enddate = "";
+        $year = $request->year;
+        $date = "";
+        if($request->quarter == 1)
+        {
+            $startdate = $year.'/01/30';
+            $enddate = $year.'/05/30';
+            $date = 'January to May 30 '.$year;
+        }
+        if($request->quarter == 2)
+        {
+            $startdate = $year.'/06/30';
+            $enddate = $year.'/12/30';
+            $date = 'June to December 30 '.$year;
+        }
+        $data = DB::select('SELECT 	construction_types.*, construction_types.id as jobreq_id, jobrequestschedules.id as jr_id, jobrequestschedules.status  as jobreqsched_status
+                            FROM 	construction_types, jobrequestschedules
+                            WHERE 	construction_types.id = jobrequestschedules.jobrequest_id
+                            AND		jobrequestschedules.updated_at BETWEEN "'.$startdate.'" AND "'.$enddate.'"');
+        $data1 = [
+            'jobrequests' => $data,
+            'date' => $date
+        ];
+        return redirect()->back()->with(['data'=>$data1]);
     }
     public function accomplishedjobrequests()
     {

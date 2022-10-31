@@ -260,7 +260,26 @@ class MainController extends Controller
             return redirect('/')->with('fail', 'You must be logged in!');
         }
     }
-  
+    public function createpersonnel()
+    {
+        if(!empty(session('LoggedUser')))
+        {
+            $userinfo = DB::select('select users.*, users.id as user_id, departments.*
+                                    from departments, users 
+                                    where departments.id = users.department_id
+                                    and users.id = "'.session('LoggedUser').'"');
+            $personnels = DB::select("select * from personnels");
+            $userinfo = [
+                'userinfo' => $userinfo, 
+                'personnels' => $personnels
+            ];
+            return view('createpersonnel', $userinfo);
+        }
+        else
+        {
+            return redirect('/')->with('fail', 'You must be logged in!');
+        }
+    }
     public function unapprovedjobrequests()
     {
         if(!empty(session('LoggedUser')))

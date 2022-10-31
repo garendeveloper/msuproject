@@ -271,7 +271,7 @@
                               $totaleer_amount += $total_eer[0]->eer_total;
                               $totalelc_amount += $total_elc[0]->elc_total;
                               $totalemc_amount += $total_emc[0]->emc_total;
-                              $overalltotal += $totaleer_amount + $totalelc_amount + $totalemc_amount;
+                              $overalltotal = $totaleer_amount + $totalelc_amount + $totalemc_amount;
                             ?>
                             <tr>
                               <td align = "center">{{ $char[$i] }} </td>
@@ -326,20 +326,22 @@
                           $foreman = DB::select('select users.name
                                               from users, construction_types
                                               where construction_types.user_id = users.id
-                                              and construction_types.id = "'.$jobrequestdetails->id.'"')
+                                              and construction_types.id = "'.$jobrequestdetails->id.'"');
+                        
+                          $personnels = DB::select('select * from personnels');
                         ?>
                         <B>{{ strtoupper($foreman[0]->name)}}</B><BR>
                         Const. & Maintainance Foreman <br>
-                        Date: October 21, 2021 <br>
+                        Date: {{ date('M-d-Y'); }} <br>
                     </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
                     <address>
                         <br>
-                        <B>ENGR. JOSE VINCENT T. PADIN</B><BR>
+                        <B>{{strtoupper($personnels[0]->engineer)}}</B><BR>
                         Engineer I <br>
-                        Date: October 21, 2021 <br>
+                        Date: {{ date('M-d-Y'); }} <br>
                     </address>
                 </div>
                 <!-- /.col -->
@@ -354,7 +356,7 @@
                         ?>
                         <B>{{ strtoupper($ppuhead[0]->name) }}</B><BR>
                         Chief, Physical Plant <br>
-                        Date: October 21, 2021 <br>
+                        Date: {{ date('M-d-Y'); }} <br>
                     </address>
                 </div>
                 <div class="col-sm-1 invoice-col" style = "border-top: 1px solid black">
@@ -391,18 +393,18 @@
                 <div class="col-sm-5 invoice-col">
                     <address>
                         <br>
-                        <B>RHODA P. ABARY, CPA</B><BR>
+                        <B>{{ strtoupper($personnels[0]->vicechancellor) }}</B><BR>
                         Vice Chancellor for Administration & Finance<br>
-                        Date: October 21, 2021 <br>
+                        Date: {{ date('M-d-Y'); }} <br>
                     </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-5 invoice-col" >
                     <address>
                         <br>
-                        <B>ELNOR C. ROA, PH.D.</B><BR>
+                        <B>{{ strtoupper($personnels[0]->chancellor)}}</B><BR>
                         Chancellor<br>
-                        Date: October 21, 2021 <br>
+                        Date: {{ date('M-d-Y'); }} <br>
                     </address>
                 </div>
               </div>

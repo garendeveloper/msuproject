@@ -5,6 +5,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PersonnelController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -113,6 +114,7 @@ Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/accomplishedjobrequests', [MainController::class, 'accomplishedjobrequests']);
     Route::get('/accomplishedreport', [MainController::class, 'accomplishedreport']);
     Route::get('/createaccomplishmentreport/{id}', [MainController::class, 'createaccomplishmentreport']);
-    
+    Route::get('/createpersonnel', [MainController::class, 'createpersonnel']);
+    Route::post('/savepersonnel', [PersonnelController::class, 'savepersonnel']);
 });
 

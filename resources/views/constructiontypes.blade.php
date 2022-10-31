@@ -423,9 +423,9 @@
             // html += "<td >"+jQuery.timeago(date)+"</td>";
             html += "<td >"+data[i].dateRequested+"</td>";
             html += '<td align = "center" > '+
-                        '<a class = " info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i> Info</a> '+ 
-                        '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-link"></i> Report</a> '+ 
-                        '<a style  ="color:red"  href = "/constructionsbyID/'+data[i].id+'" ><i class = "fa fa-arrow-right"></i> Estimation</a>'+ 
+                        '<a style  ="color:black"  class = " info" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-info"></i>&nbsp; Info</a> '+ 
+                        '<a href = "/jobrequest_formById/'+data[i].id+'" ><i class = "fa fa-edit"></i>&nbsp; Update</a> '+ 
+                        '<a style  ="color:red"  href = "/constructionsbyID/'+data[i].id+'" ><i class = "fa fa-arrow-right"></i>&nbsp; Estimation</a>'+ 
                      '</td>';
             html += "</tr>";
           }

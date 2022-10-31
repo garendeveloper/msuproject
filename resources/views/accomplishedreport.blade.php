@@ -94,7 +94,8 @@
             </div>
             <br>
             <!-- Main content -->
-            <div class="invoice p-3 mb-3">
+      
+            <div class="invoice p-3 mb-3" >
               <!-- title row -->
               <div class="row">
                 <div class="col-12">
@@ -165,6 +166,7 @@
                 <div class="col-sm-10 invoice-col">
                   @if(!empty(session()->has('data')))
                     <?php $data = session()->get('data')['jobrequests'];?>
+                    @if(count($data) > 0)
                     <table>
                       <thead>
                         <tr style = "text-align: center">
@@ -208,18 +210,22 @@
                                                         where construction_types.id = constructions.constructiontype_id
                                                         and constructions.id = estimated_equipment_rental_costs.construction_id
                                                         and construction_types.id = "'.$jr_id.'"');
-                              $amount = ($emc_amount[0]->amount)+($elc_amount[0]->amount)+($eec_amount[0]->amount);
+                              
                               if(count($accoms) > 0)
                               {
+                                $amount = ($emc_amount[0]->amount)+($elc_amount[0]->amount)+($eec_amount[0]->amount);
                                 $gaa = $accoms[0]->gaa;
                                 $amount_utilized = $accoms[0]->amount_utilized;
                                 $remarks = $accoms[0]->remarks;
-                                $accomplishmentpercent = ($amount/($amount+$amount_utilized))*100;
+                                $accomplishmentpercent = ($amount_utilized / $amount)*100;
+                             
                               }
                               else {
                                 $gaa = " - ";
                                 $remarks = " - ";
                                 $accomplishmentpercent = 0;
+                                $amount_utilized = 0;
+                                $amount = 0;
                               }
                              
                               $jobreqsched_status = $jr->jobreqsched_status;
@@ -227,8 +233,8 @@
                              
                             ?>
                             <tr>
-                              <td>{{ $jr->construction_type }}</td>
-                              <td>{{ $gaa }}</td>
+                              <td>{{ ucwords($jr->construction_type) }}</td>
+                              <td>{{ strtoupper($gaa) }}</td>
                               <td align="right">{{ number_format($amount, 2) }}</td>
                               <td align = "right">{{ number_format($amount_utilized, 2) }}</td>
                               <td> 
@@ -244,13 +250,51 @@
                           @endforeach
                       </tbody>
                     </table>
+                    @endif
                   @endif
                 </div>
                 <div class="col-sm-1 invoice-col">
 
                 </div>
-              </div> 
-       
+              </div> <br><br><br>
+              
+              <div class="row invoice-info"> 
+                  <div class="col-sm-1 invoice-col">
+                      <address>
+                          
+                      </address>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-4 invoice-col">
+                      <address>
+                          <br>
+                          <?php 
+                            $ppuhead = DB::select('select users.name 
+                                                    from users, departments
+                                                    where departments.departmentname = "PPU HEAD"');
+                            $personnels = DB::select('select * from personnels');
+                          ?>
+                          <B><?= $ppuhead[0]->name ?></B><BR>
+                          Chief, Physical Plant<br>
+                      </address>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-4 invoice-col">
+                      <address>
+                          <br>
+                          <B>{{ strtoupper($personnels[0]->adminofficer) }}</B><BR>
+                          Administrative Officer <br>
+                      </address>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-3 invoice-col" >
+                      <address>
+                          <br>
+                          <B>{{ strtoupper($personnels[0]->chancellor) }}</B><BR>
+                          Chancellor <br>
+                      </address>
+                  </div>
+              </div>
               <!-- this row will not appear when printing -->
               <div class="row no-print">
               </div>
@@ -264,7 +308,7 @@
   </div>
   <!-- /.content-wrapper -->
     <!-- Main Footer -->
-    @include('templates/footer')
+    <!-- @include('templates/footer') -->
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->

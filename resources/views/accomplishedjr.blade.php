@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <br>
-                <table id = "tbl_jobrequests" class="table table-bordered table-striped data-table" style = "table-layout: responsive ">
+                <table id = "tbl_jobrequests" class="table table-bordered table-striped data-table" style = "table-layout: responsive; font-size: 12px; ">
                   <thead style = "background-color: #1C518A; color: white;">
                   <tr>
                     <th>Job Request</th>

@@ -57,11 +57,17 @@
               </a>
             </li>
             <li class="nav-item">
-            <a href="{{ url('/scheduling') }}" class="nav-link">
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>Scheduling</p>
-            </a>
-          </li>
+              <a href="{{ url('/scheduling') }}" class="nav-link">
+                <i class="nav-icon far fa-calendar-alt"></i>
+                <p>Scheduling</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url('/createpersonnel') }}" class="nav-link">
+                <i class="nav-icon fas fa-cog"></i>
+                <p>Honorables</p>
+              </a>
+            </li>
           <!-- <li class="nav-item">
             <a href="" class="nav-link">
               <i class="nav-icon fas fa-file"></i>

@@ -115,10 +115,11 @@
             <input type="hidden" value = "" id = "id" name = "id">
             
             <div class="form-group">
-              <label for="constructiontype_id">Construction Type</label>
+              <!-- <label for="constructiontype_id">Construction Type</label>
               <select class ="form-control" name="constructiontype_id" id="constructiontype_id">
                 <option value="">--Select Item -- </option>
-              </select>
+              </select> -->
+              <input type="text" style = "display: none" name="constructiontype_id" id="constructiontype_id" value = "{{ $url_id }}">
             </div>
             <div class="form-group">
               <label for="construction">Scope of Work</label>

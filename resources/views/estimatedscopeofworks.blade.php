@@ -150,7 +150,7 @@
                                               where departments.id = users.department_id
                                               and departments.departmentname = "PPU HEAD"')
                         ?>
-                        <B>{{ strtoupper($ppuhead[0]->name) }}</B><BR>
+                        <B>{{ !empty($ppuhead[0]->name) ? strtoupper($ppuhead[0]->name) : " - " }}</B><BR>
                         Chief, Physical Plant
                     </center>
                 </div>
@@ -323,14 +323,16 @@
                     <address>
                         <br>
                         <?php 
-                          $foreman = DB::select('select users.name
-                                              from users, construction_types
-                                              where construction_types.user_id = users.id
-                                              and construction_types.id = "'.$jobrequestdetails->id.'"');
+                          $foreman = DB::select(' select users.name
+                                                  from users, construction_types, jobrequestschedules, userjobrequestschedules
+                                                  where construction_types.id = jobrequestschedules.jobrequest_id
+                                                  and jobrequestschedules.id = userjobrequestschedules.jobrequestsched_id
+                                                  and users.id = userjobrequestschedules.user_id
+                                                  and construction_types.id = "'.$jobrequestdetails->id.'"');
                         
                           $personnels = DB::select('select * from personnels');
                         ?>
-                        <B>{{ strtoupper($foreman[0]->name)}}</B><BR>
+                        <B>{{ !empty($foreman) ? strtoupper($foreman[0]->name) : " - " }}</B><BR>
                         Const. & Maintainance Foreman <br>
                         Date: {{ date('M-d-Y'); }} <br>
                     </address>
@@ -339,7 +341,7 @@
                 <div class="col-sm-4 invoice-col">
                     <address>
                         <br>
-                        <B>{{strtoupper($personnels[0]->engineer)}}</B><BR>
+                        <B>{{ !empty($personnels[0]->engineer) ? strtoupper($personnels[0]->engineer) : " - "}}</B><BR>
                         Engineer I <br>
                         Date: {{ date('M-d-Y'); }} <br>
                     </address>
@@ -354,7 +356,7 @@
                                               where departments.id = users.department_id
                                               and departments.departmentname = "PPU HEAD"')
                         ?>
-                        <B>{{ strtoupper($ppuhead[0]->name) }}</B><BR>
+                        <B>{{ !empty($ppuhead[0]->name) ? strtoupper($ppuhead[0]->name) : " - " }}</B><BR>
                         Chief, Physical Plant <br>
                         Date: {{ date('M-d-Y'); }} <br>
                     </address>
@@ -393,7 +395,7 @@
                 <div class="col-sm-5 invoice-col">
                     <address>
                         <br>
-                        <B>{{ strtoupper($personnels[0]->vicechancellor) }}</B><BR>
+                        <B>{{ !empty($personnels[0]->vicechancellor) ? strtoupper($personnels[0]->vicechancellor) : " - " }}</B><BR>
                         Vice Chancellor for Administration & Finance<br>
                         Date: {{ date('M-d-Y'); }} <br>
                     </address>
@@ -402,7 +404,7 @@
                 <div class="col-sm-5 invoice-col" >
                     <address>
                         <br>
-                        <B>{{ strtoupper($personnels[0]->chancellor)}}</B><BR>
+                        <B>{{ !empty($personnels[0]->chancellor) ? strtoupper($personnels[0]->chancellor) : " - "}}</B><BR>
                         Chancellor<br>
                         Date: {{ date('M-d-Y'); }} <br>
                     </address>

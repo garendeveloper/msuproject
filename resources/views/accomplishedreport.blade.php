@@ -274,15 +274,15 @@
                                                     where departments.departmentname = "PPU HEAD"');
                             $personnels = DB::select('select * from personnels');
                           ?>
-                          <B><?= $ppuhead[0]->name ?></B><BR>
-                          Chief, Physical Plant<br>
+                          <B>{{ !empty($ppuhead[0]->name) ? strtoupper($ppuhead[0]->name) : " - " }}</B><BR>
+                          Chief, Physical Plant <br>
                       </address>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-4 invoice-col">
                       <address>
                           <br>
-                          <B>{{ strtoupper($personnels[0]->adminofficer) }}</B><BR>
+                          <B>{{ !empty($personnels[0]->adminofficer) ? strtoupper($personnels[0]->adminofficer) : " - " }}</B><BR>
                           Administrative Officer <br>
                       </address>
                   </div>
@@ -290,8 +290,8 @@
                   <div class="col-sm-3 invoice-col" >
                       <address>
                           <br>
-                          <B>{{ strtoupper($personnels[0]->chancellor) }}</B><BR>
-                          Chancellor <br>
+                          <B>{{ !empty($personnels[0]->chancellor) ? strtoupper($personnels[0]->chancellor) : " - "}}</B><BR>
+                          Chancellor<br>
                       </address>
                   </div>
               </div>

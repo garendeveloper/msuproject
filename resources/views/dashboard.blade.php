@@ -1,9 +1,4 @@
-@if($userinfo[0]->departmentname == "FINANCIAL DIVISION")
-  <script>
-    alert("You do not have the authority to visit this page!")
-    window.location.href = "/checking_fundsAvailability";
-  </script>
-@endif
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,8 +64,9 @@
                   @endif
 
                 <p>Awaiting for Scheduling.</p>
-
+                @if($userinfo[0]->departmentname == "PPU HEAD")
                 <a href="{{ url('/fundsclearedjobrequest') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                @endif
               </div>
             </div>
           </div>
@@ -86,8 +82,9 @@
                   @endif
 
                 <p>With available funds.</p>
-
+                @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
                 <a href="{{ url('/approvedjobrequests')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                @endif
               </div>
             </div>
           </div>
@@ -103,8 +100,9 @@
                   @endif
 
                 <p>Pending for Fund Validation.</p>
-
+                @if($userinfo[0]->departmentname == "PPU HEAD" || $userinfo[0]->departmentname == "FINANCIAL DIVISION")
                 <a href="{{ url('/unapprovedjobrequests')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                @endif
               </div>
             </div>
           </div>
@@ -120,8 +118,9 @@
                   @endif
 
                 <p>Accomplished Job Requests</p>
-
+                @if($userinfo[0]->departmentname == "PPU HEAD")
                 <a href="{{url('/accomplishedjobrequests')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                @endif
               </div>
             </div>
           </div>

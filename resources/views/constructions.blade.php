@@ -53,12 +53,13 @@
               <div class="card-header">
                 <div class="row">
                   <div class="col-md-8">
+                  <a  href="{{ url('/constructiontypes') }}" class = "btn btn-outline-primary btn-sm"  align = "right"><i class = "fa fa-arrow-left"></i>&nbsp; Back</a>
                     <button class = "btn btn-outline-primary btn-sm" id = "btn_openmodal" type = "button"><i class = "fa fa-plus"></i>&nbsp; Add Construction (SOW )</button>
                     <a  href="{{ url('/estimatedscopeofworks/'.$url_id) }}" class = "btn btn-outline-success btn-sm"  align = "right"><i class = "fa fa-file"></i>&nbsp; Generate Report</a>
                     <a  href="{{ url('/materialreport/'.$url_id) }}" class = "btn btn-outline-success btn-sm"  align = "right"><i class = "fa fa-file"></i>&nbsp; Generate Material Report</a>
                     <a  href="{{ url('/equipmentreport/'.$url_id) }}" class = "btn btn-outline-success btn-sm"  align = "right"><i class = "fa fa-building"></i>&nbsp; Generate Equipment Report</a>
                     <a  href="{{ url('/laborreport/'.$url_id) }}" class = "btn btn-outline-success btn-sm"  align = "right"><i class = "fa fa-user"></i>&nbsp; Generate Labor Report</a>
-                    <a  href="{{ url('/constructiontypes') }}" class = "btn btn-outline-primary btn-sm"  align = "right"><i class = "fa fa-arrow-left"></i>&nbsp; Back</a>
+                    
                   </div>
                   <div class="col-md-4">
                     <input class="form-control" id = "search" type="search" placeholder="Search Item Here.." aria-label="Search">

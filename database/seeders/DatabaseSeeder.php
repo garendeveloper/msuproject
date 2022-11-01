@@ -140,5 +140,13 @@ class DatabaseSeeder extends Seeder
           'construction_name' => 'Electrical Works',
           'constructiontype_id' => 1,
         ]);
+
+
+        \App\Models\Personnel::factory()->create([
+          'adminofficer' => 'ENGR. NORMAN C. EBALLE',
+          'engineer' => 'ENGR. JOSE VINCENT T. PADIN',
+          'vicechancellor' => 'RHODA P. ABARY, CPA',
+          'chancellor' => 'ELNOR C. ROA, PH.D',
+        ]);
     }
 }

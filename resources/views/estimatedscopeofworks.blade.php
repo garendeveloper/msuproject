@@ -238,12 +238,56 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <?php 
+                        <?php 
                             $totaleer_amount = 0;
                             $totalelc_amount = 0;
                             $totalemc_amount = 0;
                             $overalltotal = 0;
-                           $i  = 0;
+                            $percent = 0;
+                            $i  = 0;
+                            $char = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+                          ?>
+                          
+                        @foreach($scopeofworks as $sow)
+                            <?php
+                              $sow_id = $sow->id;
+                              $jobrequest_id = $sow->constructiontype_id;
+
+                              $total_emc = DB::select('SELECT sum(estimated_material_costs.amount) as emc_total
+                                                      FROM estimated_material_costs, constructions
+                                                      WHERE constructions.id = estimated_material_costs.construction_id
+                                                      AND constructions.id = "'.$sow_id.'"');
+
+                              $total_eer = DB::select('SELECT sum(estimated_equipment_rental_costs.amount) as eer_total
+                                                      FROM estimated_equipment_rental_costs, constructions
+                                                      WHERE constructions.id = estimated_equipment_rental_costs.construction_id
+                                                      AND constructions.id = "'.$sow_id.'"'); 
+                              
+                              $total_elc = DB::select('SELECT sum(estimated_labor_costs.amount) as elc_total
+                                                      FROM estimated_labor_costs, constructions
+                                                      WHERE constructions.id = estimated_labor_costs.construction_id
+                                                      AND constructions.id = "'.$sow_id.'"');
+                              
+                              $total = $total_emc[0]->emc_total + $total_eer[0]->eer_total + $total_elc[0]->elc_total;
+                              
+                              $totaleer_amount += $total_eer[0]->eer_total;
+                              $totalelc_amount += $total_elc[0]->elc_total;
+                              $totalemc_amount += $total_emc[0]->emc_total;
+                              $overalltotal = $totaleer_amount + $totalelc_amount + $totalemc_amount;
+                       
+                            ?>
+                          <?php $i++?>
+                          @endforeach
+
+                          <?php 
+                          $overalltotal1 = 0;
+                          if($overalltotal >  0) {$overalltotal1 = $overalltotal; }
+                            $totaleer_amount = 0;
+                            $totalelc_amount = 0;
+                            $totalemc_amount = 0;
+                            $overalltotal = 0;
+                            $percent = 0;
+                            $i  = 0;
                             $char = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
                           ?>
                           @foreach($scopeofworks as $sow)
@@ -272,11 +316,12 @@
                               $totalelc_amount += $total_elc[0]->elc_total;
                               $totalemc_amount += $total_emc[0]->emc_total;
                               $overalltotal = $totaleer_amount + $totalelc_amount + $totalemc_amount;
+                              $percent = ($total / $overalltotal1) * 100;
                             ?>
                             <tr>
                               <td align = "center">{{ $char[$i] }} </td>
                               <td>{{ ucwords(strtolower($sow->construction_name)) }}</td>
-                              <td></td>
+                              <td align = "center">{{ $percent > 0 ? number_format($percent, 2) : " 0 " }} </td>
                               <td align = "right">{{ number_format($total_elc[0]->elc_total, 2) > 0 ? number_format($total_elc[0]->elc_total, 2) : " " }}</td>
                               <td align = "right">{{ number_format($total_eer[0]->eer_total, 2) > 0 ? number_format($total_eer[0]->eer_total, 2) : " " }}</td>
                               <td align = "right">{{ number_format($total_emc[0]->emc_total, 2) > 0 ? number_format($total_emc[0]->emc_total, 2) : " " }}</td>
@@ -289,7 +334,7 @@
                           <tr >
                             <td></td>
                             <td style = "text-align: center"><b>TOTAL AMOUNT</b></td>
-                            <td></td>
+                            <td align = "center">{{ $overalltotal1 > 0 ? "100 %" : " 0 %"}}</td>
                             <td align = "right"><b>{{ number_format($totalelc_amount,2) }}</b></td>
                             <td align = "right"><b>{{ number_format($totaleer_amount,2) }}</b></td>
                             <td align = "right"><b>{{ number_format($totalemc_amount,2) }}</b></td>

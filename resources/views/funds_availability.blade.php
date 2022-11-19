@@ -9,6 +9,26 @@
 <html lang="en">
 <head>
   @include('scripts/header')
+  <style>
+.overlay{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background: rgba(255,255,255,0.8) url("adminlte3/dist/img/loader1.gif") center no-repeat;
+}
+/* Turn off scrollbar when body element has the loading class */
+body.loading{
+    overflow: hidden;   
+}
+/* Make spinner image visible when body element has the loading class */
+body.loading .overlay{
+    display: block;
+}
+</style>
 </head>
 <!--
 `body` tag options:
@@ -143,7 +163,7 @@
         <!-- /.modal-dialog -->
       </div>
       <!-- /.modal -->
-
+      <div class="overlay"></div>
   <!-- Main Footer -->
   @include('templates/footer')
 </div>
@@ -151,6 +171,16 @@
 
 <!-- REQUIRED SCRIPTS -->
 @include('scripts/footer')
+<script>
+  $(document).on({
+    ajaxStart: function(){
+        $("body").addClass("loading"); 
+    },
+    ajaxStop: function(){ 
+        $("body").removeClass("loading"); 
+    }    
+});
+</script>
 <script>
   $(function () {
     $("#search").on('keyup', function(){
@@ -171,9 +201,9 @@
     })
     var Toast = Swal.mixin({
       toast: true,
-      position: 'top-end',
+      position: 'top-right',
       showConfirmButton: false,
-      timer: 3000
+      timer: 9000
     });
     function toTitleCase(str) {
         return str.replace(/(?:^|\s)\w/g, function(match) {
@@ -203,6 +233,25 @@
        
       })
       show_allData();
+    })
+    $("body").on('click', '.resendEmail', function(){
+      var jobrequest_id = $(this).data('id');
+
+      $.ajax({
+        type: 'get',
+        url: '/resendEmail/'+jobrequest_id,
+        dataType: 'json',
+        success: function(response)
+        {
+          if(response.status == 200) toastr.success(response.message);
+          else  toastr.error(response.message)
+          show_allData();
+        },
+        error: function(resp)
+        {
+          alert("Something went wrong! Please reload your page.");
+        }
+      })
     })
     function show_allData(){
       $.ajax({
@@ -235,8 +284,9 @@
               else
               {
                 html += '<td align = "center"> '+
-                        '<a style = "font-size: 10px" class = "btn btn-sm btn-success fundsCleared" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-certificate"></i>&nbsp; Funds Cleared</a>';
-                     '</td>';
+                        '<a style = "font-size: 10px" class = "btn btn-sm btn-success fundsCleared" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-certificate"></i>&nbsp; Funds Cleared</a>'+
+                        '<a style = "font-size: 10px" class = "btn btn-sm btn-primary resendEmail" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i>&nbsp; Resend Email</a>'+
+                        '</td>';
               }
             }
             else
@@ -268,15 +318,15 @@
             {
               if(response.status == 200)
               {
-                Toast.fire({
-                  icon: 'success',
-                  title: response.success
-                })
-              }
-              else 
+                toastr.success(response.message);
+                toastr.success(response.mail);
+              } 
+              else if(response.status == 201)
               {
-                alert(response.error_msg);
+                toastr.success(response.message);
+                toastr.error(response.mail)
               }
+              else alert(response.error_msg);
               show_allData();
             }
           })

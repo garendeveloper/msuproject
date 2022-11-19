@@ -86,6 +86,7 @@ Route::get('get_allconstructiontypesById', [MainController::class,'get_allconstr
 Route::post('/register_jobrequestor', [LoginController::class, 'register_jobrequestor']);
 Route::post('/saveaccomplishmentreport', [MainController::class, 'saveaccomplishmentreport']);
 Route::post('/queryaccomplishmentreport', [MainController::class, 'queryaccomplishmentreport']);
+Route::get('/resendEmail/{id}', [MainController::class, 'resendEmail']);
 
 Route::group(['middleware'=> ['AuthCheck']], function(){
     Route::get('/', [LoginController::class, 'index'])->name('/');

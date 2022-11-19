@@ -125,7 +125,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-11 invoice-col">
-                <b>{{ ucwords(strtolower($jobrequestdetails->construction_type))}}</b> 
+                <b>Repair & Improvement of Campus Infirmary Phase -2 </b> 
                 </div>
                 <!-- /.col -->
               </div>

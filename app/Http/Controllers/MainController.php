@@ -17,6 +17,8 @@ use App\Models\UserJobRequestSchedule;
 use App\Models\JobRequestSchedule;
 use App\Models\AccomplishmentReport;
 use Illuminate\Support\Str;
+use Mail;
+use App\Mail\ReceipientMail;
 
 class MainController extends Controller
 {
@@ -316,31 +318,67 @@ class MainController extends Controller
     }
     public function queryaccomplishmentreport(Request $request)
     {
-        $startdate = "";
-        $enddate = "";
+       
         $year = $request->year;
-        $date = "";
-        if($request->quarter == 1)
+        $startdate = $year.'/'.$request->from.'/30';
+        $enddate = $year.'/'.$request->to.'/30';
+
+        $from = "";
+        $to = "";
+        if($request->from == 01) $from = "January";
+        if($request->from == 02) $from = "February";
+        if($request->from == 03) $from = "March";
+        if($request->from == 04) $from = "April";
+        if($request->from == 05) $from = "May";
+        if($request->from == 06) $from = "June";
+        if($request->from == 07) $from = "July";
+        if($request->from == '08') $from = "August";
+        if($request->from == '09') $from = "September";
+        if($request->from == 10) $from = "October";
+        if($request->from == 11) $from = "November";
+        if($request->from == 12) $from = "December";
+
+        if($request->to == 01) $to = "January";
+        if($request->to == 02) $to = "February";
+        if($request->to == 03) $to = "March";
+        if($request->to == 04) $to = "April";
+        if($request->to == 05) $to = "May";
+        if($request->to == 06) $to = "June";
+        if($request->to == 07) $to = "July";
+        if($request->to == '08') $to = "August";
+        if($request->to == '09') $to = "September";
+        if($request->to == 10) $to = "October";
+        if($request->to == 11) $to = "November";
+        if($request->to == 12) $to = "December";
+        
+
+        $date = $from." to ".$to." ".$year;
+        
+        // if($request->quarter == 1)
+        // {
+        //     $startdate = $year.'/01/30';
+        //     $enddate = $year.'/05/30';
+        //     $date = 'January to May 30 '.$year;
+        // }
+        // if($request->quarter == 2)
+        // {
+        //     $startdate = $year.'/06/30';
+        //     $enddate = $year.'/12/30';
+        //     $date = 'June to December 30 '.$year;
+        // }
+        if($request->from <= $request->to)
         {
-            $startdate = $year.'/01/30';
-            $enddate = $year.'/05/30';
-            $date = 'January to May 30 '.$year;
+            $data = DB::select('SELECT 	construction_types.*, construction_types.id as jobreq_id, jobrequestschedules.id as jr_id, jobrequestschedules.status  as jobreqsched_status
+                                FROM 	construction_types, jobrequestschedules
+                                WHERE 	construction_types.id = jobrequestschedules.jobrequest_id
+                                AND		jobrequestschedules.updated_at BETWEEN "'.$startdate.'" AND "'.$enddate.'"');
+            $data1 = [
+                'jobrequests' => $data,
+                'date' => $date
+            ];
+            return redirect()->back()->with(['data'=>$data1]);
         }
-        if($request->quarter == 2)
-        {
-            $startdate = $year.'/06/30';
-            $enddate = $year.'/12/30';
-            $date = 'June to December 30 '.$year;
-        }
-        $data = DB::select('SELECT 	construction_types.*, construction_types.id as jobreq_id, jobrequestschedules.id as jr_id, jobrequestschedules.status  as jobreqsched_status
-                            FROM 	construction_types, jobrequestschedules
-                            WHERE 	construction_types.id = jobrequestschedules.jobrequest_id
-                            AND		jobrequestschedules.updated_at BETWEEN "'.$startdate.'" AND "'.$enddate.'"');
-        $data1 = [
-            'jobrequests' => $data,
-            'date' => $date
-        ];
-        return redirect()->back()->with(['data'=>$data1]);
+        else return redirect()->back()->with('message', 'Cannnot Process. Invalid Month Selected!');
     }
     public function accomplishedjobrequests()
     {
@@ -563,7 +601,7 @@ class MainController extends Controller
             'jobrequest_id' => 'required',
             'gaa' => 'required',
             'amount_utilized' => 'required|integer',
-            'remarks' => 'required|min:10'
+            'remarks' => 'required|min:5'
         ]);
 
         AccomplishmentReport::updateOrCreate(['id'=>$request->id], [
@@ -1775,24 +1813,105 @@ class MainController extends Controller
         }
        return redirect('/')->with('fail', 'You must be logged in!');
     }
+    public function resendEmail($jobrequest_id)
+    {
+        $jobrequestor = DB::select('select users.name, users.email
+                                    from users, construction_types
+                                    where users.id = construction_types.user_id
+                                    and construction_types.id = "'.$jobrequest_id.'"');
+
+        $personnel = DB::select('select users.*
+                                from users
+                                where department_id = 2');
+
+        $connected = @fsockopen("www.google.com", 80); 
+        //website, port  (try 80 or 443)
+        if ($connected)
+        {
+            $is_connected = true; //action when connected
+            fclose($connected);
+        }
+        else $is_connected = false; //action in connection failure
+
+        if($is_connected)
+        {
+            $mailData = [
+                'title' => 'Request Approved',
+                'body' => $jobrequestor[0]->name,
+                'personnel' => $personnel,
+            ];
+
+            Mail::to($jobrequestor[0]->email)->send(new ReceipientMail($mailData));
+
+            return response()->json([
+                'status' => 200, 
+                'message' => 'Email has been sent successfully',
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status' => 400, 
+                'message' => 'Please check your connection! Mail cannot process.',
+            ]);
+        }
+    }
     public function approve_jobRequest($id)
     {
+        $jobrequestor = DB::select('select users.name, users.email
+                                    from users, construction_types
+                                    where users.id = construction_types.user_id
+                                    and construction_types.id = "'.$id.'"');
+        $personnel = DB::select('select users.*
+                                from users
+                                where department_id = 2');
+
         $construction_type = ConstructionTypes::findOrFail($id);
         if(! $construction_type )
         {
             return response()->json([
                 'status' => 400, 
-                'error_msg' => 'Server error: in finding construction type'
+                'error_msg' => 'Server error in searching job request'
             ]);
         }
         else
         {
+            $connected = @fsockopen("www.google.com", 80); 
+                                            //website, port  (try 80 or 443)
+            if ($connected)
+            {
+                $is_connected = true; //action when connected
+                fclose($connected);
+            }
+            else $is_connected = false; //action in connection failure
+            
+
+            $mailData = [
+                'title' => 'Request Approved',
+                'body' => $jobrequestor[0]->name,
+                'personnel' => $personnel,
+            ];
+
             $construction_type->status = 1;
             $construction_type->update();
-            return response()->json([
-                'status' => 200, 
-                'success' => 'The job request has been successfully approved!'
-            ]);
+            if($is_connected)
+            {
+                Mail::to($jobrequestor[0]->email)->send(new ReceipientMail($mailData));
+
+                return response()->json([
+                    'status' => 200, 
+                    'message' => 'The job request has been successfully approved',
+                    'mail' => 'Email has been sent successfully'
+                ]);
+            }
+            else 
+            {
+                return response()->json([
+                    'status' => 201, 
+                    'message' => 'The job request has been successfully approved!',
+                    'mail' => 'Please check your connection! Mail cannot process!',
+                ]);
+            }
         }
     }
     public function search_constructiontypes(Request $request)

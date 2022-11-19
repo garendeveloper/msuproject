@@ -34,7 +34,11 @@
   @include('templates/sidebar')
   <!-- /.control-sidebar -->
 
-  
+  @if(session()->has('message'))
+    <script>
+      alert("Cannot process. Invalid month selected!\nFrom must be less than to To")
+    </script>
+  @endif
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -56,7 +60,7 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
+    
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -70,7 +74,39 @@
                     <form action="{{url('/queryaccomplishmentreport') }}" method="post" >
                       @csrf
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
+                                <select name="from" id="from" class = "form-control">
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="to" id="to" class = "form-control">
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <select name="year" id="year" class = "form-control">
                                     <?php $i=0;?>
                                     @foreach($years as $year)
@@ -79,13 +115,13 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-5">
+                            <!-- <div class="col-md-5">
                                 <select name="quarter" id="quarter" class = "form-control">
                                     <option value="1">January to May </option>
                                     <option value="2">June to December</option>
                                 </select>
-                            </div>
-                            <div class="col-md-2">
+                            </div> -->
+                            <div class="col-md-3">
                                <button class = "btn btn-sm btn-block btn-primary" class = "btn btn-submit"><i class = "fa fa-search"></i>&nbsp; Query</button>
                             </div>
                         </div>
@@ -233,7 +269,7 @@
                              
                             ?>
                             <tr>
-                              <td>{{ ucwords($jr->construction_type) }}</td>
+                              <td>{{ ucwords(strtolower($jr->construction_type)) }}</td>
                               <td>{{ strtoupper($gaa) }}</td>
                               <td align="right">{{ number_format($amount, 2) }}</td>
                               <td align = "right">{{ number_format($amount_utilized, 2) }}</td>

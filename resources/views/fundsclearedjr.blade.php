@@ -102,9 +102,22 @@
                                 <td>{{$jobrequests[$i]['designation']}}</td>
                                 <td>{{$jobrequests[$i]['dateCleared']}}</td>
                                 <td align = "center">
-                                
-                                    <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule</a>
-                               
+
+                                <?php 
+                                    $jobrequest_id = $jobrequests[$i]['id'];
+                                    $schedule = DB::select('select jobrequestschedules.* 
+                                                                from jobrequestschedules
+                                                                where jobrequestschedules.jobrequest_id = "'.$jobrequest_id.'"');
+                                    
+                                    
+
+                                ?>
+                                @if($schedule[0]->status == 1)
+                                  <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm disabled"><i class="fa fa-calendar"></i>&nbsp; Completed</a>
+                                @endif
+                                @if($schedule[0]->status == 0 || empty($schedule))
+                                  <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule </a>
+                                @endif
                                 </td>
                             </tr>
                         <?php }?>

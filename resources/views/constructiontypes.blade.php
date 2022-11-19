@@ -412,7 +412,7 @@
             var urgentstatus = "<span class = 'badge badge-primary'>No</span>";
             if(data[i].urgentstatus == 1) urgentstatus = "<span class = 'badge badge-danger'>Urgent</span>";
 
-            var status = "<span class = 'badge badge-warning'>Still process</span>";
+            var status = "<span class = 'badge badge-warning'>In Process</span>";
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
             // var date = new Date(data[i].created_at);
             html += "<tr style = 'text-align:center'>";
@@ -480,14 +480,14 @@
           {
             user += '<tr>'+
                     '<th>Approval Status</th>'+
-                    '<td> <span class = "badge badge-warning">Still Process</span></td>'+
+                    '<td> <span class = "badge badge-warning">In Process</span></td>'+
                   '</tr>';
           }
           if(data.scheduling_info[0].status == 0 || data.scheduling_info[0].status == " ")
           {
             user += '<tr>'+
                     '<th>Scheduling Status</th>'+
-                    '<td> <span class = "badge badge-warning">On Process</span></td>'+
+                    '<td> <span class = "badge badge-warning">Pending</span></td>'+
                   '</tr>';
           }
           if(data.scheduling_info[0].status == 1)

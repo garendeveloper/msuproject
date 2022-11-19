@@ -263,7 +263,7 @@ body.loading .overlay{
           for(var i = 0; i<data.length; i++)
           {
             var urgentstatus = "";
-            var status = "<span class = 'badge badge-warning'>Still Process</span>";
+            var status = "<span class = 'badge badge-warning'>In Process</span>";
             if(data[i].status == 1)  status = "<span class = 'badge badge-success'>Approved</span>";
             if(data[i].urgentstatus == 1) urgentstatus = "<span class = 'badge badge-danger'>Urgent</span>";
         
@@ -284,7 +284,7 @@ body.loading .overlay{
               else
               {
                 html += '<td align = "center"> '+
-                        '<a style = "font-size: 10px" class = "btn btn-sm btn-success fundsCleared" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-certificate"></i>&nbsp; Funds Cleared</a>'+
+                        '<a style = "font-size: 10px" class = "btn btn-sm btn-success fundsCleared" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-certificate"></i>&nbsp; Clear Funds</a>'+
                         '<a style = "font-size: 10px" class = "btn btn-sm btn-primary resendEmail" data-constructiontype = "'+data[i].construction_type+'" data-id = "'+data[i].id+'" ><i class = "fa fa-arrow-right"></i>&nbsp; Resend Email</a>'+
                         '</td>';
               }

@@ -138,7 +138,7 @@
                     @endif
                     @if($jr_info == "")
                     <input type="text" style = "display: none" id = "constructiontype_id" value = "">
-                    <textarea name="constructiontype"  id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required></textarea>
+                    <textarea name="constructiontype" placeholder="Write your request here" id="constructiontype" cols="30" rows="10" style="border: solid 1px black;" class = "form-control" required></textarea>
                     @endif
                     <br>
                 </div>

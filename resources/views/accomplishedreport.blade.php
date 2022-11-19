@@ -122,7 +122,7 @@
                                 </select>
                             </div> -->
                             <div class="col-md-3">
-                               <button class = "btn btn-sm btn-block btn-primary" class = "btn btn-submit"><i class = "fa fa-search"></i>&nbsp; Query</button>
+                               <button class = "btn btn-sm btn-block btn-primary" class = "btn btn-submit"><i class = "fa fa-search"></i>&nbsp; Generate</button>
                             </div>
                         </div>
                     </form>

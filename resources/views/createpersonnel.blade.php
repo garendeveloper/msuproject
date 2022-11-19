@@ -96,7 +96,7 @@
                               <input type="text" class="form-control" name = "engineer" value = "{{ $personnels[0]->engineer }}" placeholder="Engineer" autocomplete="">
                           </div>
                           <div class="form-group">
-                              <label >Vice Chancellor</label>
+                              <label >Vice Chancellor for Administration of Finance</label>
                               <input type="text" class="form-control" name = "vicechancellor" value = "{{ $personnels[0]->vicechancellor }}" placeholder="Enter Vice Chancellor" autocomplete="">
                           </div>
                           <div class="form-group">

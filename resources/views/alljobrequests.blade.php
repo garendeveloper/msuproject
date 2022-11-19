@@ -290,7 +290,7 @@
           for(var i = 0; i<data.length; i++)
           {
             var urgentstatus = "<span class = 'badge badge-primary'>No</span>";
-            var status = "<span class = 'badge badge-warning'>Still process</span>";
+            var status = "<span class = 'badge badge-warning'>In Process</span>";
             if(data[i].status == 1) status = "<span class = 'badge badge-success'>Approved</span>";
             if(data[i].urgentstatus == 1) urgentstatus = "<span class = 'badge badge-danger'>Urgent</span>";
             html += "<tr>";

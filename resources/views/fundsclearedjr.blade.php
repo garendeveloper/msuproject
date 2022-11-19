@@ -108,15 +108,18 @@
                                     $schedule = DB::select('select jobrequestschedules.* 
                                                                 from jobrequestschedules
                                                                 where jobrequestschedules.jobrequest_id = "'.$jobrequest_id.'"');
-                                    
-                                    
 
                                 ?>
-                                @if($schedule[0]->status == 1)
-                                  <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm disabled"><i class="fa fa-calendar"></i>&nbsp; Completed</a>
+                                @if($schedule != [])
+                                  @if($schedule[0]->status == 1)
+                                    <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm disabled"><i class="fa fa-calendar"></i>&nbsp; Completed</a>
+                                  @endif
+                                  @if($schedule[0]->status == 0 || empty($schedule))
+                                    <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule </a>
+                                  @endif
                                 @endif
-                                @if($schedule[0]->status == 0 || empty($schedule))
-                                  <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule </a>
+                                @if($schedule == [])
+                                <a href="{{url('/schedulejobrequests/'.$jobrequests[$i]['id'])}}" class="btn btn-primary btn-sm"><i class="fa fa-calendar"></i>&nbsp; Schedule </a>
                                 @endif
                                 </td>
                             </tr>
